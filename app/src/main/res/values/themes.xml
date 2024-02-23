@@ -21,4 +21,21 @@
         <item name="colorOutline">@color/blue</item>
         <item name="android:textColorHint">@color/deep_blue</item>
     </style>
+
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="fontFamily">@font/poppins_semibold</item>
+    </style>
+
+    <style name="Toolbar.SubtitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/deep_blue</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="CustomImageRounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerRadius">100dp</item>
+    </style>
 </resources>

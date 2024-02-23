@@ -9,12 +9,35 @@
         android:id="@+id/registerFragment"
         android:name="com.fienna.movieapp.view.prelogin.RegisterFragment"
         android:label="fragment_regsiter"
-        tools:layout="@layout/fragment_regsiter" />
+        tools:layout="@layout/fragment_regsiter" >
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:popUpTo="@id/registerFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.fienna.movieapp.view.prelogin.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_loginFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/onboardingFragment"
         android:name="com.fienna.movieapp.view.onboarding.OnboardingFragment"
@@ -24,16 +47,32 @@
             android:id="@+id/action_onboardingFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/onboardingFragment"
-            app:popUpToInclusive="false" />
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_onboardingFragment_to_registerFragment"
             app:destination="@id/registerFragment"
             app:popUpTo="@id/onboardingFragment"
-            app:popUpToInclusive="false" />
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/splashScreenFragment"
         android:name="com.fienna.movieapp.view.onboarding.SplashScreenFragment"
         android:label="fragment_splash_screen"
         tools:layout="@layout/fragment_splash_screen" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.fienna.movieapp.view.prelogin.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.fienna.movieapp.view.dashboard.DashboardFragment"
+        android:label="fragment_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
 </navigation>

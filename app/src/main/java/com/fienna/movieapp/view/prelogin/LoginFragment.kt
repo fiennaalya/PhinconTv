@@ -1,5 +1,6 @@
 package com.fienna.movieapp.view.prelogin
 
+import androidx.navigation.fragment.findNavController
 import com.fienna.movieapp.R
 import com.fienna.movieapp.core.base.BaseFragment
 import com.fienna.movieapp.databinding.FragmentLoginBinding
@@ -20,11 +21,16 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, PreloginViewModel>(Frag
     }
 
     override fun initListener() {
-        TODO("Not yet implemented")
+        with(binding){
+            tvSignUp.setOnClickListener {
+                findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+            }
+            btnLogin.setOnClickListener {
+                findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+            }
+        }
     }
 
-    override fun observeData() {
-        TODO("Not yet implemented")
-    }
+    override fun observeData() {}
 
 }

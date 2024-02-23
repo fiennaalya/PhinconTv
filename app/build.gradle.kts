@@ -52,4 +52,11 @@ dependencies {
     //navigation
     implementation ("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation ("androidx.navigation:navigation-ui-ktx:2.7.7")
+
+    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
+    implementation("com.airbnb.android:lottie:4.1.0")
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
+    implementation ("io.insert-koin:koin-android:3.5.3")
+    implementation("androidx.window:window:1.2.0")
 }

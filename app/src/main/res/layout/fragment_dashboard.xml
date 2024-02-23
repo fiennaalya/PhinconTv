@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.dashboard.DashboardFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/ab_dashboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_regular">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/abt_dashboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            app:menu="@menu/top_dashboard_menu"
+            app:subtitleTextAppearance="@style/Toolbar.SubtitleText"
+            app:titleTextAppearance="@style/Toolbar.TitleText"
+            tools:subtitle="@string/subtitle_dashboard"
+            tools:title="@string/title_dashboard" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <View
+        android:id="@+id/divider_ab_dashboard"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/ab_dashboard"
+        android:background="#000000"
+        android:backgroundTint="@color/sky_blue" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_dashboard_container"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_above="@id/divider_bn_dashboard"
+        android:layout_below="@id/divider_ab_dashboard"
+        app:navGraph="@navigation/dashboard_nav" />
+
+    <View
+        android:id="@+id/divider_bn_dashboard"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/bn_dashboard"
+        android:background="#000000"
+        android:backgroundTint="@color/sky_blue" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bn_dashboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/poppins_regular"
+        app:activeIndicatorLabelPadding="4dp"
+        app:itemIconSize="30dp"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_dashboard_menu" />
+
+</RelativeLayout>

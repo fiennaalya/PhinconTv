@@ -20,7 +20,11 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingVie
     override fun initListener() {
         with(binding){
             btnLoginOnboarding.setOnClickListener {
-                findNavController().navigate(R.id.action_onboarding_to_login)
+                findNavController().navigate(R.id.action_onboardingFragment_to_loginFragment)
+            }
+
+            btnRegisterOnboarding.setOnClickListener {
+                findNavController().navigate(R.id.action_onboardingFragment_to_registerFragment)
             }
         }
     }
