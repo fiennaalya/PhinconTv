@@ -12,13 +12,12 @@
     <string name="tv_signup">Sign Up</string>
     <string name="tv_login_question">Already have an account?</string>
     <string name="tv_login">Sign in</string>
-    <string name="tv_tnc"><![CDATA[By registering with PhinconTV, you agree to PhinconTV\'s Terms of Service & Privacy Policy]]></string>
+    <string name="tv_tnc"><![CDATA[By registering with PhinconTV, you agree to PhinconTV\'s Terms of Service and Privacy Policy]]></string>
     <string name="username">Username</string>
     <string name="btn_username">Done</string>
     <string name="tv_username_desc">Help people discover your account by using the name you\'re known by.</string>
     <string name="tv_username">Enter Username</string>
-    <string name="title_dashboard"><font fgcolor='#003366'>Phincon</font><font fgcolor='#5c73ae'>TV</font></string>
-
+    <string name="title_dashboard"><font fgcolor='#5c73ae'>Phincon</font><font>TV</font></string>
     <string name="subtitle_dashboard">Hi, Fienna!</string>
     <string name="menu_cart">Cart</string>
     <string name="menu_user">User</string>
@@ -34,4 +33,12 @@
     <string name="search">Search</string>
     <string name="hint_search">Search</string>
     <string name="tv_rating">4.0 (982)</string>
+    <string name="tv_thumbnail_onboarding">Watch million movies with your loved ones!</string>
+    <string name="tv_subtitle_thumbnail">Pick hundreds of thousands free movie to watch on your intimate and fun quality time.</string>
+    <string name="tv_thumbnail_onboarding_3">Watch anytime and anywhere!</string>
+    <string name="tv_subtitle_thumbnail_3">Watch exclusive trending movies around the world</string>
+    <string name="tv_thumbnail_onboarding_2">Enjoy movies with affordable movie token!</string>
+    <string name="tv_subtitle_thumbnail_2">With movie token, watch exclusive content at an affordable price</string>
+    <string name="helperText_email">Email is required</string>
+    <string name="helperText_password">Minimum of 8 character</string>
 </resources>

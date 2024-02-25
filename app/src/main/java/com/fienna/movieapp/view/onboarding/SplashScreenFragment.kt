@@ -1,60 +1,46 @@
 package com.fienna.movieapp.view.onboarding
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.fienna.movieapp.R
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import com.fienna.movieapp.core.base.BaseFragment
+import com.fienna.movieapp.databinding.FragmentSplashScreenBinding
+import com.fienna.movieapp.viewmodel.OnboardingViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SplashScreenFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class SplashScreenFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+class SplashScreenFragment : BaseFragment<FragmentSplashScreenBinding, OnboardingViewModel>(FragmentSplashScreenBinding::inflate) {
+    override val viewModel: OnboardingViewModel by viewModel()
+    override fun initView() {
+        animateSplash()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_splash_screen, container, false)
+    override fun initListener() {
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SplashScreen.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SplashScreenFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun observeData() {
     }
+
+    private fun animateSplash(){
+        val fadeInAnimator = ObjectAnimator.ofFloat(binding.imgSplash, "alpha", 0f, 1f)
+        fadeInAnimator.duration = 2000 // Sesuaikan durasi animasi
+
+        // Animasi translasi ke kiri untuk img_splash
+        val translateLeftAnimator = ObjectAnimator.ofFloat(binding.imgSplash, "translationX", 0f, -binding.root.resources.getDimensionPixelSize(
+            org.koin.android.R.dimen.abc_action_bar_subtitle_bottom_margin_material).toFloat())
+        translateLeftAnimator.duration = 2000 // Sesuaikan durasi animasi
+
+        // Animasi fade in lebih cepat untuk layout_text_splash
+        val fadeInFastAnimator = ObjectAnimator.ofFloat(binding.layoutTextSplash, "alpha", 0f, 1f)
+        fadeInFastAnimator.duration = 1000 // Sesuaikan durasi animasi
+
+        // Menjalankan animasi bersamaan
+        val animatorSet = AnimatorSet()
+        animatorSet.play(fadeInAnimator)
+            .before(translateLeftAnimator)
+            .before(fadeInFastAnimator)
+
+        // Memulai animasi
+        animatorSet.start()
+    }
+
+
 }

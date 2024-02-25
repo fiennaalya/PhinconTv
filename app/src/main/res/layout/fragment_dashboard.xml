@@ -21,7 +21,8 @@
             app:subtitleTextAppearance="@style/Toolbar.SubtitleText"
             app:titleTextAppearance="@style/Toolbar.TitleText"
             tools:subtitle="@string/subtitle_dashboard"
-            tools:title="@string/title_dashboard" />
+            app:titleTextColor="@color/sky_blue"
+            app:title="@string/title_dashboard" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <View

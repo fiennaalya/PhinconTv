@@ -14,6 +14,10 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
     override fun initView() {
         val navHostFragment = childFragmentManager.findFragmentById(R.id.fragment_dashboard_container) as NavHostFragment
         navController = navHostFragment.navController
+
+        with(binding){
+            abtDashboard.subtitle = resources.getString(R.string.subtitle_dashboard)
+        }
     }
 
     override fun initListener() {}

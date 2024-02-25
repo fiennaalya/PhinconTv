@@ -36,10 +36,10 @@
         android:id="@+id/layout_form_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="150dp"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/tv_tnc"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_title_register">
 
@@ -52,6 +52,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins_regular"
             android:lines="1"
+            app:helperText="@string/helperText_email"
             tools:hint="@string/tv_email">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -67,11 +68,13 @@
             android:id="@+id/form_password_signup"
             style="@style/BlueBackgroundTextInputLayout"
             android:layout_width="match_parent"
+            app:passwordToggleEnabled="true"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:fontFamily="@font/poppins_regular"
+            app:helperText="@string/helperText_password"
             android:lines="1"
             tools:hint="@string/tv_password">
 
@@ -102,8 +105,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/btn_signup"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_signup">
 
         <TextView
             android:id="@+id/tv_ahaa"

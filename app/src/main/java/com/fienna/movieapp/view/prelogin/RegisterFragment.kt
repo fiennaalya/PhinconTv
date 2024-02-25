@@ -4,6 +4,7 @@ import androidx.navigation.fragment.findNavController
 import com.fienna.movieapp.R
 import com.fienna.movieapp.core.base.BaseFragment
 import com.fienna.movieapp.databinding.FragmentRegsiterBinding
+import com.fienna.movieapp.utils.setText
 import com.fienna.movieapp.viewmodel.PreloginViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -19,6 +20,8 @@ class RegisterFragment : BaseFragment<FragmentRegsiterBinding,PreloginViewModel>
             tvLogin.text= resources.getString(R.string.tv_login)
             tvTnc.text = resources.getString(R.string.tv_tnc)
         }
+
+        textHyperlink()
     }
 
     override fun initListener() {
@@ -34,4 +37,7 @@ class RegisterFragment : BaseFragment<FragmentRegsiterBinding,PreloginViewModel>
 
     override fun observeData() {}
 
+    private fun textHyperlink() {
+        context?.let { setText("languageEn", it, binding.tvTnc, getString(R.string.tv_tnc)) }
+    }
 }
