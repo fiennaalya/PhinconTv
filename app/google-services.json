@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "289990064078",
+    "project_id": "phincontv-fp",
+    "storage_bucket": "phincontv-fp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289990064078:android:5479b6e5030ae3a6f39d9f",
+        "android_client_info": {
+          "package_name": "com.fienna.movieapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTCxhylxNZH5cbwDC-Tzp3tuusge0Lbnc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MovieApp</string>
+    <string name="hint_search">Cari</string>
+    <string name="tv_rating">4.0 (982)</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_onboarding">Phincon</string>
+    <string name="secondtitle_onboarding">TV</string>
+    <string name="btn_login">Masuk</string>
+    <string name="btn_signup">Register</string>
+    <string name="tv_email">Email</string>
+    <string name="tv_password">Password</string>
+    <string name="tv_signup_question">Don\'t have an account?</string>
+    <string name="tv_signup">Sign Up</string>
+    <string name="tv_login_question">Already have an account?</string>
+    <string name="tv_login">Sign in</string>
+    <string name="tv_tnc"><![CDATA[Dengan mendaftar di PhinconTV, Anda menyetujui Ketentuan Layanan & Kebijakan Privasi PhinconTV]]></string>
+    <string name="username">Username</string>
+    <string name="btn_username">Done</string>
+    <string name="tv_username_desc">Help people discover your account by using the name you\'re known by.</string>
+    <string name="tv_username">Enter Username</string>
+    <string name="title_dashboard"><font fgcolor='#003366'>Phincon</font><font fgcolor='#5c73ae'>TV</font></string>
+
+    <string name="subtitle_dashboard">Hi, Fienna!</string>
+    <string name="menu_cart">Cart</string>
+    <string name="menu_user">User</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_wishlist">Wishlist</string>
+    <string name="menu_transaction">Transaction</string>
+    <string name="tv_coming_soon">Coming Soon</string>
+    <string name="tv_popular">Popular</string>
+    <string name="title_movie">Eternal Spiderman Nowat Home lalallala</string>
+    <string name="year_and_genre_movie">2022 . Action</string>
+    <string name="token_movie">500</string>
+    <string name="search">Search</string>
+    <string name="tv_thumbnail_onboarding_3">Watch anytime and anywhere</string>
+    <string name="tv_subtitle_thumbnail_3">Watch exclusive trending movies around the world</string>
+    <string name="title_appbarSetting">Pengguna</string>
+    <string name="tv_card_dark_mode">Mode Gelap</string>
+    <string name="tv_card_lang">Bahasa</string>
+    <string name="en">ENG</string>
+    <string name="tv_card_logout">Keluar</string>
+    <string name="tv_card_title">Settings</string>
+    <string name="tv_card_token">Token</string>
+    <string name="on">ON</string>
+    <string name="tv_thumbnail_onboarding_2">Enjoy movies with affordable movie token!</string>
+    <string name="tv_subtitle_thumbnail_2">With movie token, watch exclusive content at an affordable price</string>
+    <string name="helperText_email">Email is required</string>
+    <string name="helperText_password">Minimum of 8 character</string>
+    <string name="tv_thumbnail_onboarding">Watch million movies with your loved ones!</string>
+    <string name="tv_subtitle_thumbnail">Pick hundreds of thousands free movie to watch on your intimate and fun quality time.</string>
+    <string name="helperText_email_error">Email is Invalid</string>
+    <string name="helperText_password_error">Password is Invalid</string>
+    <string name="helperText_name_error">Please input username</string>
+
+</resources>

@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.prelogin.LoginFragment">
-
+    tools:context=".view.auth.LoginFragment">
 
     <LinearLayout
         android:id="@+id/layout_title_login"
@@ -34,23 +33,24 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginBottom="32dp"
         android:id="@+id/layout_form_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="150dp"
         android:gravity="center_vertical"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/layout_signup"
         app:layout_constraintTop_toBottomOf="@id/layout_title_login">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_marginTop="16dp"
             android:id="@+id/form_email"
             style="@style/BlueBackgroundTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:helperText="@string/helperText_email"
             android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins_regular"
             android:lines="1"
             tools:hint="@string/tv_email">
@@ -65,14 +65,16 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_marginBottom="16dp"
             android:id="@+id/form_password"
             style="@style/BlueBackgroundTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:fontFamily="@font/poppins_regular"
+            app:helperText="@string/helperText_password"
+            app:passwordToggleEnabled="true"
             android:lines="1"
             tools:hint="@string/tv_password">
 
@@ -80,6 +82,7 @@
                 android:id="@+id/tietPass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:helperText="@string/helperText_password"
                 android:fontFamily="@font/poppins_regular"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword" />
@@ -101,10 +104,10 @@
         android:id="@+id/layout_signup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center_horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_login">
 
         <TextView
             android:id="@+id/tv_dhaa"
@@ -120,11 +123,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
             android:fontFamily="@font/poppins_medium"
-            tools:text="@string/tv_signup"
             android:textColor="@color/deep_blue"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="32dp"/>
+            tools:text="@string/tv_signup" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
