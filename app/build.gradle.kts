@@ -9,6 +9,7 @@ plugins {
 android {
     namespace = "com.fienna.movieapp"
     compileSdk = 34
+    buildFeatures.buildConfig = true
 
     defaultConfig {
         applicationId = "com.fienna.movieapp"
@@ -61,4 +62,6 @@ dependencies {
     implementation("com.facebook.shimmer:shimmer:0.5.0")
     implementation ("io.insert-koin:koin-android:3.5.3")
     implementation("androidx.window:window:1.2.0")
+
+    implementation ("io.coil-kt:coil:2.5.0")
 }

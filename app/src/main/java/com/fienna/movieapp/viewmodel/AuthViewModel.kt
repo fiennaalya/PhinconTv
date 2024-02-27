@@ -85,8 +85,9 @@ class AuthViewModel(private val movieUsecase: MovieUsecase):ViewModel() {
         _registerValidation.value = FlowState.FlowCreated
     }
 
-    fun resetRegisterPasswordState() {
-        _registerPass.value = FlowState.FlowCreated
+
+    fun resetLoginPasswordState() {
+        _loginValidation.value = FlowState.FlowCreated
     }
 
     fun validateProfileField(name:String){

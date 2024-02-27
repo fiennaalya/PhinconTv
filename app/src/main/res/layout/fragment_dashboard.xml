@@ -37,7 +37,7 @@
         android:id="@+id/fragment_dashboard_container"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_above="@id/divider_bn_dashboard"
         android:layout_below="@id/divider_ab_dashboard"
         app:navGraph="@navigation/dashboard_nav" />

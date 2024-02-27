@@ -8,46 +8,48 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_now_playing"
             android:layout_width="match_parent"
-            android:layout_height="350dp" />
+            android:layout_height="400dp" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tl_now_playing"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:background="@android:color/transparent"
             app:tabBackground="@drawable/indicator"
             app:tabGravity="center"
             app:tabIndicator="@android:color/transparent" />
 
         <TextView
+            android:id="@+id/tv_coming_soon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/poppins_semibold"
-            android:text="@string/tv_coming_soon"
             android:textColor="@color/deep_blue"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:text="@string/tv_coming_soon" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_coming_soon"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="400dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_movie" />
 
         <TextView
+            android:id="@+id/tv_popular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/poppins_semibold"
             android:text="@string/tv_popular"
             android:textColor="@color/deep_blue"
@@ -56,7 +58,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_popular"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="400dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_movie" />

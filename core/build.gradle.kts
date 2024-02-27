@@ -8,12 +8,16 @@ plugins {
 android {
     namespace = "com.fienna.movieapp.core"
     compileSdk = 34
+    buildFeatures.buildConfig = true
 
     defaultConfig {
         minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "BEARER_TOKEN", "\"eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0ODcwZGU2Y2E2YzNjMjQyMDVlMjFjMmJhZmYyYWE5ZiIsInN1YiI6IjY1OGE4MmZmZGQyNTg5NzFhZTZiZmYxNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.UvkVcTG4Z3eSL5EGuSuyc0uLZGfjNRpZRc0LBBh_k2o\"")
+        buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/\"")
     }
 
     buildTypes {

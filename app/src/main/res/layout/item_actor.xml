@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/img_actor"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/deep_blue"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+    <TextView
+        android:id="@+id/tv_cast_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/deep_blue"
+        app:layout_constraintEnd_toEndOf="@id/img_actor"
+        app:layout_constraintStart_toStartOf="@id/img_actor"
+        app:layout_constraintTop_toBottomOf="@id/img_actor"
+        tools:text="Anne Hathaway" />
+
+    <TextView
+        android:id="@+id/tv_cast_character"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="11sp"
+        android:textColor="@color/blue"
+        app:layout_constraintEnd_toEndOf="@id/tv_cast_name"
+        app:layout_constraintStart_toStartOf="@id/tv_cast_name"
+        app:layout_constraintTop_toBottomOf="@id/tv_cast_name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp"
+        tools:text="Anne Hathaway" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

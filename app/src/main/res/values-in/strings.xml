@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">MovieApp</string>
     <string name="hint_search">Cari</string>
-    <string name="tv_rating">4.0 (982)</string>
+    <string name="tv_rating">%rating% (%total_rating%)</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_onboarding">Phincon</string>
@@ -32,7 +32,7 @@
     <string name="tv_coming_soon">Coming Soon</string>
     <string name="tv_popular">Popular</string>
     <string name="title_movie">Eternal Spiderman Nowat Home lalallala</string>
-    <string name="year_and_genre_movie">2022 . Action</string>
+    <string name="year_and_genre_movie">%year% . %genre%</string>
     <string name="token_movie">500</string>
     <string name="search">Search</string>
     <string name="tv_thumbnail_onboarding_3">Watch anytime and anywhere</string>
@@ -54,5 +54,10 @@
     <string name="helperText_email_error">Email is Invalid</string>
     <string name="helperText_password_error">Password is Invalid</string>
     <string name="helperText_name_error">Please input username</string>
+    <string name="desc">Desperate to keep custody of his daughter, a mixed martial arts fighter abandons a big match and races across Berlin to attend her birthday party</string>
+    <string name="tv_favorite">Add To Favorite</string>
+    <string name="no_text">No Text</string>
+    <string name="tv_cart">Add to Cart</string>
+    <string name="rating">Rating</string>
 
 </resources>

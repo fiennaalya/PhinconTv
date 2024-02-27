@@ -49,7 +49,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, AuthViewModel>(Frag
                         }
                     }
                 } else{
-                    println("masuk error")
                 }
             }
         }
