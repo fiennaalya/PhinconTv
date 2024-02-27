@@ -11,6 +11,7 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.TextView
+import com.google.android.material.materialswitch.MaterialSwitch
 
 fun setText(locale: String, context: Context, textInput: TextView, fullText: String) {
     val spannable = SpannableString(fullText)
@@ -69,4 +70,8 @@ fun setText(locale: String, context: Context, textInput: TextView, fullText: Str
 fun openUrl(context: Context, url: String) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
     context.startActivity(intent)
+}
+
+fun MaterialSwitch.checkIf(state: Boolean){
+    this.isChecked = state
 }

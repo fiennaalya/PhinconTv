@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.prelogin.LoginFragment">
+    tools:context=".view.auth.LoginFragment">
 
     <LinearLayout
         android:id="@+id/layout_title_login"
@@ -48,6 +48,7 @@
             style="@style/BlueBackgroundTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:helperText="@string/helperText_email"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins_regular"
@@ -72,6 +73,8 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:fontFamily="@font/poppins_regular"
+            app:helperText="@string/helperText_password"
+            app:passwordToggleEnabled="true"
             android:lines="1"
             tools:hint="@string/tv_password">
 
@@ -79,6 +82,7 @@
                 android:id="@+id/tietPass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:helperText="@string/helperText_password"
                 android:fontFamily="@font/poppins_regular"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword" />

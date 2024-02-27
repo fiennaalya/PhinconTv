@@ -37,6 +37,22 @@
     <string name="search">Search</string>
     <string name="tv_thumbnail_onboarding_3">Watch anytime and anywhere</string>
     <string name="tv_subtitle_thumbnail_3">Watch exclusive trending movies around the world</string>
-
+    <string name="title_appbarSetting">Pengguna</string>
+    <string name="tv_card_dark_mode">Mode Gelap</string>
+    <string name="tv_card_lang">Bahasa</string>
+    <string name="en">ENG</string>
+    <string name="tv_card_logout">Keluar</string>
+    <string name="tv_card_title">Settings</string>
+    <string name="tv_card_token">Token</string>
+    <string name="on">ON</string>
+    <string name="tv_thumbnail_onboarding_2">Enjoy movies with affordable movie token!</string>
+    <string name="tv_subtitle_thumbnail_2">With movie token, watch exclusive content at an affordable price</string>
+    <string name="helperText_email">Email is required</string>
+    <string name="helperText_password">Minimum of 8 character</string>
+    <string name="tv_thumbnail_onboarding">Watch million movies with your loved ones!</string>
+    <string name="tv_subtitle_thumbnail">Pick hundreds of thousands free movie to watch on your intimate and fun quality time.</string>
+    <string name="helperText_email_error">Email is Invalid</string>
+    <string name="helperText_password_error">Password is Invalid</string>
+    <string name="helperText_name_error">Please input username</string>
 
 </resources>

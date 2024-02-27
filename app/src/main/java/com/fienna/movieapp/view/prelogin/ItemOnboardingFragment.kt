@@ -1,13 +1,13 @@
-package com.fienna.movieapp.view.onboarding
+package com.fienna.movieapp.view.prelogin
 
 import com.fienna.movieapp.R
 import com.fienna.movieapp.core.base.BaseFragment
 import com.fienna.movieapp.databinding.FragmentItemOnboardingBinding
-import com.fienna.movieapp.viewmodel.OnboardingViewModel
+import com.fienna.movieapp.viewmodel.PreLoginViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ItemOnboardingFragment : BaseFragment<FragmentItemOnboardingBinding, OnboardingViewModel>(FragmentItemOnboardingBinding::inflate) {
-    override val viewModel: OnboardingViewModel by viewModel()
+class ItemOnboardingFragment : BaseFragment<FragmentItemOnboardingBinding, PreLoginViewModel>(FragmentItemOnboardingBinding::inflate) {
+    override val viewModel: PreLoginViewModel by viewModel()
 
     override fun initView() {}
 

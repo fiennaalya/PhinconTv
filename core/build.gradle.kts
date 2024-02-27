@@ -64,4 +64,11 @@ dependencies {
     api ("androidx.paging:paging-runtime-ktx:3.2.1")
     api("androidx.room:room-paging:2.6.1")
 
+
+    api(platform("com.google.firebase:firebase-bom:32.7.2"))
+    api("com.google.firebase:firebase-crashlytics-ktx")
+    api("com.google.firebase:firebase-analytics-ktx")
+    api("com.google.firebase:firebase-config-ktx")
+    api("com.google.firebase:firebase-messaging-ktx")
+    api("com.google.firebase:firebase-auth-ktx")
 }
