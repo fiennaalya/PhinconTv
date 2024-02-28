@@ -1,57 +1,68 @@
-package com.fienna.movieapp.view.dashboard.wishlist
+package com.fienna.movieapp.view.dashboard.cart
 
 import android.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fienna.movieapp.R
-import com.fienna.movieapp.adapter.WishlistAdapter
+import com.fienna.movieapp.adapter.CartAdapter
 import com.fienna.movieapp.core.base.BaseFragment
-import com.fienna.movieapp.core.domain.model.DataWishlist
+import com.fienna.movieapp.core.domain.model.DataCart
 import com.fienna.movieapp.core.domain.state.onError
 import com.fienna.movieapp.core.domain.state.onLoading
 import com.fienna.movieapp.core.domain.state.onSuccess
 import com.fienna.movieapp.core.utils.launchAndCollectIn
-import com.fienna.movieapp.databinding.FragmentWishlistBinding
+import com.fienna.movieapp.databinding.FragmentCartBinding
 import com.fienna.movieapp.utils.CustomSnackbar
-import com.fienna.movieapp.viewmodel.WishlistViewModel
+import com.fienna.movieapp.viewmodel.CartViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class WishlistFragment : BaseFragment<FragmentWishlistBinding,WishlistViewModel >(FragmentWishlistBinding::inflate) {
-    override val viewModel: WishlistViewModel by viewModel()
-    private var dataWishlist:List<DataWishlist>? = null
-    private lateinit var rvWishlist : RecyclerView
-    private val listWishlistAdapter by lazy {
-        WishlistAdapter(
+class CartFragment : BaseFragment<FragmentCartBinding, CartViewModel>(FragmentCartBinding::inflate) {
+    override val viewModel: CartViewModel by viewModel()
+    private var dataCart:List<DataCart>? = null
+    private lateinit var rvCart : RecyclerView
+    private val listCartAdapter by lazy {
+        CartAdapter(
             action = {
-                val bundle = bundleOf("movieId" to it.movieId)
-                activity?.supportFragmentManager?.findFragmentById(R.id.main_fragment_container)?.findNavController()?.navigate(R.id.action_dashboardFragment_to_detailFragment, bundle)
             },
-            remove = {entity-> removeItemFromWishlist(entity)}
+            remove = {entity -> removeItemFromCart(entity)}
         )
     }
+
     override fun initView() {
-        binding.tvWishlistCountItems.text = resources.getString(R.string.tv_count_wishlist)
-        rvWishlist = binding.rvWishlist
-        rvWishlist.setHasFixedSize(true)
-        viewModel.fetchWishlist()
-        listWishlistView()
+        rvCart = binding.rvCart
+        rvCart.setHasFixedSize(true)
+        viewModel.fetchCart()
+        listCartView()
+
+        with(binding){
+            tvTitleCart.text = resources.getString(R.string.menu_cart)
+            tvCartSelect.text = resources.getString(R.string.tv_select_all)
+            tvCartDelete.text = resources.getString(R.string.tv_delete)
+            tvCartTotalprice.text = resources.getString(R.string.total_bayar)
+            tvCartPrice.text = resources.getString(R.string.harga_detail)
+            btnBuy.text = resources.getString(R.string.buy)
+        }
     }
 
-    override fun initListener() {}
+    override fun initListener() {
+        binding.cvBackCart.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
 
     override fun observeData() {
         with(viewModel){
-            fetchWishlist().launchAndCollectIn(viewLifecycleOwner){state->
+            fetchCart().launchAndCollectIn(viewLifecycleOwner){state->
                 this.launch {
                     state.onLoading {  }
                         .onSuccess {data ->
-                            dataWishlist = data
-                            listWishlistAdapter.submitList(data)
+                            println("MASUK: $data")
+                            dataCart = data
+                            listCartAdapter.submitList(data)
 
                         }.onError {
                             context?.let {
@@ -66,7 +77,7 @@ class WishlistFragment : BaseFragment<FragmentWishlistBinding,WishlistViewModel 
         }
     }
 
-    private fun removeItemFromWishlist(dataWishlist: DataWishlist) {
+    private fun removeItemFromCart(dataCart: DataCart) {
         context?.let {
             MaterialAlertDialogBuilder(it)
                 .setMessage(resources.getString(R.string.tv_delete_wishlist))
@@ -74,7 +85,7 @@ class WishlistFragment : BaseFragment<FragmentWishlistBinding,WishlistViewModel 
                     dialog.dismiss()
                 }
                 .setPositiveButton(resources.getString(R.string.tv_yes)) { dialog, which ->
-                    viewModel.deleteWishlist(dataWishlist)
+                    viewModel.deleteCart(dataCart)
                 }
                 .show()
                 .getButton(AlertDialog.BUTTON_POSITIVE)
@@ -82,10 +93,11 @@ class WishlistFragment : BaseFragment<FragmentWishlistBinding,WishlistViewModel 
         }
     }
 
-    private fun listWishlistView() {
-        rvWishlist.run {
+    private fun listCartView() {
+        rvCart.run {
             layoutManager = LinearLayoutManager(context)
-            adapter = listWishlistAdapter
+            adapter = listCartAdapter
         }
     }
+
 }

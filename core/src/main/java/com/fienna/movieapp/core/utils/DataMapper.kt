@@ -1,16 +1,20 @@
 package com.fienna.movieapp.core.utils
 
+import com.fienna.movieapp.core.data.local.entity.CartEntity
+import com.fienna.movieapp.core.data.local.entity.WishlistEntity
 import com.fienna.movieapp.core.data.remote.data.CreditResponse
 import com.fienna.movieapp.core.data.remote.data.DetailMovieResponse
 import com.fienna.movieapp.core.data.remote.data.NowPlayingResponse
 import com.fienna.movieapp.core.data.remote.data.PopularResponse
 import com.fienna.movieapp.core.data.remote.data.UpComingResponse
+import com.fienna.movieapp.core.domain.model.DataCart
 import com.fienna.movieapp.core.domain.model.DataCredit
 import com.fienna.movieapp.core.domain.model.DataDetailMovie
 import com.fienna.movieapp.core.domain.model.DataNowPlaying
 import com.fienna.movieapp.core.domain.model.DataPopular
 import com.fienna.movieapp.core.domain.model.DataSession
 import com.fienna.movieapp.core.domain.model.DataUpcoming
+import com.fienna.movieapp.core.domain.model.DataWishlist
 import com.fienna.movieapp.core.domain.state.SplashState
 
 object DataMapper {
@@ -83,6 +87,7 @@ object DataMapper {
         voteAverage = voteAverage,
         voteCount = voteCount,
         popularity = popularity,
+        posterPath = posterPath,
         genres = genres.map { genre ->
             DataDetailMovie.Genre(
                 genreId = genre.id,
@@ -97,5 +102,47 @@ object DataMapper {
         profilePath = profilePath
     )
     fun CreditResponse.toUiListData() = cast.map { cast -> cast.toUiData() }.toList()
+
+    fun CartEntity.toUiData() = DataCart(
+        cartId = cartId,
+        userId = userId,
+        movieId = movieId,
+        posterPath = posterPath,
+        title = title,
+        genreName = genreName,
+        popularity = popularity
+    )
+
+    fun DataCart.toEntity() =CartEntity(
+        cartId = cartId,
+        userId = userId,
+        movieId = movieId,
+        posterPath = posterPath,
+        title = title,
+        genreName = genreName,
+        popularity = popularity
+    )
+
+    fun WishlistEntity.toUiData() = DataWishlist(
+        wishlistId = wishlistId,
+        userId = userId,
+        movieId = movieId,
+        posterPath = posterPath,
+        title = title,
+        popularity = popularity,
+        voteAverage = voteAverage,
+        voteCount = voteCount
+    )
+
+    fun DataWishlist.toEntity() = WishlistEntity(
+        wishlistId = wishlistId,
+        userId = userId,
+        movieId = movieId,
+        posterPath = posterPath,
+        title = title,
+        popularity = popularity,
+        voteAverage = voteAverage,
+        voteCount = voteCount
+    )
 
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
@@ -12,6 +13,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.TextView
 import com.google.android.material.materialswitch.MaterialSwitch
+import java.util.Base64
 
 fun setText(locale: String, context: Context, textInput: TextView, fullText: String) {
     val spannable = SpannableString(fullText)
@@ -109,4 +111,12 @@ fun extractYearFromDate(dateString: String): String {
 
 fun formatRating(rating: Double): String {
     return String.format("%.1f", rating)
+}
+
+fun String.toBase64(): String {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        Base64.getEncoder().encodeToString(this.toByteArray())
+    } else {
+        android.util.Base64.encodeToString(this.toByteArray(), android.util.Base64.DEFAULT)
+    }
 }

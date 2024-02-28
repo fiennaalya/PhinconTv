@@ -2,8 +2,6 @@ package com.fienna.movieapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fienna.movieapp.core.domain.model.DataCredit
-import com.fienna.movieapp.core.domain.model.DataDetailMovie
 import com.fienna.movieapp.core.domain.model.DataNowPlaying
 import com.fienna.movieapp.core.domain.model.DataPopular
 import com.fienna.movieapp.core.domain.model.DataUpcoming
@@ -24,11 +22,6 @@ class HomeViewModel(private val movieUsecase: MovieUsecase): ViewModel() {
     private val _upComingMovie: MutableStateFlow<UiState<List<DataUpcoming>>> = MutableStateFlow(UiState.Empty)
     val upComingMovie = _upComingMovie.asStateFlow()
 
-    private val _detailMovie: MutableStateFlow<UiState<DataDetailMovie>> = MutableStateFlow(UiState.Empty)
-    val detailMovie = _detailMovie.asStateFlow()
-
-    private val _creditMovie: MutableStateFlow<UiState<List<DataCredit>>> = MutableStateFlow(UiState.Empty)
-    val creditMovie = _creditMovie.asStateFlow()
 
     fun fetchNowPlayingMovie() {
         viewModelScope.launch {
@@ -51,22 +44,5 @@ class HomeViewModel(private val movieUsecase: MovieUsecase): ViewModel() {
             }
         }
    }
-
-    fun fetchDetailMovie(movieId:Int){
-        viewModelScope.launch {
-            _detailMovie.asMutableStateFlow {
-                movieUsecase.fetchDetailMovie(movieId)
-            }
-        }
-    }
-
-    fun fetchCreditMovie(movieId:Int){
-        viewModelScope.launch {
-            println("masuk viewmodel")
-            _creditMovie.asMutableStateFlow {
-                movieUsecase.fetchCreditMovie(movieId)
-            }
-        }
-    }
 
 }

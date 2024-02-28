@@ -4,9 +4,11 @@ import com.fienna.movieapp.core.data.remote.data.CreditResponse
 import com.fienna.movieapp.core.data.remote.data.DetailMovieResponse
 import com.fienna.movieapp.core.data.remote.data.NowPlayingResponse
 import com.fienna.movieapp.core.data.remote.data.PopularResponse
+import com.fienna.movieapp.core.data.remote.data.SearchResponse
 import com.fienna.movieapp.core.data.remote.data.UpComingResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiEndPoint {
     @GET("movie/now_playing")
@@ -23,4 +25,11 @@ interface ApiEndPoint {
 
     @GET("movie/{id}/credits")
     suspend fun fetchCreditMovie(@Path("id") movieId:Int?=null):CreditResponse
+
+    @GET("search/movie")
+    suspend fun fetchSearchMovie(
+        @Query("search") searchQuery :String? = "",
+        @Query("page") page:Int? = null
+    ):SearchResponse
+
 }

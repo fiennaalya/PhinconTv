@@ -2,6 +2,7 @@ package com.fienna.movieapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.fienna.movieapp.core.domain.model.DataSession
+import com.fienna.movieapp.core.domain.model.DataUser
 import com.fienna.movieapp.core.domain.state.SplashState
 import com.fienna.movieapp.core.domain.usecase.MovieUsecase
 import com.fienna.movieapp.core.utils.DataMapper.toSplashState
@@ -20,4 +21,9 @@ class PreLoginViewModel(private val useCase: MovieUsecase) :ViewModel(){
     fun saveOnBoardingValue(value:Boolean){
         useCase.putOnBoardingValue(value)
     }
+
+    fun getCurrentUser(): DataUser? {
+        return useCase.getCurrentUser()
+    }
+
 }

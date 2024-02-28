@@ -36,6 +36,7 @@ class AuthViewModel(private val movieUsecase: MovieUsecase):ViewModel() {
 
     private  val _profileNameValidation = MutableStateFlow<FlowState<Boolean>>(FlowState.FlowCreated)
     val profileNameValidation = _profileNameValidation.asStateFlow()
+
     fun signUp(email: String, password: String): Flow<Boolean> = runBlocking {
         movieUsecase.signUp(email, password)
     }
@@ -98,6 +99,9 @@ class AuthViewModel(private val movieUsecase: MovieUsecase):ViewModel() {
         _profileNameValidation.value = FlowState.FlowCreated
     }
 
+    fun saveProfileName(name: String?){
+        movieUsecase.putProfileName(name)
+    }
 
 
 }

@@ -39,6 +39,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, AuthViewModel>(Frag
                 if (formUsername.isErrorEnabled.not()){
                     viewModel.updateProfile(profileUpdates).launchAndCollectIn(viewLifecycleOwner){
                         if (it){
+                            viewModel.saveProfileName(profileUpdates.displayName)
                             findNavController().navigate(R.id.action_profileFragment_to_dashboardFragment)
                         } else{
                             Toast.makeText(

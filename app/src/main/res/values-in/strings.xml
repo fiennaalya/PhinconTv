@@ -21,8 +21,7 @@
     <string name="tv_username_desc">Help people discover your account by using the name you\'re known by.</string>
     <string name="tv_username">Enter Username</string>
     <string name="title_dashboard"><font fgcolor='#003366'>Phincon</font><font fgcolor='#5c73ae'>TV</font></string>
-
-    <string name="subtitle_dashboard">Hi, Fienna!</string>
+    <string name="subtitle_dashboard">Hi, %name%!</string>
     <string name="menu_cart">Cart</string>
     <string name="menu_user">User</string>
     <string name="menu_home">Home</string>
@@ -59,5 +58,14 @@
     <string name="no_text">No Text</string>
     <string name="tv_cart">Add to Cart</string>
     <string name="rating">Rating</string>
+    <string name="total_bayar">Total Cost</string>
+    <string name="harga_detail">Rp.0</string>
+    <string name="buy">Buy</string>
+    <string name="tv_addcart">Add to Cart</string>
+    <string name="tv_snackbar_wishlist">Movie has been added to wishlist</string>
+    <string name="tv_snackbar_cart_add">Movie has been added to cart</string>
+    <string name="tv_delete_wishlist">Do you want to remove this movie?</string>
+    <string name="tv_no">No</string>
+    <string name="tv_yes">Yes</string>
 
 </resources>

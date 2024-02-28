@@ -8,20 +8,23 @@ import coil.load
 import com.fienna.movieapp.R
 import com.fienna.movieapp.adapter.CastAdapter
 import com.fienna.movieapp.core.base.BaseFragment
+import com.fienna.movieapp.core.domain.model.DataCart
 import com.fienna.movieapp.core.domain.model.DataDetailMovie
+import com.fienna.movieapp.core.domain.model.DataWishlist
 import com.fienna.movieapp.core.domain.state.onError
 import com.fienna.movieapp.core.domain.state.onLoading
 import com.fienna.movieapp.core.domain.state.onSuccess
 import com.fienna.movieapp.core.utils.launchAndCollectIn
 import com.fienna.movieapp.databinding.FragmentDetailBinding
 import com.fienna.movieapp.utils.AppConstant
+import com.fienna.movieapp.utils.CustomSnackbar
 import com.fienna.movieapp.utils.extractYearFromDate
 import com.fienna.movieapp.utils.formatRating
-import com.fienna.movieapp.viewmodel.HomeViewModel
+import com.fienna.movieapp.viewmodel.DetailViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class DetailFragment : BaseFragment<FragmentDetailBinding, HomeViewModel>(FragmentDetailBinding::inflate) {
-    override val viewModel: HomeViewModel by viewModel()
+class DetailFragment : BaseFragment<FragmentDetailBinding, DetailViewModel>(FragmentDetailBinding::inflate) {
+    override val viewModel: DetailViewModel by viewModel()
     val safeArgs: DetailFragmentArgs by navArgs()
     private lateinit var rvCast: RecyclerView
     private val listCastAdapter =  CastAdapter()
@@ -38,11 +41,63 @@ class DetailFragment : BaseFragment<FragmentDetailBinding, HomeViewModel>(Fragme
             viewModel.fetchCreditMovie(movieId.toInt())
         }
         castView()
+        updateFavorite()
+        updateCart()
     }
 
     override fun initListener() {
-        binding.cvBack.setOnClickListener {
-            findNavController().popBackStack()
+        with(binding){
+            cvBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
+
+            cbFavorite.setOnClickListener {
+                val isChecked = cbFavorite.isChecked
+                if (isChecked){
+                    cbFavorite.setButtonDrawable(context?.getDrawable(R.drawable.ic_check))
+                    context?.let { context ->
+                        CustomSnackbar.showSnackBar(
+                            context,
+                            binding.root,
+                            resources.getString(R.string.tv_snackbar_wishlist)
+                        )
+                    }
+                    viewModel.insertWishlist()
+                } else{
+                    cbFavorite.setButtonDrawable(context?.getDrawable(R.drawable.ic_favorite))
+                    context?.let { context ->
+                        CustomSnackbar.showSnackBar(
+                            context,
+                            binding.root,
+                            resources.getString(R.string.tv_snackbar_wishlist_delete)
+                        )
+                    }
+                }
+            }
+
+            cbCart.setOnClickListener {
+                val isChecked = cbCart.isChecked
+                if (isChecked){
+                    cbCart.setButtonDrawable(context?.getDrawable(R.drawable.ic_check))
+                    context?.let { context ->
+                        CustomSnackbar.showSnackBar(
+                            context,
+                            binding.root,
+                            resources.getString(R.string.tv_snackbar_cart_add)
+                        )
+                    }
+                    viewModel.insertCart()
+                } else{
+                    cbCart.setButtonDrawable(context?.getDrawable(R.drawable.ic_add_deepblue))
+                    context?.let { context ->
+                        CustomSnackbar.showSnackBar(
+                            context,
+                            binding.root,
+                            resources.getString(R.string.tv_snackbar_cart_delete)
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -62,6 +117,28 @@ class DetailFragment : BaseFragment<FragmentDetailBinding, HomeViewModel>(Fragme
                                 .replace("%total_rating%", it.voteCount.toString())
                             tvDetailDesc.text= it.overview
                             tvToken.text = it.popularity.toInt().toString()
+                            updateFavorite()
+                            updateCart()
+                            viewModel.setDataCart(
+                                DataCart(
+                                    movieId = it.id,
+                                    posterPath = it.posterPath,
+                                    title = it.title,
+                                    genreName = getGenresString(it.genres),
+                                    popularity = it.popularity
+                                )
+                            )
+
+                            viewModel.setDataWishlist(
+                                DataWishlist(
+                                    movieId = it.id,
+                                    posterPath = it.posterPath,
+                                    title = it.title,
+                                    popularity = it.popularity,
+                                    voteAverage = it.voteAverage,
+                                    voteCount = it.voteCount
+                                )
+                            )
                         }
                     }
                     .onError {
@@ -73,7 +150,6 @@ class DetailFragment : BaseFragment<FragmentDetailBinding, HomeViewModel>(Fragme
             creditMovie.launchAndCollectIn(viewLifecycleOwner){state ->
                 state.onLoading {  }
                     .onSuccess {
-                        println("MASUK credit $it")
                         listCastAdapter.submitList(it)
                     }.onError {
                         println("MASUK error credit ${it.message}")
@@ -83,7 +159,28 @@ class DetailFragment : BaseFragment<FragmentDetailBinding, HomeViewModel>(Fragme
     }
 
     private fun getGenresString(genres: List<DataDetailMovie.Genre>): String {
-        return genres.map { it.name }.joinToString(", ")
+        val maxGenres = 3
+        val limitedGenres = genres.take(maxGenres)
+        return limitedGenres.joinToString(", ") { it.name }
+    }
+
+
+    private fun updateFavorite() {
+        binding.cbFavorite.isChecked = viewModel.checkFavorite(safeArgs.movieId.toInt())
+        when(binding.cbFavorite.isChecked){
+            true -> binding.cbFavorite.setButtonDrawable(context?.getDrawable(R.drawable.ic_check))
+            false -> {
+                binding.cbFavorite.setButtonDrawable(context?.getDrawable(R.drawable.ic_favorite))
+            }
+        }
+    }
+
+    private fun updateCart(){
+        binding.cbCart.isChecked = viewModel.checkAdd(safeArgs.movieId.toInt())
+        when(binding.cbCart.isChecked){
+            true -> binding.cbCart.setButtonDrawable(context?.getDrawable(R.drawable.ic_check))
+            false -> binding.cbCart.setButtonDrawable(context?.getDrawable(R.drawable.ic_add_deepblue))
+        }
     }
 
     fun castView(){

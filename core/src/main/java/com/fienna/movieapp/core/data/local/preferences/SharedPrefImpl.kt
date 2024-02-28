@@ -11,8 +11,10 @@ interface SharedPref{
     fun getOnBoardingValue():Boolean?
     fun putOnBoardingValue(value:Boolean)
     fun getProfileName():String?
+    fun putProfileName(value: String?)
     fun getUserId(): String?
     fun putUserId(id:String)
+
 }
 
 class SharedPrefImpl (private val context: Context):SharedPref{
@@ -44,6 +46,14 @@ class SharedPrefImpl (private val context: Context):SharedPref{
     }
 
     override fun getProfileName(): String? = prefs.getString(MovieConstant.profileName, "")
+
+    override fun putProfileName(value: String?) {
+        prefs.edit().apply{
+            putString(MovieConstant.profileName, value)
+            apply()
+        }
+    }
+
     override fun getUserId(): String? = prefs.getString(MovieConstant.userIdFirebase, "")
 
     override fun putUserId(id: String) {

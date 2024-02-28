@@ -97,6 +97,9 @@
                 android:name="movieId"
                 app:argType="string"/>
         </action>
+        <action
+            android:id="@+id/action_dashboardFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -116,5 +119,10 @@
             android:name="movieId"
             app:argType="string"/>
     </fragment>
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.fienna.movieapp.view.dashboard.cart.CartFragment"
+        android:label="fragment_cart"
+        tools:layout="@layout/fragment_cart" />
 
 </navigation>

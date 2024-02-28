@@ -1,6 +1,8 @@
 package com.fienna.movieapp.core.di
 
+import androidx.room.Room
 import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.fienna.movieapp.core.data.local.database.MovieDatabase
 import com.fienna.movieapp.core.data.local.datasource.LocalDataSource
 import com.fienna.movieapp.core.data.local.preferences.SharedPref
 import com.fienna.movieapp.core.data.local.preferences.SharedPrefImpl
@@ -14,6 +16,8 @@ import com.fienna.movieapp.core.domain.repository.PreLoginRepository
 import com.fienna.movieapp.core.domain.repository.PreLoginRepositoryImpl
 import com.fienna.movieapp.core.domain.repository.RemoteRepository
 import com.fienna.movieapp.core.domain.repository.RemoteRepositoryImpl
+import com.fienna.movieapp.core.domain.repository.RoomRepository
+import com.fienna.movieapp.core.domain.repository.RoomRepositoryImpl
 import com.fienna.movieapp.core.domain.usecase.MovieInteractor
 import com.fienna.movieapp.core.domain.usecase.MovieUsecase
 import com.google.firebase.Firebase
@@ -34,7 +38,7 @@ val sharedPrefModules = module {
 }
 
 val databaseModules = module {
-    single { LocalDataSource(get()) }
+    single { LocalDataSource(get(), get()) }
     single { RemoteDataSource(get()) }
 }
 
@@ -42,6 +46,16 @@ val repositoryModules = module {
     single<FirebaseRepository> { FirebaseRepositoryImpl(get()) }
     single<PreLoginRepository> { PreLoginRepositoryImpl(get()) }
     single<RemoteRepository> { RemoteRepositoryImpl(get()) }
+    single<RoomRepository> { RoomRepositoryImpl(get()) }
+}
+
+val roomDatabaseModules = module {
+    single {
+        Room.databaseBuilder(androidContext(), MovieDatabase::class.java, "movie_database")
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+    single { get<MovieDatabase>().movieDao() }
 }
 
 val networkModules = module {
@@ -52,9 +66,9 @@ val networkModules = module {
 }
 
 val usecaseModules = module {
-    single<MovieUsecase> { MovieInteractor(get(),get(), get()) }
+    single<MovieUsecase> { MovieInteractor(get(),get(), get(), get()) }
 }
 
 val coreModule = module {
-    includes(databaseModules, sharedPrefModules, repositoryModules, firebaseModule, usecaseModules, networkModules)
+    includes(databaseModules, sharedPrefModules, repositoryModules, firebaseModule, usecaseModules, networkModules, databaseModules, roomDatabaseModules)
 }

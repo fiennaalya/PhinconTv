@@ -11,6 +11,8 @@ interface PreLoginRepository{
     fun putLanguageValue(value: String)
     fun getUserId(): String
     fun putUserId(id:String)
+    fun getProfileName():String
+    fun putProfileName(value: String?)
 }
 
 class PreLoginRepositoryImpl(
@@ -24,4 +26,6 @@ class PreLoginRepositoryImpl(
     override fun putLanguageValue(value: String) { local.putLanguageValue(value) }
     override fun getUserId(): String = local.getUserId().toString()
     override fun putUserId(id: String) { local.putUserId(id) }
+    override fun getProfileName(): String = local.getProfileName().toString()
+    override fun putProfileName(value: String?) { local.putProfileName(value) }
 }

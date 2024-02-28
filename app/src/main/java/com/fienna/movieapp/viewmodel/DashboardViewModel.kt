@@ -12,6 +12,9 @@ class DashboardViewModel(private val movieUsecase: MovieUsecase): ViewModel() {
     private  val _theme = MutableStateFlow(false)
     val theme = _theme.asStateFlow()
 
+    private  val _profileUserName = MutableStateFlow("")
+    val profileUserName = _profileUserName.asStateFlow()
+
     fun getThemeValue() {
         _theme.update { movieUsecase.getSwitchThemeValue() }
     }
@@ -34,5 +37,9 @@ class DashboardViewModel(private val movieUsecase: MovieUsecase): ViewModel() {
     }
     fun putUserId(id:String){
         movieUsecase.putUserId(id)
+    }
+
+    fun getProfileName() {
+        _profileUserName.update { movieUsecase.getProfileName() }
     }
 }
