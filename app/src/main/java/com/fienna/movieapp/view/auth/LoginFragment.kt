@@ -39,17 +39,18 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, AuthViewModel>(Fragment
 
 
             btnLogin.setOnClickListener {
-                val email = tietEmail.text.toString().trim()
-                val password = tietPass.text.toString().trim()
-
-                if (formEmail.isErrorEnabled.not() && formPassword.isErrorEnabled.not()){
-                    viewModel.validateLoginField(email, password)
-                }else{
-                    Toast.makeText(
-                        context,
-                        "Please enter both email and password.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                val email = tietEmail.text.toString()
+                val password = tietPass.text.toString()
+                viewModel.signIn(email,password).launchAndCollectIn(viewLifecycleOwner){
+                    if (it){
+                        findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+                    }else{
+                        Toast.makeText(
+                            context,
+                            "use other email",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }
@@ -98,7 +99,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, AuthViewModel>(Fragment
                             if (isPass) {
                                 val email = tietEmail.text.toString()
                                 val password = tietPass.text.toString()
-
                                 viewModel.signIn(email,password).launchAndCollectIn(viewLifecycleOwner){
                                     if (it){
                                         findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
@@ -114,10 +114,32 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, AuthViewModel>(Fragment
                             } else {
                                 formPassword.error = resources.getString(R.string.helperText_password_error)
                             }
-                            resetLoginValidationState()
                         }
                     }
             }
+        }
+    }
+
+    fun fetchLogin(isPass:Boolean) = binding.run {
+        formEmail.isErrorEnabled = isPass.not()
+        formPassword.isErrorEnabled = isPass.not()
+        if (isPass) {
+            val email = tietEmail.text.toString()
+            val password = tietPass.text.toString()
+            viewModel.signIn(email,password).launchAndCollectIn(viewLifecycleOwner){
+                if (it){
+                    findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+                }else{
+                    Toast.makeText(
+                        context,
+                        "use other email",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+        } else {
+            formPassword.error = resources.getString(R.string.helperText_password_error)
         }
     }
 

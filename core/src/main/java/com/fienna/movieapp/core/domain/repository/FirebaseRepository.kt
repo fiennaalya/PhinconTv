@@ -36,7 +36,8 @@ class FirebaseRepositoryImpl (private val auth: FirebaseAuth):FirebaseRepository
                 } else {
                     println("MASUK : signInWithEmail:failure ${task.exception}")
                 }
-            }
+            }.addOnFailureListener {}
+
         awaitClose()
     }
 

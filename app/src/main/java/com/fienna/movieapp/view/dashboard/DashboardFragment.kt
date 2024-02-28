@@ -3,10 +3,12 @@ package com.fienna.movieapp.view.dashboard
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.fienna.movieapp.R
 import com.fienna.movieapp.core.base.BaseFragment
 import com.fienna.movieapp.databinding.FragmentDashboardBinding
 import com.fienna.movieapp.viewmodel.DashboardViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewModel>(FragmentDashboardBinding::inflate) {
@@ -28,6 +30,9 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
                 viewModel.putUserId(it.userId)
             }
         }
+
+        val bottomNav = binding.bnDashboard as BottomNavigationView
+        bottomNav.setupWithNavController(navController)
 
 
     }

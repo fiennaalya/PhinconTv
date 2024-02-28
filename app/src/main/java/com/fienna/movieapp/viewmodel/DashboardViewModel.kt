@@ -35,8 +35,4 @@ class DashboardViewModel(private val movieUsecase: MovieUsecase): ViewModel() {
     fun putUserId(id:String){
         movieUsecase.putUserId(id)
     }
-
-
-
-
 }
