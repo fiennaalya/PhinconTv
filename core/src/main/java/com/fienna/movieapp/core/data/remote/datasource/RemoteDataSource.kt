@@ -4,7 +4,6 @@ import com.fienna.movieapp.core.data.remote.data.CreditResponse
 import com.fienna.movieapp.core.data.remote.data.DetailMovieResponse
 import com.fienna.movieapp.core.data.remote.data.NowPlayingResponse
 import com.fienna.movieapp.core.data.remote.data.PopularResponse
-import com.fienna.movieapp.core.data.remote.data.SearchResponse
 import com.fienna.movieapp.core.data.remote.data.UpComingResponse
 import com.fienna.movieapp.core.data.remote.service.ApiEndPoint
 import com.fienna.movieapp.core.utils.safeApiCall
@@ -30,8 +29,5 @@ class RemoteDataSource(private val apiEndPoint: ApiEndPoint) {
         apiEndPoint.fetchCreditMovie(movieId)
     }
 
-    suspend fun fetchSearchMovie(query:String?=""):SearchResponse = safeApiCall {
-        apiEndPoint.fetchSearchMovie(query)
-    }
 
 }

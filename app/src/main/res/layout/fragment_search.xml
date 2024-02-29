@@ -13,22 +13,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:hint="@string/hint_search"
         android:lines="1">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tiet_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_search"
             android:drawablePadding="8dp"
             android:fontFamily="@font/poppins_regular"
             android:inputType="text"
+            android:textColor="@color/black"
             android:paddingStart="16dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_search"
         android:layout_marginHorizontal="4dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -72,4 +72,14 @@
     <string name="tv_delete_wishlist">Do you want to remove this movie?</string>
     <string name="tv_no">No</string>
     <string name="tv_yes">Yes</string>
+    <string name="tv_topup">Top Up</string>
+    <string name="year">%year%</string>
+    <string name="tv_choose_amount">Choose Amount</string>
+    <string name="tv_your_token">Your Token</string>
+    <string name="hint_enter_amount">Enter Amount</string>
+    <string name="helper_token">Buy in Rupiah</string>
+    <string name="tv_payment">Payment</string>
+    <string name="tv_choose_payment">Choose Payment</string>
+    <string name="tv_virtual_account">Virtual Account</string>
+    <string name="tv_bca_virtual_account">BCA Virtual Account</string>
 </resources>

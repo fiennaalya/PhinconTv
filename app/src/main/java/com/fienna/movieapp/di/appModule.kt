@@ -6,10 +6,18 @@ import com.fienna.movieapp.viewmodel.DashboardViewModel
 import com.fienna.movieapp.viewmodel.DetailViewModel
 import com.fienna.movieapp.viewmodel.HomeViewModel
 import com.fienna.movieapp.viewmodel.PreLoginViewModel
+import com.fienna.movieapp.viewmodel.SearchViewModel
+import com.fienna.movieapp.viewmodel.TokenViewModel
 import com.fienna.movieapp.viewmodel.TransactionViewModel
 import com.fienna.movieapp.viewmodel.WishlistViewModel
+import com.google.firebase.analytics.FirebaseAnalytics
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+
+val firebaseModule = module {
+    single { FirebaseAnalytics.getInstance(androidContext())}
+}
 
 val viewModelModule = module {
     viewModel{AuthViewModel(get())}
@@ -20,8 +28,10 @@ val viewModelModule = module {
     viewModel{WishlistViewModel(get(),get())}
     viewModel{CartViewModel(get())}
     viewModel{TransactionViewModel(get())}
+    viewModel{SearchViewModel(get())}
+    viewModel{TokenViewModel(get())}
 }
 
 val appModule = module {
-    includes(viewModelModule)
+    includes(viewModelModule, firebaseModule)
 }

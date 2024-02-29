@@ -2,6 +2,7 @@ package com.fienna.movieapp.view.dashboard.cart
 
 import android.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +28,8 @@ class CartFragment : BaseFragment<FragmentCartBinding, CartViewModel>(FragmentCa
     private val listCartAdapter by lazy {
         CartAdapter(
             action = {
+                val bundle = bundleOf("movieId" to it.movieId.toString())
+                findNavController().navigate(R.id.action_cartFragment_to_detailFragment, bundle)
             },
             remove = {entity -> removeItemFromCart(entity)}
         )

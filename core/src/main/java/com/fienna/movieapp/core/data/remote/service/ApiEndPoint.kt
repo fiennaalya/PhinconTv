@@ -28,7 +28,7 @@ interface ApiEndPoint {
 
     @GET("search/movie")
     suspend fun fetchSearchMovie(
-        @Query("search") searchQuery :String? = "",
+        @Query("query") query :String? = "",
         @Query("page") page:Int? = null
     ):SearchResponse
 

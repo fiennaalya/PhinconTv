@@ -13,6 +13,8 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.TextView
 import com.google.android.material.materialswitch.MaterialSwitch
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.util.Base64
 
 fun setText(locale: String, context: Context, textInput: TextView, fullText: String) {
@@ -78,7 +80,7 @@ fun MaterialSwitch.checkIf(state: Boolean){
     this.isChecked = state
 }
 
-fun changeGenre(genreId: Int): String {
+fun changeGenre(genreId: Int? = null): String {
     val genres = mapOf(
         28 to "Action",
         12 to "Adventure",
@@ -104,12 +106,18 @@ fun changeGenre(genreId: Int): String {
     return genres[genreId] ?: "Unknown Genre"
 }
 
-fun extractYearFromDate(dateString: String): String {
-    val year = dateString.split("-")[0]
+fun extractYearFromDate(dateString: String? = null): String {
+    val date = dateString ?: ""  // Using the elvis operator to handle null or empty cases
+    val year = if (date.isNotEmpty()) {
+        date.split("-")[0]
+    } else {
+        ""
+    }
     return year
 }
 
-fun formatRating(rating: Double): String {
+
+fun formatRating(rating: Double? = null): String {
     return String.format("%.1f", rating)
 }
 
@@ -119,4 +127,15 @@ fun String.toBase64(): String {
     } else {
         android.util.Base64.encodeToString(this.toByteArray(), android.util.Base64.DEFAULT)
     }
+}
+
+fun currency(number : Int): String{
+    val currencyIn = DecimalFormat.getCurrencyInstance() as DecimalFormat
+    val formatRupiah = DecimalFormatSymbols()
+
+    formatRupiah.currencySymbol = "Rp "
+    formatRupiah.groupingSeparator = '.'
+
+    currencyIn.decimalFormatSymbols = formatRupiah
+    return currencyIn.format(number).dropLast(3)
 }

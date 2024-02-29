@@ -2,6 +2,7 @@ package com.fienna.movieapp.view.dashboard.setting
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.fienna.movieapp.R
 import com.fienna.movieapp.core.base.BaseFragment
@@ -68,7 +69,12 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, DashboardViewModel>
         }
 
         binding.abtSetting.setNavigationOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigate(R.id.action_settingFragment_to_dashboardFragment)
+        }
+
+        binding.cardToken.setOnClickListener {
+            val bundle = bundleOf("paymentLabel" to resources.getString(R.string.tv_choose_payment))
+            findNavController().navigate(R.id.action_settingFragment_to_tokenFragment, bundle)
         }
 
     }

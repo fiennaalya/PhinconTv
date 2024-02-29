@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/layout_payment_child"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/dividerBottom_bank_recyclerview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/img_payment_child"
+            android:layout_width="48dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:visibility="gone"
+            tools:src="@drawable/img_bca" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/sv_payment_child"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:visibility="gone"
+            android:layout_marginStart="16dp"
+            android:scaleType="centerInside"
+            tools:src="@drawable/img_bca" />
+
+        <TextView
+            android:id="@+id/tv_title_payment_child"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginHorizontal="16dp"
+            android:layout_weight="1"
+            android:textColor="@color/deep_blue"
+            android:textSize="14sp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="@string/tv_bca_virtual_account" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginHorizontal="16dp"
+            android:layout_margin="18dp"
+            android:src="@drawable/ic_arrow_card" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/dividerBottom_bank_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000000"
+        android:backgroundTint="@color/grey"
+        app:layout_constraintBottom_toBottomOf="@+id/layout_payment_child" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

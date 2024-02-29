@@ -46,7 +46,7 @@ class HomeFragment :  BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHo
             tvComingSoon.text = resources.getString(R.string.tv_coming_soon)
             tvPopular.text = resources.getString(R.string.tv_popular)
         }
-        //autoScrollNowPlaying()
+
         rvUpcoming = binding.rvComingSoon
         rvUpcoming.setHasFixedSize(true)
 
@@ -58,6 +58,7 @@ class HomeFragment :  BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHo
         viewModel.fetchNowPlayingMovie()
         upComingView()
         popularView()
+        //autoScrollNowPlaying()
     }
 
     override fun initListener() {}

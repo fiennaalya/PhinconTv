@@ -28,7 +28,7 @@ class WishlistFragment : BaseFragment<FragmentWishlistBinding,WishlistViewModel 
     private val listWishlistAdapter by lazy {
         WishlistAdapter(
             action = {
-                val bundle = bundleOf("movieId" to it.movieId)
+                val bundle = bundleOf("movieId" to it.movieId.toString())
                 activity?.supportFragmentManager?.findFragmentById(R.id.main_fragment_container)?.findNavController()?.navigate(R.id.action_dashboardFragment_to_detailFragment, bundle)
             },
             remove = {entity-> removeItemFromWishlist(entity)}

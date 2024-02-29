@@ -5,13 +5,17 @@ import com.fienna.movieapp.core.data.local.entity.WishlistEntity
 import com.fienna.movieapp.core.data.remote.data.CreditResponse
 import com.fienna.movieapp.core.data.remote.data.DetailMovieResponse
 import com.fienna.movieapp.core.data.remote.data.NowPlayingResponse
+import com.fienna.movieapp.core.data.remote.data.PaymentResponse
 import com.fienna.movieapp.core.data.remote.data.PopularResponse
+import com.fienna.movieapp.core.data.remote.data.SearchResponse
 import com.fienna.movieapp.core.data.remote.data.UpComingResponse
 import com.fienna.movieapp.core.domain.model.DataCart
 import com.fienna.movieapp.core.domain.model.DataCredit
 import com.fienna.movieapp.core.domain.model.DataDetailMovie
 import com.fienna.movieapp.core.domain.model.DataNowPlaying
+import com.fienna.movieapp.core.domain.model.DataPayment
 import com.fienna.movieapp.core.domain.model.DataPopular
+import com.fienna.movieapp.core.domain.model.DataSearch
 import com.fienna.movieapp.core.domain.model.DataSession
 import com.fienna.movieapp.core.domain.model.DataUpcoming
 import com.fienna.movieapp.core.domain.model.DataWishlist
@@ -103,6 +107,19 @@ object DataMapper {
     )
     fun CreditResponse.toUiListData() = cast.map { cast -> cast.toUiData() }.toList()
 
+    fun SearchResponse.Result.toUiData() = DataSearch(
+        id = id,
+        genreIds = genreIds,
+        popularity = popularity,
+        posterPath = posterPath,
+        releaseDate = releaseDate,
+        title = title,
+        voteAverage = voteAverage,
+        voteCount = voteCount
+    )
+
+    fun SearchResponse.toUiListData() = results.map { result -> result.toUiData() }.toList()
+
     fun CartEntity.toUiData() = DataCart(
         cartId = cartId,
         userId = userId,
@@ -144,5 +161,19 @@ object DataMapper {
         voteAverage = voteAverage,
         voteCount = voteCount
     )
+
+    fun PaymentResponse.Data.toUiData() = DataPayment(
+        title = title,
+        item = item.map {item ->
+            DataPayment.Item(
+                image = item.image,
+                label = item.label,
+                status = item.status
+            )
+
+        }
+    )
+
+    fun PaymentResponse.toListData() = data.map { data ->  data.toUiData() }.toList()
 
 }

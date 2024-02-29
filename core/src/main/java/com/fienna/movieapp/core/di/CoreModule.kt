@@ -7,6 +7,7 @@ import com.fienna.movieapp.core.data.local.datasource.LocalDataSource
 import com.fienna.movieapp.core.data.local.preferences.SharedPref
 import com.fienna.movieapp.core.data.local.preferences.SharedPrefImpl
 import com.fienna.movieapp.core.data.remote.client.MovieClient
+import com.fienna.movieapp.core.data.remote.datasource.PagingDataSourceImpl
 import com.fienna.movieapp.core.data.remote.datasource.RemoteDataSource
 import com.fienna.movieapp.core.data.remote.interceptor.MovieInterceptor
 import com.fienna.movieapp.core.data.remote.service.ApiEndPoint
@@ -40,12 +41,13 @@ val sharedPrefModules = module {
 val databaseModules = module {
     single { LocalDataSource(get(), get()) }
     single { RemoteDataSource(get()) }
+    single { PagingDataSourceImpl(get()) }
 }
 
 val repositoryModules = module {
-    single<FirebaseRepository> { FirebaseRepositoryImpl(get()) }
+    single<FirebaseRepository> { FirebaseRepositoryImpl(get(),get(),get()) }
     single<PreLoginRepository> { PreLoginRepositoryImpl(get()) }
-    single<RemoteRepository> { RemoteRepositoryImpl(get()) }
+    single<RemoteRepository> { RemoteRepositoryImpl(get(),get()) }
     single<RoomRepository> { RoomRepositoryImpl(get()) }
 }
 

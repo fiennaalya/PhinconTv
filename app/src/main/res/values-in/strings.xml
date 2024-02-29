@@ -67,5 +67,10 @@
     <string name="tv_delete_wishlist">Do you want to remove this movie?</string>
     <string name="tv_no">No</string>
     <string name="tv_yes">Yes</string>
+    <string name="tv_topup">Top Up</string>
+    <string name="year">%year%</string>
+    <string name="tv_choose_amount">Choose Amount</string>
+    <string name="tv_your_token">Your Token</string>
+    <string name="helper_token">Buy in Rupiah</string>
 
 </resources>

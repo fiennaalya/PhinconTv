@@ -37,11 +37,11 @@
         tools:text="@string/title_movie" />
 
     <ImageView
-        android:layout_marginBottom="8dp"
         android:id="@+id/img_movie"
         android:layout_width="15dp"
         android:layout_height="15dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:src="@drawable/ic_movie"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/img_star_rating"
@@ -57,7 +57,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/img_movie"
         app:layout_constraintStart_toEndOf="@+id/img_movie"
         app:layout_constraintTop_toTopOf="@+id/img_movie"
-        tools:text="@string/year_and_genre_movie" />
+        tools:text="@string/year" />
 
     <TextView
         android:id="@+id/token_coming_soon"

@@ -1,5 +1,6 @@
 package com.fienna.movieapp.view.auth
 
+import android.os.Bundle
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.navigation.fragment.findNavController
@@ -11,10 +12,14 @@ import com.fienna.movieapp.core.utils.launchAndCollectIn
 import com.fienna.movieapp.databinding.FragmentRegsiterBinding
 import com.fienna.movieapp.utils.setText
 import com.fienna.movieapp.viewmodel.AuthViewModel
+import com.fienna.movieapp.viewmodel.FirebaseViewModel
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RegisterFragment : BaseFragment<FragmentRegsiterBinding,AuthViewModel>(FragmentRegsiterBinding::inflate) {
     override val viewModel: AuthViewModel by viewModel()
+    private val firebaseViewModel : FirebaseViewModel by viewModel()
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
     override fun initView() {
         with(binding){
             btnSignup.text = resources.getString(R.string.btn_signup)
@@ -47,6 +52,11 @@ class RegisterFragment : BaseFragment<FragmentRegsiterBinding,AuthViewModel>(Fra
 
                 if (formEmailSignup.isErrorEnabled.not() && formPasswordSignup.isErrorEnabled.not()){
                     viewModel.validateRegisterField(email,password)
+                    val bundle = Bundle().apply {
+                        putString("show_message", email)
+                    }
+
+                    analytics(email)
                 }
             }
         }
@@ -123,6 +133,19 @@ class RegisterFragment : BaseFragment<FragmentRegsiterBinding,AuthViewModel>(Fra
                     }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val screenName = resources.getString(R.string.btn_signup)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, Bundle().apply { putString("screenName", screenName) })
+    }
+
+    private fun analytics(data:String){
+        val bundle = Bundle()
+        bundle.putString("show_message", data)
+        firebaseAnalytics.logEvent("show_selected", bundle)
     }
 
     private fun textHyperlink() {

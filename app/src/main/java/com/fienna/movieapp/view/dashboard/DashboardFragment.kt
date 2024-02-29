@@ -44,6 +44,8 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
             profileUserName.launchAndCollectIn(viewLifecycleOwner){
                 binding.abtDashboard.subtitle = resources.getString(R.string.subtitle_dashboard)
                     .replace("%name%", it)
+
+                println("masuk nama $it")
             }
         }
     }
