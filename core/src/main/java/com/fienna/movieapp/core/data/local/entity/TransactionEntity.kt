@@ -18,8 +18,6 @@ data class TransactionEntity (
     val posterPath: String,
     @ColumnInfo("title")
     val title: String,
-    @ColumnInfo("genre_name")
-    val genreName: String,
     @ColumnInfo("popularity")
     val popularity: Double
 )

@@ -3,6 +3,8 @@ package com.fienna.movieapp.core.domain.repository
 import com.fienna.movieapp.core.data.local.datasource.LocalDataSource
 
 interface PreLoginRepository{
+    fun getTokenValue():Int
+    fun putTokenValue(value:Int)
     fun getOnBoardingValue():Boolean
     fun putOnBoardingValue(value:Boolean)
     fun getSwitchThemeValue():Boolean
@@ -18,6 +20,8 @@ interface PreLoginRepository{
 class PreLoginRepositoryImpl(
     private val local:LocalDataSource
 ):PreLoginRepository{
+    override fun getTokenValue(): Int = local.getTokenValue()
+    override fun putTokenValue(value: Int) {local.putTokenValue(value)}
     override fun getOnBoardingValue(): Boolean = local.getOnBoardingValue() == true
     override fun putOnBoardingValue(value: Boolean) { local.putOnBoardingValue(value) }
     override fun getSwitchThemeValue(): Boolean = local.getSwitchThemeValue() == true

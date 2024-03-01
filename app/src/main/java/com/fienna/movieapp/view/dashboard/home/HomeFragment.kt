@@ -26,6 +26,7 @@ class HomeFragment :  BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHo
     private lateinit var rvUpcoming: RecyclerView
     private lateinit var rvPopular: RecyclerView
     private lateinit var nowPlayingAdapter: DetailNowPlayingAdapter
+    private val list = mutableListOf<DataNowPlaying>()
 
     private val listUpComingAdapter by lazy {
         UpComingAdapter{data ->
@@ -53,12 +54,14 @@ class HomeFragment :  BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHo
         rvPopular = binding.rvPopular
         rvPopular.setHasFixedSize(true)
 
+        nowPlayingAdapter = DetailNowPlayingAdapter(list)
+
         viewModel.fetchUpcomingMovie()
         viewModel.fetchPopularMovie()
         viewModel.fetchNowPlayingMovie()
         upComingView()
         popularView()
-        //autoScrollNowPlaying()
+        autoScrollNowPlaying()
     }
 
     override fun initListener() {}
@@ -85,7 +88,9 @@ class HomeFragment :  BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHo
             nowPlayingMovie.launchAndCollectIn(viewLifecycleOwner){state ->
                 state.onLoading {
                 }.onSuccess {
-                    setupViewPager(it)
+                    list.addAll(it)
+                    nowPlayingAdapter.notifyDataSetChanged()
+                    setupViewPager()
 
                 }
             }
@@ -106,9 +111,8 @@ class HomeFragment :  BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHo
         }
     }
 
-    private fun setupViewPager(list: List<DataNowPlaying>) {
+    private fun setupViewPager() {
         with(binding) {
-            nowPlayingAdapter = DetailNowPlayingAdapter(list)
             vpNowPlaying.adapter = nowPlayingAdapter
             TabLayoutMediator(tlNowPlaying, vpNowPlaying) { _, _ -> }.attach()
         }

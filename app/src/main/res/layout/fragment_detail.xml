@@ -271,5 +271,17 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
+    <Button
+        android:id="@+id/btn_buy_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#90acbcd4"
+        android:layout_marginHorizontal="16dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="#003366"
+        android:textSize="14sp"
+        android:text="@string/tv_buy_now"
+        app:layout_constraintTop_toTopOf="@id/cv_back"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

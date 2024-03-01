@@ -72,5 +72,9 @@
     <string name="tv_choose_amount">Choose Amount</string>
     <string name="tv_your_token">Your Token</string>
     <string name="helper_token">Buy in Rupiah</string>
+    <string name="tv_added_token">token has been added to your account</string>
+    <string name="tv_enough_balance">You don\'t have enough balance.</string>
+    <string name="tv_please_top_up">Top-Up</string>
+    <string name="tv_movie_title">Movie Title</string>
 
 </resources>

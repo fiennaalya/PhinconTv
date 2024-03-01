@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.fienna.movieapp.core.domain.model.DataCart
 import com.fienna.movieapp.core.domain.model.DataCredit
 import com.fienna.movieapp.core.domain.model.DataDetailMovie
+import com.fienna.movieapp.core.domain.model.DataTransaction
 import com.fienna.movieapp.core.domain.model.DataWishlist
 import com.fienna.movieapp.core.domain.state.UiState
 import com.fienna.movieapp.core.domain.usecase.MovieUsecase
@@ -24,6 +25,8 @@ class DetailViewModel(private val movieUsecase: MovieUsecase):ViewModel() {
 
     private var dataCart: DataCart? = null
     private var dataWishlist: DataWishlist? = null
+    private var dataTransaction: DataTransaction? = null
+
     fun fetchDetailMovie(movieId:Int){
         viewModelScope.launch {
             _detailMovie.asMutableStateFlow {
@@ -47,11 +50,20 @@ class DetailViewModel(private val movieUsecase: MovieUsecase):ViewModel() {
         dataWishlist = data
     }
 
+    fun setDataTransaction(data:DataTransaction){
+        dataTransaction = data
+    }
+
+    fun insertTransaction() = runBlocking {
+        val username = movieUsecase.getProfileName()
+        dataTransaction = dataTransaction?.copy(userId = username.toBase64())
+        movieUsecase.insertTransaction(dataTransaction)
+    }
+
     fun insertWishlist() = runBlocking{
         val username = movieUsecase.getProfileName()
         dataWishlist = dataWishlist?.copy(userId = username.toBase64())
         movieUsecase.insertWishlist(dataWishlist)
-        println("MASUK VIEWMODEL DATA WISHLIST  $dataWishlist")
     }
 
 
@@ -65,8 +77,10 @@ class DetailViewModel(private val movieUsecase: MovieUsecase):ViewModel() {
         movieUsecase.checkFavorite(movieId) > 0
     }
 
-    fun resetFavoriteValue(movieId: Int) = runBlocking {
-        movieUsecase.checkFavorite(movieId) == 1
+    fun deleteWishlist() = runBlocking {
+        val username = movieUsecase.getProfileName()
+        dataWishlist = dataWishlist?.copy(userId = username.toBase64())
+        movieUsecase.deleteWishlist(dataWishlist)
     }
 
     fun checkAdd(movieId: Int) = runBlocking {

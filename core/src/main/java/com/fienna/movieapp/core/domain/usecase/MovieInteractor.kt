@@ -3,6 +3,7 @@ package com.fienna.movieapp.core.domain.usecase
 import android.os.Bundle
 import androidx.paging.PagingData
 import com.fienna.movieapp.core.data.local.entity.CartEntity
+import com.fienna.movieapp.core.data.local.entity.TransactionEntity
 import com.fienna.movieapp.core.data.local.entity.WishlistEntity
 import com.fienna.movieapp.core.data.remote.data.PaymentResponse
 import com.fienna.movieapp.core.domain.model.DataCart
@@ -14,6 +15,7 @@ import com.fienna.movieapp.core.domain.model.DataPopular
 import com.fienna.movieapp.core.domain.model.DataSearch
 import com.fienna.movieapp.core.domain.model.DataSession
 import com.fienna.movieapp.core.domain.model.DataToken
+import com.fienna.movieapp.core.domain.model.DataTransaction
 import com.fienna.movieapp.core.domain.model.DataUpcoming
 import com.fienna.movieapp.core.domain.model.DataUser
 import com.fienna.movieapp.core.domain.model.DataWishlist
@@ -86,6 +88,8 @@ class MovieInteractor(
             uiDataList
         }
 
+    override fun getTokenValue(): Int  = preLoginRepository.getTokenValue()
+    override fun putTokenValue(value: Int) { preLoginRepository.putTokenValue(value) }
     override fun getCurrentUser(): DataUser? {
         return firebaseRepository.getCurrentUser()?.displayName?.let { DataUser(it) }
     }
@@ -123,7 +127,7 @@ class MovieInteractor(
     }
 
     override fun getProfileName(): String = preLoginRepository.getProfileName()
-    override fun putProfileName(value: String?) {
+    override fun putProfileName(value: String) {
         preLoginRepository.putProfileName(value)
     }
 
@@ -201,5 +205,28 @@ class MovieInteractor(
         roomRepository.checkFavorite(movieId)
     }
 
+    override suspend fun fetchAllTransaction(userId: String): Flow<UiState<List<DataTransaction>>> =
+        safeDataCall {
+            roomRepository.fetchAllTransaction(userId).map {data ->
+                val mapped = data.map { entity: TransactionEntity -> entity.toUiData() }
+                UiState.Success(mapped)
+            }.flowOn(Dispatchers.IO).catch { throwable -> UiState.Error(throwable) }
+        }
+
+    override suspend fun insertTransaction(dataTransaction: DataTransaction?) {
+        dataTransaction?.let { roomRepository.insertTransaction(it.toEntity()) }
+    }
+
+    override suspend fun checkTransaction(movieId: Int): Int = safeDataCall {
+        roomRepository.checkTransaction(movieId)
+    }
+
+    override suspend fun fetchTransactionsForMovie(movieId: Int): Flow<UiState<DataTransaction>> =
+        safeDataCall {
+            roomRepository.fetchTransactionsForMovie(movieId).map {
+                val data = it.toUiData()
+                UiState.Success(data)
+            }.flowOn(Dispatchers.IO).catch { throwable -> UiState.Error(throwable) }
+        }
 
 }

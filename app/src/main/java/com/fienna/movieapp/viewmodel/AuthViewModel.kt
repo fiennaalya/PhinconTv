@@ -99,7 +99,7 @@ class AuthViewModel(private val movieUsecase: MovieUsecase):ViewModel() {
         _profileNameValidation.value = FlowState.FlowCreated
     }
 
-    fun saveProfileName(name: String?){
+    fun saveProfileName(name: String){
         movieUsecase.putProfileName(name)
     }
 

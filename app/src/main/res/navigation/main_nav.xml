@@ -107,6 +107,9 @@
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting">
         <argument
+            android:name="tokenTopUp"
+            app:argType="string"/>
+        <argument
             android:name="paymentLabel"
             app:argType="string"/>
         <action
@@ -127,6 +130,9 @@
         <argument
             android:name="movieId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_detailFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
     </fragment>
     <fragment
         android:id="@+id/cartFragment"
@@ -139,6 +145,9 @@
         <action
             android:id="@+id/action_cartFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_cartFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
     </fragment>
     <fragment
         android:id="@+id/tokenFragment"
@@ -166,6 +175,18 @@
         <action
             android:id="@+id/action_paymentFragment_to_tokenFragment"
             app:destination="@id/tokenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/checkoutFragment"
+        android:name="com.fienna.movieapp.view.dashboard.checkout.CheckoutFragment"
+        android:label="fragment_checkout"
+        tools:layout="@layout/fragment_checkout" >
+        <action
+            android:id="@+id/action_checkoutFragment_to_tokenFragment"
+            app:destination="@id/tokenFragment" />
+        <argument
+            android:name="dataTransaction"
+            app:argType="com.fienna.movieapp.core.domain.model.DataTransaction" />
     </fragment>
 
 </navigation>

@@ -85,6 +85,7 @@
                     android:src="@drawable/ic_coin_blue" />
 
                 <TextView
+                    android:id="@+id/tv_buy_token_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:layout_marginStart="4dp"

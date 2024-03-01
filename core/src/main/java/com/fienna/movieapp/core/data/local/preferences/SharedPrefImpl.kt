@@ -14,6 +14,8 @@ interface SharedPref{
     fun putProfileName(value: String?)
     fun getUserId(): String?
     fun putUserId(id:String)
+    fun getTokenValue():Int
+    fun putTokenValue(value:Int)
 
 }
 
@@ -62,5 +64,14 @@ class SharedPrefImpl (private val context: Context):SharedPref{
             apply()
         }
     }
+
+    override fun getTokenValue(): Int = prefs.getInt(MovieConstant.tokenKey, 0)
+    override fun putTokenValue(value: Int) {
+        prefs.edit().apply {
+            putInt(MovieConstant.tokenKey, value)
+            apply()
+        }
+    }
+
 
 }

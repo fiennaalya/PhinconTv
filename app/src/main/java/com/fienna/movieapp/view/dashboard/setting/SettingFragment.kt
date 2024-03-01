@@ -10,15 +10,17 @@ import com.fienna.movieapp.core.utils.launchAndCollectIn
 import com.fienna.movieapp.databinding.FragmentSettingBinding
 import com.fienna.movieapp.utils.checkIf
 import com.fienna.movieapp.viewmodel.DashboardViewModel
+import com.fienna.movieapp.viewmodel.TokenViewModel
 import com.google.firebase.auth.FirebaseAuth
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingFragment : BaseFragment<FragmentSettingBinding, DashboardViewModel> (FragmentSettingBinding::inflate) {
     override val viewModel: DashboardViewModel by viewModel()
+    val tokenViewModel : TokenViewModel by viewModel()
     private lateinit var auth: FirebaseAuth
     override fun initView() {
         auth = FirebaseAuth.getInstance()
-        with(binding){
+        with(binding) {
             abtSetting.title = resources.getString(R.string.title_appbarSetting)
             tvCardToken.text = resources.getString(R.string.tv_card_token)
             tvCardMode.text = resources.getString(R.string.tv_card_dark_mode)
@@ -37,6 +39,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, DashboardViewModel>
             AppCompatDelegate.setApplicationLocales(appLocale)
             binding.switchLang.isChecked = false
         }
+        tokenViewModel.getTokenValue()
     }
 
     override fun initListener() {
@@ -82,6 +85,12 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, DashboardViewModel>
         viewModel.run {
             theme.launchAndCollectIn(viewLifecycleOwner){
                 binding.switchTheme.checkIf(it)
+            }
+        }
+
+        tokenViewModel.run {
+            selectedToken.launchAndCollectIn(viewLifecycleOwner) {
+                binding.tvTokenAmountUser.text = it.toString()
             }
         }
     }

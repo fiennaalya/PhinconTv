@@ -82,4 +82,17 @@
     <string name="tv_choose_payment">Choose Payment</string>
     <string name="tv_virtual_account">Virtual Account</string>
     <string name="tv_bca_virtual_account">BCA Virtual Account</string>
+    <string name="tv_added_token">token has been added to your account</string>
+    <string name="tv_buy_now">Buy Now</string>
+    <string name="tv_checkout_items">Purchased Items</string>
+    <string name="tv_enough_balance">You don\'t have enough balance.</string>
+    <string name="tv_please_top_up">Top-Up</string>
+    <string name="tv_zero">0</string>
+    <string name="tv_checkout">Checkout</string>
+    <string name="tv_status">Status</string>
+    <string name="tv_payment_is_successful">Payment is Successful</string>
+    <string name="tv_transaction_detail">Transaction Detail</string>
+    <string name="tv_transaction_id">Transaction ID</string>
+    <string name="tv_movie_title">Movie Title</string>
+    <string name="tv_total_payment">Total Payment</string>
 </resources>

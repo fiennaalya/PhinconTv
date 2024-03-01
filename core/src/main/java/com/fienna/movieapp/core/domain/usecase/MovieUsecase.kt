@@ -11,6 +11,7 @@ import com.fienna.movieapp.core.domain.model.DataPopular
 import com.fienna.movieapp.core.domain.model.DataSearch
 import com.fienna.movieapp.core.domain.model.DataSession
 import com.fienna.movieapp.core.domain.model.DataToken
+import com.fienna.movieapp.core.domain.model.DataTransaction
 import com.fienna.movieapp.core.domain.model.DataUpcoming
 import com.fienna.movieapp.core.domain.model.DataUser
 import com.fienna.movieapp.core.domain.model.DataWishlist
@@ -34,6 +35,8 @@ interface MovieUsecase {
 
 
     /*shared pref*/
+    fun getTokenValue():Int
+    fun putTokenValue(value:Int)
     fun getCurrentUser(): DataUser?
     fun getOnBoardingValue():Boolean
     fun putOnBoardingValue(value:Boolean)
@@ -45,7 +48,7 @@ interface MovieUsecase {
     fun putUserId(id:String)
     fun getSessionData(): DataSession
     fun getProfileName():String
-    fun putProfileName(value: String?)
+    fun putProfileName(value: String)
 
     /*movie remote*/
     suspend fun fetchNowPlayingMovie(): List<DataNowPlaying>
@@ -68,5 +71,10 @@ interface MovieUsecase {
     suspend fun insertWishlist(dataWishlist: DataWishlist?)
     suspend fun deleteWishlist(dataWishlist: DataWishlist?)
     suspend fun checkFavorite(movieId:Int) : Int
+
+    suspend fun fetchAllTransaction(userId:String): Flow<UiState<List<DataTransaction>>>
+    suspend fun insertTransaction(dataTransaction: DataTransaction?)
+    suspend fun checkTransaction(movieId:Int) : Int
+    suspend fun fetchTransactionsForMovie(movieId: Int): Flow<UiState<DataTransaction>>
 
 }

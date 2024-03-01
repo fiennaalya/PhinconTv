@@ -8,6 +8,7 @@
     <color name="transparant">#00FFFFFF</color>
     <color name="sky_blue">#acbcd4</color>
     <color name="red">#e75641</color>
+    <color name="green">#009E60</color>
 
     <color name="colorControlNormal">@color/blue</color>
 </resources>

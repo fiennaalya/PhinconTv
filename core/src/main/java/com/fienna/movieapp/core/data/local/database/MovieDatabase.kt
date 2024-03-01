@@ -6,7 +6,7 @@ import com.fienna.movieapp.core.data.local.entity.CartEntity
 import com.fienna.movieapp.core.data.local.entity.TransactionEntity
 import com.fienna.movieapp.core.data.local.entity.WishlistEntity
 
-@Database(entities = [CartEntity::class, WishlistEntity::class, TransactionEntity::class], version = 3)
+@Database(entities = [CartEntity::class, WishlistEntity::class, TransactionEntity::class], version = 4)
 abstract class MovieDatabase:RoomDatabase() {
     abstract fun movieDao(): MovieDao
 }

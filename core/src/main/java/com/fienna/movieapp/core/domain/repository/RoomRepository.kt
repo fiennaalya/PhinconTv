@@ -2,6 +2,7 @@ package com.fienna.movieapp.core.domain.repository
 
 import com.fienna.movieapp.core.data.local.datasource.LocalDataSource
 import com.fienna.movieapp.core.data.local.entity.CartEntity
+import com.fienna.movieapp.core.data.local.entity.TransactionEntity
 import com.fienna.movieapp.core.data.local.entity.WishlistEntity
 import com.fienna.movieapp.core.utils.safeDataCall
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +19,12 @@ interface RoomRepository {
     suspend fun insertWishlist(wishlistEntity: WishlistEntity)
     suspend fun deleteWishlist(wishlistEntity: WishlistEntity)
     suspend fun checkFavorite(movieId:Int) : Int
+
+    suspend fun fetchAllTransaction(userId:String): Flow<List<TransactionEntity>>
+    suspend fun insertTransaction(transactionEntity: TransactionEntity)
+    suspend fun checkTransaction(movieId:Int) : Int
+    suspend fun fetchTransactionsForMovie(movieId: Int): Flow<TransactionEntity>
+
 }
 
 class RoomRepositoryImpl(
@@ -62,6 +69,23 @@ class RoomRepositoryImpl(
     override suspend fun checkFavorite(movieId: Int): Int = safeDataCall{
         local.checkFavorite(movieId)
     }
+
+    override suspend fun fetchAllTransaction(userId: String): Flow<List<TransactionEntity>> = safeDataCall{
+        local.fetchAllTransaction(userId)
+    }
+
+    override suspend fun insertTransaction(transactionEntity: TransactionEntity) {
+        local.insertTransaction(transactionEntity)
+    }
+
+    override suspend fun checkTransaction(movieId: Int): Int = safeDataCall{
+        local.checkTransaction(movieId)
+    }
+
+    override suspend fun fetchTransactionsForMovie(movieId: Int): Flow<TransactionEntity> = safeDataCall{
+        local.retrieveTransactionsForMovie(movieId)
+    }
+
 
 
 }

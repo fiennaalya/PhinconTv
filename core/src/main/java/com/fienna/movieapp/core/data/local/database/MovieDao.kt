@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.fienna.movieapp.core.data.local.entity.CartEntity
+import com.fienna.movieapp.core.data.local.entity.TransactionEntity
 import com.fienna.movieapp.core.data.local.entity.WishlistEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -33,6 +34,17 @@ interface MovieDao {
     suspend fun deleteWishlist(cart:WishlistEntity)
     @Query("SELECT count(*) FROM table_wishlist WHERE movie_id = :movieId")
     suspend fun checkFavorite(movieId: Int): Int
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTransaction(transaction: TransactionEntity)
+    @Query("SELECT * FROM table_transaction WHERE user_id = :userId")
+    fun retrieveAllTransaction(userId: String): Flow<List<TransactionEntity>>
+    @Query("SELECT count(*) FROM table_transaction WHERE movie_id = :movieId")
+    suspend fun checkTransaction(movieId: Int): Int
+    @Query("SELECT * FROM table_transaction WHERE movie_id = :movieId")
+    fun retrieveTransactionsForMovie(movieId: Int): Flow<TransactionEntity>
+
 
 
 }

@@ -64,4 +64,7 @@ dependencies {
     implementation("androidx.window:window:1.2.0")
 
     implementation ("io.coil-kt:coil:2.5.0")
+
+    //firebase
+    implementation("com.google.firebase:firebase-database")
 }
