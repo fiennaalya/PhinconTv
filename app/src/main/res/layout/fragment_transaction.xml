@@ -7,6 +7,7 @@
     tools:context=".view.dashboard.transaction.TransactionFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_transaction"
         android:layout_marginTop="8dp"
         tools:listitem="@layout/item_transaction"
         android:layout_width="match_parent"

@@ -1,6 +1,7 @@
 package com.fienna.movieapp.core.utils
 
 object MovieConstant {
+    val countWishlistKey = "countWishlist_key"
     val themeKey = "theme_key"
     val langKey = "language_key"
     val profileName = "profile_name"

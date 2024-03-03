@@ -14,7 +14,7 @@ class TokenAdapter(
         {data, binding, itemView, position ->
             binding.run {
                 tvTokenInput.text = data.token
-                tvRupiahInput.text = currency(data.price.toInt())
+                tvRupiahInput.text = currency(data.price)
 
                 var isItemViewClicked = false
                 itemView.setOnClickListener {

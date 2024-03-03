@@ -7,6 +7,10 @@ import kotlinx.parcelize.Parcelize
 @Keep
 @Parcelize
 data class DataToken (
-    var token: String,
-    var price: String,
+    var paymentMethod:String = "",
+    var price: Int = 0,
+    var token:String = "",
+    var transactionTime:String = "",
+    var userId:String = "",
+    var userName:String = "",
 ):Parcelable

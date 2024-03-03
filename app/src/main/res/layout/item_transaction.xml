@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_card_transaction"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
-    android:layout_marginVertical="8dp"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
     android:layout_marginHorizontal="16dp"
-    app:cardCornerRadius="5dp"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_centerVertical="true">
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,31 +18,30 @@
             android:id="@+id/img_shopping_bag"
             android:layout_width="30dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_shopping_bag"
             android:layout_margin="8dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:src="@drawable/ic_shopping_bag"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_shopping"
             android:layout_width="wrap_content"
-            android:fontFamily="@font/poppins_medium"
-            android:textSize="14sp"
-            android:layout_marginHorizontal="4dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/img_shopping_bag"
+            android:layout_marginHorizontal="4dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="@string/tv_shopping"
+            android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@id/img_shopping_bag"
-            android:text="Shopping"
-            />
+            app:layout_constraintTop_toTopOf="@id/img_shopping_bag" />
 
         <TextView
             android:id="@+id/tv_date_shopping"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="14-01-2023"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/tv_shopping"
-            app:layout_constraintTop_toBottomOf="@+id/tv_shopping"
-            android:text="14-01-2023"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_shopping" />
 
 
         <View
@@ -52,35 +51,35 @@
             android:layout_marginTop="4dp"
             android:background="#000000"
             android:backgroundTint="@color/sky_blue"
-            app:layout_constraintTop_toBottomOf="@+id/tv_date_shopping"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_date_shopping" />
 
         <TextView
             android:id="@+id/tv_movie_title"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/poppins_medium"
             android:textSize="14sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginHorizontal="4dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/divider_transaction_appBar"
-            app:layout_constraintStart_toEndOf="@id/img_shopping_bag"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="The Hunger Games: Mocking Jay Part 1 232456789808765432"
-            />
+            app:layout_constraintStart_toEndOf="@id/img_shopping_bag"
+            app:layout_constraintTop_toBottomOf="@+id/divider_transaction_appBar"
+            tools:text="The Hunger Games: Mocking Jay Part 1 232456789808765432" />
 
         <TextView
             android:id="@+id/tv_movie_token"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
             android:fontFamily="@font/poppins_medium"
             android:textSize="14sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginHorizontal="4dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tv_movie_title"
-            app:layout_constraintStart_toEndOf="@id/img_shopping_bag"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="500 Token"
-            />
+            app:layout_constraintStart_toEndOf="@id/img_shopping_bag"
+            app:layout_constraintTop_toBottomOf="@+id/tv_movie_title"
+            tools:text="@string/tv_token_transaction_value" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

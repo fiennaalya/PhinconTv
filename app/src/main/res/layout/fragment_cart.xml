@@ -67,18 +67,6 @@
         app:layout_constraintTop_toBottomOf="@+id/divider_cart_appBar"
         tools:text="@string/tv_select_all" />
 
-    <TextView
-        android:id="@+id/tv_cart_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="18dp"
-        android:fontFamily="@font/poppins_medium"
-        android:textColor="@color/deep_blue"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider_cart_appBar"
-        tools:text="@string/tv_delete" />
-
     <View
         android:id="@+id/dividerBottom_cart_allItems"
         android:layout_width="match_parent"

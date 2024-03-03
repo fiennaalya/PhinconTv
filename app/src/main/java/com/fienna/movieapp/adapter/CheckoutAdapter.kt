@@ -16,6 +16,7 @@ class CheckoutAdapter (
                 tvCartName.text = data.title
                 tvCartPrice.text = data.popularity.toInt().toString()
                 imgCartItems.load(AppConstant.imageLink + data.posterPath)
+                action.invoke(data)
             }
         }
 }

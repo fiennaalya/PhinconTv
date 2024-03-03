@@ -4,6 +4,7 @@ import com.fienna.movieapp.viewmodel.AuthViewModel
 import com.fienna.movieapp.viewmodel.CartViewModel
 import com.fienna.movieapp.viewmodel.DashboardViewModel
 import com.fienna.movieapp.viewmodel.DetailViewModel
+import com.fienna.movieapp.viewmodel.FirebaseViewModel
 import com.fienna.movieapp.viewmodel.HomeViewModel
 import com.fienna.movieapp.viewmodel.PreLoginViewModel
 import com.fienna.movieapp.viewmodel.SearchViewModel
@@ -30,6 +31,7 @@ val viewModelModule = module {
     viewModel{TransactionViewModel(get())}
     viewModel{SearchViewModel(get())}
     viewModel{TokenViewModel(get())}
+    viewModel{FirebaseViewModel(get())}
 }
 
 val appModule = module {

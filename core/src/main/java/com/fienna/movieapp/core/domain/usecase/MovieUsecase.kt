@@ -5,13 +5,13 @@ import androidx.paging.PagingData
 import com.fienna.movieapp.core.domain.model.DataCart
 import com.fienna.movieapp.core.domain.model.DataCredit
 import com.fienna.movieapp.core.domain.model.DataDetailMovie
+import com.fienna.movieapp.core.domain.model.DataMovieTransaction
 import com.fienna.movieapp.core.domain.model.DataNowPlaying
 import com.fienna.movieapp.core.domain.model.DataPayment
 import com.fienna.movieapp.core.domain.model.DataPopular
 import com.fienna.movieapp.core.domain.model.DataSearch
 import com.fienna.movieapp.core.domain.model.DataSession
 import com.fienna.movieapp.core.domain.model.DataToken
-import com.fienna.movieapp.core.domain.model.DataTransaction
 import com.fienna.movieapp.core.domain.model.DataUpcoming
 import com.fienna.movieapp.core.domain.model.DataUser
 import com.fienna.movieapp.core.domain.model.DataWishlist
@@ -26,6 +26,12 @@ interface MovieUsecase {
     suspend fun updateProfile(userProfileChangeRequest: UserProfileChangeRequest): Flow<Boolean>
     fun logScreenView(screenName:String)
     fun logEvent(eventName:String, bundle: Bundle)
+    suspend fun sendDataToDatabase(dataToken: DataToken, userId: String):Flow<Boolean>
+    suspend fun sendMovieToDatabase(dataMovieTransaction: DataMovieTransaction, userId: String, movieId:String):Flow<Boolean>
+    suspend fun getTokenFromFirebase(userId: String):Flow<Int>
+    suspend fun getMovieTokenFromFirebase(userId: String):Flow<Int>
+    suspend fun getMovieFromFirebase(userId: String, movieId: String):Flow<DataMovieTransaction?>
+    suspend fun getAllMovieFromFirebase(userId: String):Flow<List<DataMovieTransaction>>
 
     /*firebase remote config*/
     suspend fun getConfigStatusToken():Flow<Boolean>
@@ -35,8 +41,8 @@ interface MovieUsecase {
 
 
     /*shared pref*/
-    fun getTokenValue():Int
-    fun putTokenValue(value:Int)
+    fun getTokenValue(userId:String):Int
+    fun putTokenValue(userId:String, value:Int)
     fun getCurrentUser(): DataUser?
     fun getOnBoardingValue():Boolean
     fun putOnBoardingValue(value:Boolean)
@@ -49,6 +55,8 @@ interface MovieUsecase {
     fun getSessionData(): DataSession
     fun getProfileName():String
     fun putProfileName(value: String)
+    fun getCountWishlistFromDashboard():Int
+    fun putCountWishlistFromDashboard(value:Int)
 
     /*movie remote*/
     suspend fun fetchNowPlayingMovie(): List<DataNowPlaying>
@@ -64,17 +72,14 @@ interface MovieUsecase {
     suspend fun insertCart(dataCart: DataCart?)
     suspend fun deleteCart(dataCart: DataCart)
     suspend fun checkAdd(movieId:Int) : Int
-
+    suspend fun updateCheckCart(cartId: Int, value:Boolean)
+    suspend fun updateTotalPriceChecked(): Int
 
     suspend fun fetchWishlist(userId:String): Flow<UiState<List<DataWishlist>>>
     suspend fun deleteAllWishlist()
     suspend fun insertWishlist(dataWishlist: DataWishlist?)
     suspend fun deleteWishlist(dataWishlist: DataWishlist?)
     suspend fun checkFavorite(movieId:Int) : Int
-
-    suspend fun fetchAllTransaction(userId:String): Flow<UiState<List<DataTransaction>>>
-    suspend fun insertTransaction(dataTransaction: DataTransaction?)
-    suspend fun checkTransaction(movieId:Int) : Int
-    suspend fun fetchTransactionsForMovie(movieId: Int): Flow<UiState<DataTransaction>>
+    fun countWishlist(userId:String) : Int
 
 }

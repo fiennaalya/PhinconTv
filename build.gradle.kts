@@ -1,6 +1,7 @@
 buildscript {
     dependencies {
         classpath("com.google.gms:google-services:4.4.1")
+        classpath("com.google.firebase:firebase-crashlytics-gradle:2.9.9")
     }
 }
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
@@ -11,4 +12,5 @@ plugins {
     id("androidx.navigation.safeargs.kotlin") version "2.7.7" apply false
     id("com.google.gms.google-services") version "4.4.1" apply false
     id("com.google.firebase.crashlytics") version "2.9.9" apply false
+    id("io.gitlab.arturbosch.detekt") version("1.23.3")
 }

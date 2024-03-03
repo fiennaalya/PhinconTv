@@ -24,14 +24,17 @@ import com.fienna.movieapp.core.domain.usecase.MovieUsecase
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.analytics
 import com.google.firebase.auth.auth
+import com.google.firebase.database.database
 import com.google.firebase.remoteconfig.remoteConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
+
 
 val firebaseModule = module {
     single { Firebase.auth }
     single { Firebase.analytics }
     single { Firebase.remoteConfig }
+    single { Firebase.database.reference }
 }
 
 val sharedPrefModules = module {
@@ -45,7 +48,7 @@ val databaseModules = module {
 }
 
 val repositoryModules = module {
-    single<FirebaseRepository> { FirebaseRepositoryImpl(get(),get(),get()) }
+    single<FirebaseRepository> { FirebaseRepositoryImpl(get(),get(),get(), get()) }
     single<PreLoginRepository> { PreLoginRepositoryImpl(get()) }
     single<RemoteRepository> { RemoteRepositoryImpl(get(),get()) }
     single<RoomRepository> { RoomRepositoryImpl(get()) }

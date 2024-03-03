@@ -40,6 +40,11 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, AuthViewModel>(Frag
                     viewModel.updateProfile(profileUpdates).launchAndCollectIn(viewLifecycleOwner){
                         if (it){
                             profileUpdates.displayName?.let { it1 -> viewModel.saveProfileName(it1) }
+                            viewModel.getCurrentUser()?.userId?.let { it1 ->
+                                viewModel.saveUserId(
+                                    it1
+                                )
+                            }
                             findNavController().navigate(R.id.action_profileFragment_to_dashboardFragment)
                         } else{
                             Toast.makeText(
@@ -70,7 +75,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, AuthViewModel>(Frag
                                 btnUsername.isEnabled = false
                                 formUsername.error = resources.getString(R.string.helperText_name_error)
                             }
-                            resetLoginValidationState()
+                            resetProfileValidationState()
                         }
                     }
             }

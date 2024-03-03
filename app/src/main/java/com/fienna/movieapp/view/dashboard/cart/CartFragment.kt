@@ -1,6 +1,7 @@
 package com.fienna.movieapp.view.dashboard.cart
 
 import android.app.AlertDialog
+import android.os.Looper
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
@@ -31,7 +32,13 @@ class CartFragment : BaseFragment<FragmentCartBinding, CartViewModel>(FragmentCa
                 val bundle = bundleOf("movieId" to it.movieId.toString())
                 findNavController().navigate(R.id.action_cartFragment_to_detailFragment, bundle)
             },
-            remove = {entity -> removeItemFromCart(entity)}
+            remove = {entity -> removeItemFromCart(entity)},
+            checkbox = {id, isChecked ->
+                viewModel.updateCheckCart(id, isChecked)
+                android.os.Handler(Looper.getMainLooper())
+                    .postDelayed({viewModel.totalPrice()}, 500)
+
+            }
         )
     }
 
@@ -44,7 +51,6 @@ class CartFragment : BaseFragment<FragmentCartBinding, CartViewModel>(FragmentCa
         with(binding){
             tvTitleCart.text = resources.getString(R.string.menu_cart)
             tvCartSelect.text = resources.getString(R.string.tv_select_all)
-            tvCartDelete.text = resources.getString(R.string.tv_delete)
             tvCartTotalprice.text = resources.getString(R.string.total_bayar)
             tvCartPrice.text = resources.getString(R.string.harga_detail)
             btnBuy.text = resources.getString(R.string.buy)
@@ -55,6 +61,11 @@ class CartFragment : BaseFragment<FragmentCartBinding, CartViewModel>(FragmentCa
         binding.cvBackCart.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        binding.checkboxCartAll.setOnClickListener {
+            val isChecked = binding.checkboxCartAll.isChecked
+            listCartAdapter.setAllChecked(isChecked)
+        }
     }
 
     override fun observeData() {
@@ -63,7 +74,6 @@ class CartFragment : BaseFragment<FragmentCartBinding, CartViewModel>(FragmentCa
                 this.launch {
                     state.onLoading {  }
                         .onSuccess {data ->
-                            println("MASUK: $data")
                             dataCart = data
                             listCartAdapter.submitList(data)
 
@@ -76,6 +86,10 @@ class CartFragment : BaseFragment<FragmentCartBinding, CartViewModel>(FragmentCa
                             }
                         }
                 }
+            }
+
+            totalPrice.launchAndCollectIn(viewLifecycleOwner){
+                binding.tvCartPrice.text = it.toString()
             }
         }
     }

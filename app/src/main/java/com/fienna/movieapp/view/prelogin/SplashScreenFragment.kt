@@ -2,7 +2,9 @@ package com.fienna.movieapp.view.prelogin
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.fienna.movieapp.R
@@ -48,28 +50,33 @@ class SplashScreenFragment : BaseFragment<FragmentSplashScreenBinding, PreLoginV
         }
     }
 
-    private fun animateSplash(){
-        val fadeInAnimator = ObjectAnimator.ofFloat(binding.imgSplash, "alpha", 0f, 1f)
-        fadeInAnimator.duration = 2000 // Sesuaikan durasi animasi
+    private fun animateSplash() {
+        binding.layoutTextSplash.visibility = View.GONE
 
-        // Animasi translasi ke kiri untuk img_splash
-        val translateLeftAnimator = ObjectAnimator.ofFloat(binding.imgSplash, "translationX", 0f, -binding.root.resources.getDimensionPixelSize(
-            org.koin.android.R.dimen.abc_action_bar_subtitle_bottom_margin_material).toFloat())
-        translateLeftAnimator.duration = 2000 // Sesuaikan durasi animasi
+        val visibilityAnimator = ValueAnimator.ofInt(View.GONE, View.VISIBLE)
+        visibilityAnimator.addUpdateListener { animator ->
+            val value = animator.animatedValue as Int
+            binding.layoutTextSplash.visibility = value
+        }
+        visibilityAnimator.duration = 1
 
-        // Animasi fade in lebih cepat untuk layout_text_splash
-        val fadeInFastAnimator = ObjectAnimator.ofFloat(binding.layoutTextSplash, "alpha", 0f, 1f)
-        fadeInFastAnimator.duration = 1000 // Sesuaikan durasi animasi
+        val translateLeftAnimator = ObjectAnimator.ofFloat(binding.imgSplash, TRANSLATIONX_ANIMATION, 0f, -150f)
+        translateLeftAnimator.duration = 1000
 
-        // Menjalankan animasi bersamaan
+        val translateLeftAnimatorText = ObjectAnimator.ofFloat(binding.layoutTextSplash, TRANSLATIONX_ANIMATION, 0f, -150f)
+        translateLeftAnimator.duration = 1000
+
+        val fadeInAnimator = ObjectAnimator.ofFloat(binding.layoutTextSplash, ALPHA_ANIMATION, 0f, 1f)
+        fadeInAnimator.duration = 2000
+
         val animatorSet = AnimatorSet()
-        animatorSet.play(fadeInAnimator)
-            .before(translateLeftAnimator)
-            .before(fadeInFastAnimator)
+        animatorSet.play(translateLeftAnimator).before(visibilityAnimator).with(translateLeftAnimatorText).with(fadeInAnimator)
 
-        // Memulai animasi
         animatorSet.start()
     }
 
-
+    companion object {
+        const val ALPHA_ANIMATION = "alpha"
+        const val TRANSLATIONX_ANIMATION = "translationX"
+    }
 }

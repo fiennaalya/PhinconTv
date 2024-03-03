@@ -10,14 +10,13 @@ import com.fienna.movieapp.core.utils.launchAndCollectIn
 import com.fienna.movieapp.databinding.FragmentSettingBinding
 import com.fienna.movieapp.utils.checkIf
 import com.fienna.movieapp.viewmodel.DashboardViewModel
-import com.fienna.movieapp.viewmodel.TokenViewModel
 import com.google.firebase.auth.FirebaseAuth
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingFragment : BaseFragment<FragmentSettingBinding, DashboardViewModel> (FragmentSettingBinding::inflate) {
     override val viewModel: DashboardViewModel by viewModel()
-    val tokenViewModel : TokenViewModel by viewModel()
     private lateinit var auth: FirebaseAuth
+    var userIdValue :String =""
     override fun initView() {
         auth = FirebaseAuth.getInstance()
         with(binding) {
@@ -39,7 +38,9 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, DashboardViewModel>
             AppCompatDelegate.setApplicationLocales(appLocale)
             binding.switchLang.isChecked = false
         }
-        tokenViewModel.getTokenValue()
+
+        viewModel.getUserId()
+        readFromDatabase()
     }
 
     override fun initListener() {
@@ -79,19 +80,22 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, DashboardViewModel>
             val bundle = bundleOf("paymentLabel" to resources.getString(R.string.tv_choose_payment))
             findNavController().navigate(R.id.action_settingFragment_to_tokenFragment, bundle)
         }
-
     }
     override fun observeData() {
         viewModel.run {
             theme.launchAndCollectIn(viewLifecycleOwner){
                 binding.switchTheme.checkIf(it)
             }
+            userId.launchAndCollectIn(viewLifecycleOwner){
+                userIdValue = it
+            }
         }
 
-        tokenViewModel.run {
-            selectedToken.launchAndCollectIn(viewLifecycleOwner) {
-                binding.tvTokenAmountUser.text = it.toString()
-            }
+    }
+
+    private fun readFromDatabase(){
+        viewModel.getTokenFromFirebase(userIdValue).launchAndCollectIn(viewLifecycleOwner){tokenValue ->
+            binding.tvTokenAmountUser.text = tokenValue.toString()
         }
     }
 

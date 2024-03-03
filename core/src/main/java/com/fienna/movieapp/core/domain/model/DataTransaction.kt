@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class DataTransaction (
     val transactionId: Int = 0,
-    val userId: String = "",
+    var userId: String = "",
     val movieId: Int,
     val posterPath: String,
     val title: String,

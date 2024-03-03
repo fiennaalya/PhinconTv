@@ -136,7 +136,7 @@
                         <LinearLayout
                             android:id="@+id/layout_enough_balance"
                             android:layout_width="wrap_content"
-                            android:visibility="gone"
+                            tools:visibility="gone"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
@@ -148,7 +148,7 @@
                                 android:fontFamily="@font/poppins_medium"
                                 app:cardCornerRadius="8dp"
                                 android:textColor="@color/red"
-                                tools:text="@string/tv_checkout_items" />
+                                android:text="@string/tv_checkout_items" />
 
                             <TextView
                                 android:id="@+id/tv_topup_token"
@@ -159,7 +159,7 @@
                                 android:fontFamily="@font/poppins_semibold"
                                 app:cardCornerRadius="8dp"
                                 android:textColor="@color/green"
-                                tools:text="@string/tv_please_top_up" />
+                                android:text="@string/tv_please_top_up" />
 
                         </LinearLayout>
 
@@ -204,7 +204,7 @@
 
     <TextView
         android:id="@+id/tv_token_price"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:fontFamily="@font/poppins_semibold"
@@ -213,6 +213,6 @@
         app:layout_constraintBottom_toBottomOf="@id/btn_buy_checkout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_checkout_totalprice"
-        tools:text="@string/tv_zero" />
+        tools:text="2000" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,6 @@
 package com.fienna.movieapp.view.auth
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.navigation.fragment.findNavController
 import com.fienna.movieapp.R
@@ -10,6 +9,7 @@ import com.fienna.movieapp.core.domain.state.onCreated
 import com.fienna.movieapp.core.domain.state.onValue
 import com.fienna.movieapp.core.utils.launchAndCollectIn
 import com.fienna.movieapp.databinding.FragmentRegsiterBinding
+import com.fienna.movieapp.utils.CustomSnackbar
 import com.fienna.movieapp.utils.setText
 import com.fienna.movieapp.viewmodel.AuthViewModel
 import com.fienna.movieapp.viewmodel.FirebaseViewModel
@@ -52,11 +52,7 @@ class RegisterFragment : BaseFragment<FragmentRegsiterBinding,AuthViewModel>(Fra
 
                 if (formEmailSignup.isErrorEnabled.not() && formPasswordSignup.isErrorEnabled.not()){
                     viewModel.validateRegisterField(email,password)
-                    val bundle = Bundle().apply {
-                        putString("show_message", email)
-                    }
-
-                    analytics(email)
+                    firebaseViewModel.logScreenView(email)
                 }
             }
         }
@@ -117,16 +113,25 @@ class RegisterFragment : BaseFragment<FragmentRegsiterBinding,AuthViewModel>(Fra
                                     if (it){
                                         findNavController().navigate(R.id.action_registerFragment_to_profileFragment)
                                     }else{
-                                        Toast.makeText(
-                                            context,
-                                            "use other email",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                        context?.let { it1 ->
+                                            CustomSnackbar.showSnackBar(
+                                                it1,
+                                                binding.root,
+                                                resources.getString(R.string.other_email_signup)
+                                            )
+                                        }
                                     }
                                 }
 
                             } else {
                                 formPasswordSignup.error = resources.getString(R.string.helperText_password)
+                                context?.let { it1 ->
+                                    CustomSnackbar.showSnackBar(
+                                        it1,
+                                        binding.root,
+                                        resources.getString(R.string.register_validation)
+                                    )
+                                }
                             }
                             resetRegisterValidationState()
                         }
@@ -138,14 +143,7 @@ class RegisterFragment : BaseFragment<FragmentRegsiterBinding,AuthViewModel>(Fra
     override fun onResume() {
         super.onResume()
         val screenName = resources.getString(R.string.btn_signup)
-        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, Bundle().apply { putString("screenName", screenName) })
-    }
-
-    private fun analytics(data:String){
-        val bundle = Bundle()
-        bundle.putString("show_message", data)
-        firebaseAnalytics.logEvent("show_selected", bundle)
+        firebaseViewModel.logEvent(FirebaseAnalytics.Event.SIGN_UP, Bundle().apply { putString("screenName", screenName)})
     }
 
     private fun textHyperlink() {

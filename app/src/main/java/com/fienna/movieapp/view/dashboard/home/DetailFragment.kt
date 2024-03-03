@@ -22,17 +22,20 @@ import com.fienna.movieapp.utils.AppConstant
 import com.fienna.movieapp.utils.CustomSnackbar
 import com.fienna.movieapp.utils.extractYearFromDate
 import com.fienna.movieapp.utils.formatRating
+import com.fienna.movieapp.viewmodel.DashboardViewModel
 import com.fienna.movieapp.viewmodel.DetailViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetailFragment :
     BaseFragment<FragmentDetailBinding, DetailViewModel>(FragmentDetailBinding::inflate) {
     override val viewModel: DetailViewModel by viewModel()
+    val dashboardViewModel : DashboardViewModel by viewModel()
     val safeArgs: DetailFragmentArgs by navArgs()
     private lateinit var rvCast: RecyclerView
     private val listCastAdapter = CastAdapter()
     private var dataTransaction: DataTransaction? = null
-
+    var movieIdForFirebase = ""
+    var userIdValue = ""
     private var listDataTransaction: MutableList<DataTransaction> = mutableListOf()
     override fun initView() {
         with(binding) {
@@ -43,12 +46,15 @@ class DetailFragment :
         rvCast = binding.rvCast
         rvCast.setHasFixedSize(true)
         safeArgs.movieId.let { movieId ->
+            movieIdForFirebase = movieId
             viewModel.fetchDetailMovie(movieId.toInt())
             viewModel.fetchCreditMovie(movieId.toInt())
         }
         castView()
         updateFavorite()
         updateCart()
+        dashboardViewModel.getUserId()
+        setButtonBuy()
     }
 
     override fun initListener() {
@@ -78,7 +84,7 @@ class DetailFragment :
                             resources.getString(R.string.tv_snackbar_wishlist_delete)
                         )
                     }
-                    viewModel.deleteWishlist()
+                    viewModel.deleteWishlistDetail()
                 }
             }
 
@@ -107,7 +113,7 @@ class DetailFragment :
             }
 
             btnBuyDetail.setOnClickListener {
-//                val bundle =  bundleOf("listdataTransaction" to dataTransaction.toTypedArray())
+                /*val bundle =  bundleOf("listdataTransaction" to dataTransaction.toTypedArray())*/
                 val bundle = bundleOf("dataTransaction" to dataTransaction )
                 findNavController().navigate(R.id.action_detailFragment_to_checkoutFragment, bundle)
             }
@@ -181,8 +187,6 @@ class DetailFragment :
                 state.onLoading { }
                     .onSuccess {
                         listCastAdapter.submitList(it)
-                    }.onError {
-                        println("MASUK error credit ${it.message}")
                     }
             }
         }
@@ -217,6 +221,24 @@ class DetailFragment :
         rvCast.run {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = listCastAdapter
+        }
+    }
+
+    fun setButtonBuy(){
+        dashboardViewModel.run {
+            userId.launchAndCollectIn(viewLifecycleOwner) {
+                userIdValue = it
+            }
+
+            getMovieFromDatabase(userIdValue, movieIdForFirebase).launchAndCollectIn(viewLifecycleOwner) { data ->
+                if (data?.movieId.toString() == movieIdForFirebase){
+                    binding.btnBuyDetail.isEnabled = false
+                    binding.btnBuyDetail.setTextColor(resources.getColor(R.color.grey))
+                    binding.btnBuyDetail.text = resources.getString(R.string.tv_purchased)
+                }else{
+                    binding.btnBuyDetail.isEnabled = true
+                }
+            }
         }
     }
 

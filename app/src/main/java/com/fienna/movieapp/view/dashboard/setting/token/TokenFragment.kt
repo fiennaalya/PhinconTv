@@ -6,19 +6,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.fienna.movieapp.R
 import com.fienna.movieapp.adapter.TokenAdapter
 import com.fienna.movieapp.core.base.BaseFragment
+import com.fienna.movieapp.core.domain.model.DataToken
 import com.fienna.movieapp.core.utils.launchAndCollectIn
 import com.fienna.movieapp.databinding.FragmentTokenBinding
 import com.fienna.movieapp.utils.CustomSnackbar
+import com.fienna.movieapp.utils.DateTimeNow
 import com.fienna.movieapp.utils.currency
 import com.fienna.movieapp.viewmodel.DashboardViewModel
 import com.fienna.movieapp.viewmodel.TokenViewModel
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.IgnoreExtraProperties
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TokenFragment :
@@ -26,15 +21,14 @@ class TokenFragment :
     override val viewModel: TokenViewModel by viewModel()
     val safeArgs: TokenFragmentArgs by navArgs()
     val dashboardViewModel: DashboardViewModel by viewModel()
-    //var userName : String = ""
-
-    private lateinit var database: DatabaseReference
-    private var currentTokenKey: String? = null
+    var paymentLabel: String = ""
+    var userId: String = ""
+    var userName: String = ""
 
     private val tokenAdapter by lazy {
         TokenAdapter(
             action = {
-                setandSendTokenToDatabase(it.token.toInt(), it.price.toInt())
+                setandSendTokenToDatabase(it.token.toInt(), it.price)
             }
         )
     }
@@ -57,11 +51,17 @@ class TokenFragment :
 
             safeArgs.paymentLabel.let {
                 tvChoosePayment.text = it
+                paymentLabel = it
+            }
+            if (paymentLabel == resources.getString(R.string.tv_choose_payment)) {
+                binding.btnBuyToken.isEnabled = false
+            } else {
+                binding.btnBuyToken.isEnabled = true
             }
         }
 
-        database = Firebase.database.reference
         dashboardViewModel.getProfileName()
+        dashboardViewModel.getUserId()
     }
 
     override fun initListener() {
@@ -75,72 +75,63 @@ class TokenFragment :
 
     }
 
-    private fun getDataToken() {
-        viewModel.getConfigToken().launchAndCollectIn(viewLifecycleOwner) {
-            tokenAdapter.submitList(it)
-        }
-    }
-
-    @IgnoreExtraProperties
-    data class Token(val username: String? = null, val token: Int? = null) {}
-
-    fun writeNewToken(token: Int) {
-        dashboardViewModel.profileUserName.launchAndCollectIn(viewLifecycleOwner) {
-            //userName = it
-            val tokenValue = Token(it, token)
-            val newTokenRef = database.child("userToken").push()
-            newTokenRef.setValue(tokenValue)
-
-            currentTokenKey = newTokenRef.key
-        }
-    }
-
-    fun ReadNewToken(tokenKey: String) {
-        val tokenRef = database.child("userToken").child(tokenKey)
-        val postListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val token = snapshot.getValue(Token::class.java)
-                token?.token?.let { viewModel.saveTokenValue(it) }
-                println("masuk token ${token?.token} ${token?.username}")
-
-                context?.let {
-                    CustomSnackbar.showSnackBarWithAction(
-                        it,
-                        binding.root,
-                        "${token?.token} ${resources.getString(R.string.tv_added_token)}",
-                        action = {
-                            findNavController().navigate(R.id.action_tokenFragment_to_settingFragment)
-                        }
-                    )
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                println("loadPost:onCancelled ${error.toException()}")
-            }
-
-        }
-
-        tokenRef.addListenerForSingleValueEvent(postListener)
-    }
-
-    fun setandSendTokenToDatabase(token: Int, price: Int) {
-        binding.tvTokenPrice.text = currency(price)
-        binding.tvBuyTokenAmount.text = token.toString()
-        binding.btnBuyToken.setOnClickListener {
-            writeNewToken(token)
-            currentTokenKey?.let { key ->
-                ReadNewToken(key)
-            }
-        }
-    }
-
     override fun observeData() {
         with(viewModel) {
             getDataToken()
             getConfigStatusToken().launchAndCollectIn(viewLifecycleOwner) {
                 getDataToken()
             }
+        }
+
+        dashboardViewModel.userId.launchAndCollectIn(viewLifecycleOwner) {
+            userId = it
+        }
+
+        dashboardViewModel.profileUserName.launchAndCollectIn(viewLifecycleOwner) {
+            userName = it
+
+        }
+    }
+
+    private fun getDataToken() {
+        viewModel.getConfigToken().launchAndCollectIn(viewLifecycleOwner) {
+            tokenAdapter.submitList(it)
+        }
+    }
+
+    fun writeNewToken(token: Int, price: Int) {
+        val dataToken = DataToken(
+            paymentMethod = paymentLabel,
+            price = price,
+            token = token.toString(),
+            transactionTime = DateTimeNow(),
+            userId = userId,
+            userName = userName,
+        )
+        viewModel.sendDataToDatabase(dataToken, userId)
+            .launchAndCollectIn(viewLifecycleOwner) { success ->
+                if (success) {
+                    println("MASUK SUKSES SEND")
+                    context?.let {
+                        CustomSnackbar.showSnackBarWithAction(
+                            it,
+                            binding.root,
+                            "${dataToken.token} ${resources.getString(R.string.tv_added_token)}",
+                            action = {
+                                findNavController().navigate(R.id.action_tokenFragment_to_settingFragment)
+                            }
+                        )
+                    }
+                }
+
+            }
+    }
+
+    fun setandSendTokenToDatabase(token: Int, price: Int) {
+        binding.tvTokenPrice.text = currency(price)
+        binding.tvBuyTokenAmount.text = token.toString()
+        binding.btnBuyToken.setOnClickListener {
+            writeNewToken(token, price)
         }
     }
 }

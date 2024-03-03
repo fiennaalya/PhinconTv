@@ -15,7 +15,13 @@ import android.widget.TextView
 import com.google.android.material.materialswitch.MaterialSwitch
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Base64
+import java.util.Date
+import java.util.Locale
 
 fun setText(locale: String, context: Context, textInput: TextView, fullText: String) {
     val spannable = SpannableString(fullText)
@@ -138,4 +144,34 @@ fun currency(number : Int): String{
 
     currencyIn.decimalFormatSymbols = formatRupiah
     return currencyIn.format(number).dropLast(3)
+}
+
+
+fun DateTimeNow(): String {
+    val dateTime: String
+
+    dateTime = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+        val localDateTime = LocalDateTime.now()
+        localDateTime.format(formatter)
+    } else {
+        val legacyFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+        val legacyDateTime = legacyFormatter.format(Date())
+        legacyDateTime
+    }
+
+    return dateTime
+}
+
+fun extractYearMonthDate(dateTimeString: String?): String {
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+    val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+    try {
+        val date = inputFormat.parse(dateTimeString)
+        return outputFormat.format(date)
+    } catch (e: ParseException) {
+        e.printStackTrace()
+        return ""
+    }
 }

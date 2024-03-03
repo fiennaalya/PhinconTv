@@ -11,7 +11,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiEndPoint {
-    @GET("movie/now_playing")
+    @GET("movie/now_playing?page=3")
     suspend fun fetchNowPlayingMovie(): NowPlayingResponse
 
     @GET("movie/popular?page=2")

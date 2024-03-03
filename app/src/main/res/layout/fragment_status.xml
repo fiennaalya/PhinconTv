@@ -58,7 +58,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/divider_status_appBar"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-        tools:src="@drawable/ic_check_white" />
+        android:src="@drawable/ic_check_white" />
     />
 
     <TextView
@@ -94,7 +94,7 @@
         android:fontFamily="@font/poppins_regular"
         app:layout_constraintStart_toStartOf="@id/tv_transaction_detail"
         app:layout_constraintTop_toBottomOf="@id/tv_transaction_detail"
-        tools:text="@string/tv_transaction_id" />
+        tools:text="@string/tv_transaction_date" />
 
     <TextView
         android:id="@+id/tv_movie_title"
@@ -117,7 +117,7 @@
         tools:text="@string/tv_total_payment" />
 
     <TextView
-        android:id="@+id/tv_transaction_id_value"
+        android:id="@+id/tv_transaction_date_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"

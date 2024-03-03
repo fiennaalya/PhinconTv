@@ -3,8 +3,6 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
     id ("kotlin-kapt")
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -77,4 +75,5 @@ dependencies {
     api("com.google.firebase:firebase-config-ktx")
     api("com.google.firebase:firebase-messaging-ktx")
     api("com.google.firebase:firebase-auth-ktx")
+    api ("com.google.firebase:firebase-database-ktx")
 }

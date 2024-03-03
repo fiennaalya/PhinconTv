@@ -5,12 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.fienna.movieapp.core.domain.model.DataCart
 import com.fienna.movieapp.core.domain.model.DataCredit
 import com.fienna.movieapp.core.domain.model.DataDetailMovie
-import com.fienna.movieapp.core.domain.model.DataTransaction
 import com.fienna.movieapp.core.domain.model.DataWishlist
 import com.fienna.movieapp.core.domain.state.UiState
 import com.fienna.movieapp.core.domain.usecase.MovieUsecase
 import com.fienna.movieapp.core.utils.asMutableStateFlow
-import com.fienna.movieapp.utils.toBase64
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -25,7 +23,7 @@ class DetailViewModel(private val movieUsecase: MovieUsecase):ViewModel() {
 
     private var dataCart: DataCart? = null
     private var dataWishlist: DataWishlist? = null
-    private var dataTransaction: DataTransaction? = null
+
 
     fun fetchDetailMovie(movieId:Int){
         viewModelScope.launch {
@@ -50,26 +48,17 @@ class DetailViewModel(private val movieUsecase: MovieUsecase):ViewModel() {
         dataWishlist = data
     }
 
-    fun setDataTransaction(data:DataTransaction){
-        dataTransaction = data
-    }
-
-    fun insertTransaction() = runBlocking {
-        val username = movieUsecase.getProfileName()
-        dataTransaction = dataTransaction?.copy(userId = username.toBase64())
-        movieUsecase.insertTransaction(dataTransaction)
-    }
-
     fun insertWishlist() = runBlocking{
-        val username = movieUsecase.getProfileName()
-        dataWishlist = dataWishlist?.copy(userId = username.toBase64())
+        val userId = movieUsecase.getUserId()
+        dataWishlist = dataWishlist?.copy(userId = userId)
         movieUsecase.insertWishlist(dataWishlist)
     }
 
 
+
     fun insertCart() = runBlocking{
-        val username = movieUsecase.getProfileName()
-        dataCart = dataCart?.copy(userId = username.toBase64())
+        val userId = movieUsecase.getUserId()
+        dataCart = dataCart?.copy(userId = userId)
         movieUsecase.insertCart(dataCart)
     }
 
@@ -77,10 +66,12 @@ class DetailViewModel(private val movieUsecase: MovieUsecase):ViewModel() {
         movieUsecase.checkFavorite(movieId) > 0
     }
 
-    fun deleteWishlist() = runBlocking {
-        val username = movieUsecase.getProfileName()
-        dataWishlist = dataWishlist?.copy(userId = username.toBase64())
-        movieUsecase.deleteWishlist(dataWishlist)
+    fun deleteWishlistDetail(){
+        viewModelScope.launch {
+            dataWishlist?.let {
+                movieUsecase.deleteWishlist(it)
+            }
+        }
     }
 
     fun checkAdd(movieId: Int) = runBlocking {

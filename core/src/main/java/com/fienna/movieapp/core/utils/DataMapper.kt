@@ -24,17 +24,17 @@ import com.fienna.movieapp.core.domain.model.DataWishlist
 import com.fienna.movieapp.core.domain.state.SplashState
 
 object DataMapper {
-    fun Triple<String?, String, Boolean>.toUiData() = DataSession(
+    fun Triple<String?, String?, Boolean>.toUiData() = DataSession(
         userName = this.first,
         userId = this.second,
         onBoardingState = this.third
     )
 
     fun DataSession.toSplashState() = when{
-        this.userName?.isEmpty() == true ->{
+        this.userName?.isEmpty() == true && this.userId?.isNotEmpty() == true ->{
             SplashState.Profile
         }
-        this.userName?.isNotEmpty() == true-> {
+        this.userName?.isNotEmpty() == true && this.userId?.isNotEmpty() == true-> {
             SplashState.Dashboard
         }
         this.onBoardingState -> {
@@ -178,23 +178,7 @@ object DataMapper {
 
     fun PaymentResponse.toListData() = data.map { data ->  data.toUiData() }.toList()
 
-    fun TransactionEntity.toUiData() = DataTransaction(
-        transactionId = transactionId,
-        userId = userId,
-        movieId=movieId,
-        posterPath=posterPath,
-        title=title,
-        popularity=popularity
-    )
-
-    fun DataTransaction.toEntity() = TransactionEntity(
-        transactionId = transactionId,
-        movieId = movieId,
-        userId = userId,
-        posterPath = posterPath,
-        title = title,
-        popularity = popularity
-    )
-
     fun Int?.orZero() = this?:0
+
+    fun String?.orEmpty() = this?:""
 }

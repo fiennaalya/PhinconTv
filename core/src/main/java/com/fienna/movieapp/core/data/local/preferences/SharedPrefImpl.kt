@@ -14,8 +14,10 @@ interface SharedPref{
     fun putProfileName(value: String?)
     fun getUserId(): String?
     fun putUserId(id:String)
-    fun getTokenValue():Int
-    fun putTokenValue(value:Int)
+    fun getTokenValue(userId:String):Int
+    fun putTokenValue(userId:String, value:Int)
+    fun getCountWishlistFromDashboard():Int
+    fun putCountWishlistFromDashboard(value:Int?)
 
 }
 
@@ -65,10 +67,24 @@ class SharedPrefImpl (private val context: Context):SharedPref{
         }
     }
 
-    override fun getTokenValue(): Int = prefs.getInt(MovieConstant.tokenKey, 0)
-    override fun putTokenValue(value: Int) {
+    override fun getTokenValue(userId: String): Int {
+        val userTokenKey = "${MovieConstant.tokenKey}_$userId"
+        return prefs.getInt(userTokenKey, 0)
+    }
+
+    override fun putTokenValue(userId: String, value: Int) {
         prefs.edit().apply {
-            putInt(MovieConstant.tokenKey, value)
+            val userTokenKey = "${MovieConstant.tokenKey}_$userId"
+            putInt(userTokenKey, value)
+            apply()
+        }
+    }
+
+    override fun getCountWishlistFromDashboard(): Int = prefs.getInt(MovieConstant.countWishlistKey, 0)
+
+    override fun putCountWishlistFromDashboard(value: Int?) {
+        prefs.edit().apply {
+            value?.let { putInt(MovieConstant.countWishlistKey, it) }
             apply()
         }
     }

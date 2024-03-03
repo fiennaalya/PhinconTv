@@ -25,6 +25,7 @@ class WishlistFragment : BaseFragment<FragmentWishlistBinding,WishlistViewModel 
     override val viewModel: WishlistViewModel by viewModel()
     private var dataWishlist:List<DataWishlist>? = null
     private lateinit var rvWishlist : RecyclerView
+    var count:Int = 0
     private val listWishlistAdapter by lazy {
         WishlistAdapter(
             action = {
@@ -34,11 +35,12 @@ class WishlistFragment : BaseFragment<FragmentWishlistBinding,WishlistViewModel 
             remove = {entity-> removeItemFromWishlist(entity)}
         )
     }
+
     override fun initView() {
-        binding.tvWishlistCountItems.text = resources.getString(R.string.tv_count_wishlist)
         rvWishlist = binding.rvWishlist
         rvWishlist.setHasFixedSize(true)
         viewModel.fetchWishlist()
+        viewModel.setBadge()
         listWishlistView()
     }
 
@@ -62,6 +64,19 @@ class WishlistFragment : BaseFragment<FragmentWishlistBinding,WishlistViewModel 
                             }
                         }
                 }
+            }
+
+
+//            countWishlist.launchAndCollectIn(viewLifecycleOwner){
+//                println("masuk count wishlist $it")
+//                binding.tvWishlistCountItems.text = resources.getString(R.string.tv_count_wishlist)
+//                    .replace("%angka%", it.toString())
+//            }
+
+            badge.launchAndCollectIn(viewLifecycleOwner){
+                println("masuk count wishlist $it")
+                binding.tvWishlistCountItems.text = resources.getString(R.string.tv_count_wishlist)
+                    .replace("%angka%", it.toString())
             }
         }
     }

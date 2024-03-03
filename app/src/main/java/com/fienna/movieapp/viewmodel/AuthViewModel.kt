@@ -86,11 +86,6 @@ class AuthViewModel(private val movieUsecase: MovieUsecase):ViewModel() {
         _registerValidation.value = FlowState.FlowCreated
     }
 
-
-    fun resetLoginPasswordState() {
-        _loginValidation.value = FlowState.FlowCreated
-    }
-
     fun validateProfileField(name:String){
         _profileNameValidation.update { FlowState.FlowValue(name.validateRequired())}
     }
@@ -101,6 +96,10 @@ class AuthViewModel(private val movieUsecase: MovieUsecase):ViewModel() {
 
     fun saveProfileName(name: String){
         movieUsecase.putProfileName(name)
+    }
+
+    fun saveUserId(id:String){
+        movieUsecase.putUserId(id)
     }
 
 

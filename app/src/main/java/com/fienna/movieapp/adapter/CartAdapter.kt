@@ -9,8 +9,15 @@ import com.fienna.movieapp.utils.AppConstant
 
 class CartAdapter(
     private val action:(DataCart)-> Unit,
-    private val remove:(DataCart)->Unit
+    private val remove:(DataCart)->Unit,
+    private val checkbox: (Int, Boolean)-> Unit
 ):BaseListAdapter<DataCart, ItemCartBinding>(ItemCartBinding::inflate) {
+    private var allChecked:Boolean = false
+
+    fun setAllChecked(checked:Boolean){
+        allChecked = checked
+        notifyDataSetChanged()
+    }
     override fun onItemBind(): (DataCart, ItemCartBinding, View, Int) -> Unit =
         {data, binding, itemView, _ ->
             binding.run {
@@ -21,6 +28,11 @@ class CartAdapter(
                 imgDelete.setOnClickListener {
                     remove.invoke(data)
                 }
+                checkboxCartItems.isChecked = allChecked
+                checkboxCartItems.setOnCheckedChangeListener { _, isChecked ->
+                    checkbox(data.cartId, isChecked)
+                }
+
             }
             itemView.setOnClickListener {
                 action.invoke(data)

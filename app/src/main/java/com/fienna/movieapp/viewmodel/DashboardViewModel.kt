@@ -1,12 +1,15 @@
 package com.fienna.movieapp.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.fienna.movieapp.core.domain.model.DataMovieTransaction
 import com.fienna.movieapp.core.domain.model.DataUser
 import com.fienna.movieapp.core.domain.usecase.MovieUsecase
 import com.fienna.movieapp.view.dashboard.setting.SettingFragment
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.runBlocking
 
 class DashboardViewModel(private val movieUsecase: MovieUsecase): ViewModel() {
     private  val _theme = MutableStateFlow(false)
@@ -14,6 +17,9 @@ class DashboardViewModel(private val movieUsecase: MovieUsecase): ViewModel() {
 
     private  val _profileUserName = MutableStateFlow("")
     val profileUserName = _profileUserName.asStateFlow()
+
+    private  val _userId = MutableStateFlow("")
+    val userId = _userId.asStateFlow()
 
     fun getThemeValue() {
         _theme.update { movieUsecase.getSwitchThemeValue() }
@@ -32,14 +38,27 @@ class DashboardViewModel(private val movieUsecase: MovieUsecase): ViewModel() {
         return movieUsecase.getCurrentUser()
     }
 
-    fun getUserId(): String{
-        return movieUsecase.getUserId()
-    }
-    fun putUserId(id:String){
-        movieUsecase.putUserId(id)
+    fun getUserId(){
+        _userId.update { movieUsecase.getUserId() }
     }
 
     fun getProfileName() {
         _profileUserName.update { movieUsecase.getProfileName() }
+    }
+
+    fun getTokenFromFirebase(userId: String): Flow<Int> = runBlocking {
+        movieUsecase.getTokenFromFirebase(userId)
+    }
+
+    fun sendMovieToDatabase(dataMovieTransaction: DataMovieTransaction, userId: String, movieId:String): Flow<Boolean> = runBlocking {
+        movieUsecase.sendMovieToDatabase(dataMovieTransaction, userId,movieId)
+    }
+
+    fun getMovieFromDatabase(userId: String, movieId:String):Flow<DataMovieTransaction?> = runBlocking {
+        movieUsecase.getMovieFromFirebase(userId, movieId)
+    }
+
+    fun getAllMovieFromDatabase(userId: String): Flow<List<DataMovieTransaction>> = runBlocking {
+        movieUsecase.getAllMovieFromFirebase(userId)
     }
 }

@@ -95,4 +95,11 @@
     <string name="tv_transaction_id">Transaction ID</string>
     <string name="tv_movie_title">Movie Title</string>
     <string name="tv_total_payment">Total Payment</string>
+    <string name="register_validation">Please Fill in your Email and Password</string>
+    <string name="other_email">Invalid password or use other email</string>
+    <string name="other_email_signup">This email has been registered</string>
+    <string name="tv_transaction_date">Transaction Date</string>
+    <string name="tv_token_transaction_value">%token% Token</string>
+    <string name="tv_shopping">Shopping</string>
+    <string name="tv_purchased">Purchased</string>
 </resources>
