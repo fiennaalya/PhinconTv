@@ -1,5 +1,6 @@
 package com.fienna.movieapp.view.dashboard.home
 
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.core.os.bundleOf
@@ -17,33 +18,41 @@ import com.fienna.movieapp.core.domain.state.onLoading
 import com.fienna.movieapp.core.domain.state.onSuccess
 import com.fienna.movieapp.core.utils.launchAndCollectIn
 import com.fienna.movieapp.databinding.FragmentHomeBinding
+import com.fienna.movieapp.viewmodel.FirebaseViewModel
 import com.fienna.movieapp.viewmodel.HomeViewModel
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HomeFragment :  BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHomeBinding::inflate){
+class HomeFragment :
+    BaseFragment<FragmentHomeBinding, HomeViewModel>(FragmentHomeBinding::inflate) {
     override val viewModel: HomeViewModel by viewModel()
     private lateinit var rvUpcoming: RecyclerView
     private lateinit var rvPopular: RecyclerView
     private lateinit var nowPlayingAdapter: DetailNowPlayingAdapter
     private val list = mutableListOf<DataNowPlaying>()
+    private val firebaseViewModel: FirebaseViewModel by viewModel()
 
     private val listUpComingAdapter by lazy {
-        UpComingAdapter{data ->
+        UpComingAdapter { data ->
             val bundle = bundleOf("movieId" to data.id.toString())
-            activity?.supportFragmentManager?.findFragmentById(R.id.main_fragment_container)?.findNavController()?.navigate(R.id.action_dashboardFragment_to_detailFragment, bundle)
+            activity?.supportFragmentManager?.findFragmentById(R.id.main_fragment_container)
+                ?.findNavController()
+                ?.navigate(R.id.action_dashboardFragment_to_detailFragment, bundle)
         }
     }
 
     private val listPopularAdapter by lazy {
-        PopularAdapter{data ->
+        PopularAdapter { data ->
             val bundle = bundleOf("movieId" to data.id.toString())
-            activity?.supportFragmentManager?.findFragmentById(R.id.main_fragment_container)?.findNavController()?.navigate(R.id.action_dashboardFragment_to_detailFragment, bundle)
+            activity?.supportFragmentManager?.findFragmentById(R.id.main_fragment_container)
+                ?.findNavController()
+                ?.navigate(R.id.action_dashboardFragment_to_detailFragment, bundle)
         }
     }
 
     override fun initView() {
-        with(binding){
+        with(binding) {
             tvComingSoon.text = resources.getString(R.string.tv_coming_soon)
             tvPopular.text = resources.getString(R.string.tv_popular)
         }
@@ -67,17 +76,18 @@ class HomeFragment :  BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHo
     override fun initListener() {}
 
     override fun observeData() {
-        with(viewModel){
-            upComingMovie.launchAndCollectIn(viewLifecycleOwner){ state ->
+        with(viewModel) {
+            upComingMovie.launchAndCollectIn(viewLifecycleOwner) { state ->
                 state.onLoading {}
                     .onSuccess {
                         listUpComingAdapter.submitList(it)
                     }
                     .onError {
+
                     }
             }
 
-            popularMovie.launchAndCollectIn(viewLifecycleOwner){state ->
+            popularMovie.launchAndCollectIn(viewLifecycleOwner) { state ->
                 state.onLoading { }
                     .onSuccess {
                         listPopularAdapter.submitList(it)
@@ -85,7 +95,7 @@ class HomeFragment :  BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHo
                     }
             }
 
-            nowPlayingMovie.launchAndCollectIn(viewLifecycleOwner){state ->
+            nowPlayingMovie.launchAndCollectIn(viewLifecycleOwner) { state ->
                 state.onLoading {
                 }.onSuccess {
                     list.addAll(it)
@@ -97,14 +107,23 @@ class HomeFragment :  BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHo
         }
     }
 
-    fun upComingView(){
+    override fun onResume() {
+        super.onResume()
+        val screenName = "Home"
+        firebaseViewModel.logEvent(
+            FirebaseAnalytics.Event.SCREEN_VIEW,
+            Bundle().apply { putString("screenName", screenName) }
+        )
+    }
+
+    fun upComingView() {
         rvUpcoming.run {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = listUpComingAdapter
         }
     }
 
-    fun popularView(){
+    fun popularView() {
         rvPopular.run {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = listPopularAdapter
@@ -117,6 +136,7 @@ class HomeFragment :  BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHo
             TabLayoutMediator(tlNowPlaying, vpNowPlaying) { _, _ -> }.attach()
         }
     }
+
     private fun autoScrollNowPlaying() {
         val handler = Handler(Looper.getMainLooper())
         val viewPager = binding.vpNowPlaying
@@ -124,7 +144,8 @@ class HomeFragment :  BaseFragment<FragmentHomeBinding,HomeViewModel>(FragmentHo
         val update = object : Runnable {
             override fun run() {
                 val currentItem = viewPager.currentItem
-                val nextItem = if (currentItem < nowPlayingAdapter.itemCount - 1) currentItem + 1 else 0
+                val nextItem =
+                    if (currentItem < nowPlayingAdapter.itemCount - 1) currentItem + 1 else 0
                 viewPager.setCurrentItem(nextItem, true)
 
                 val delay = 3000L

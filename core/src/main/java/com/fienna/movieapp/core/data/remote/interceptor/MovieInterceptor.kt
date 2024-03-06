@@ -13,6 +13,5 @@ class MovieInterceptor(): Interceptor {
 
         return chain.proceed(request)
 
-
     }
 }

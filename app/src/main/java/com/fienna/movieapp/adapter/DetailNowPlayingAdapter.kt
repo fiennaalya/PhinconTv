@@ -23,7 +23,7 @@ class DetailNowPlayingAdapter(private val list: List<DataNowPlaying>) :
                 yearAndGenreComingSoon.text =
                     itemView.resources.getString(R.string.year_and_genre_movie)
                         .replace("%year%", extractYearFromDate(data.releaseDate))
-                        .replace("%genre%", changeGenre(data.genreIds.first()))
+                        .replace("%genre%", changeGenre(data.genreIds.first(), itemView.context))
                 tvNowPlayingTitle.text = data.title
                 tvRatingAndTotal.text = itemView.resources.getString(R.string.tv_rating)
                     .replace("%rating%", formatRating(data.voteAverage))
@@ -31,10 +31,12 @@ class DetailNowPlayingAdapter(private val list: List<DataNowPlaying>) :
 
             }
         }
-
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailNowPlayingAdapter.DetailViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): DetailNowPlayingAdapter.DetailViewHolder {
         val binding = ItemNowPlayingBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -51,5 +53,4 @@ class DetailNowPlayingAdapter(private val list: List<DataNowPlaying>) :
         val currentItem = list[position]
         holder.bind(currentItem)
     }
-
 }

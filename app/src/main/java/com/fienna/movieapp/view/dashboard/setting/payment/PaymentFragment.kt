@@ -11,7 +11,8 @@ import com.fienna.movieapp.databinding.FragmentPaymentBinding
 import com.fienna.movieapp.viewmodel.TokenViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PaymentFragment : BaseFragment<FragmentPaymentBinding, TokenViewModel>(FragmentPaymentBinding::inflate) {
+class PaymentFragment :
+    BaseFragment<FragmentPaymentBinding, TokenViewModel>(FragmentPaymentBinding::inflate) {
     override val viewModel: TokenViewModel by viewModel()
     private val paymentParentAdapter by lazy {
         PaymentParentAdapter(
@@ -24,7 +25,7 @@ class PaymentFragment : BaseFragment<FragmentPaymentBinding, TokenViewModel>(Fra
 
     override fun initView() {
         binding.tvTitlePayment.text = resources.getString(R.string.tv_payment)
-        with(binding){
+        with(binding) {
             rvPayment.run {
                 layoutManager = LinearLayoutManager(context)
                 adapter = paymentParentAdapter
@@ -40,9 +41,9 @@ class PaymentFragment : BaseFragment<FragmentPaymentBinding, TokenViewModel>(Fra
     }
 
     override fun observeData() {
-        with(viewModel){
+        with(viewModel) {
             getDataPayment()
-            getConfigStatusPayment().launchAndCollectIn(viewLifecycleOwner){
+            getConfigStatusPayment().launchAndCollectIn(viewLifecycleOwner) {
                 getDataPayment()
             }
         }
@@ -50,8 +51,8 @@ class PaymentFragment : BaseFragment<FragmentPaymentBinding, TokenViewModel>(Fra
 
     }
 
-    private fun getDataPayment(){
-        viewModel.getConfigPayment().launchAndCollectIn(viewLifecycleOwner){
+    private fun getDataPayment() {
+        viewModel.getConfigPayment().launchAndCollectIn(viewLifecycleOwner) {
             paymentParentAdapter.submitList(it)
         }
     }

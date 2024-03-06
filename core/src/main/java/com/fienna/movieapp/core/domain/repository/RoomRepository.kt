@@ -11,15 +11,17 @@ interface RoomRepository {
     suspend fun deleteAllCart()
     suspend fun insertCart(cartEntity: CartEntity)
     suspend fun deleteCart(cartEntity: CartEntity)
-    suspend fun checkAdd(movieId:Int) : Int
-    suspend fun updateCheckCart(cartId: Int, value:Boolean)
-    suspend fun updateTotalPriceChecked(): Int = 0
+    suspend fun checkAdd(movieId:Int, userId: String) : Int
+    suspend fun updateCheckCart(cartId: Int, value:Boolean, userId: String)
+    suspend fun updateTotalPriceChecked(userId: String): Int = 0
+    suspend fun fetchMovieCart(movieId: Int, userId: String): CartEntity
     suspend fun fetchWishlist(userId:String): Flow<List<WishlistEntity>>
+    suspend fun fetchMovieWishlist(movieId: Int,userId: String):WishlistEntity
     suspend fun deleteAllWishlist()
     suspend fun insertWishlist(wishlistEntity: WishlistEntity)
     suspend fun deleteWishlist(wishlistEntity: WishlistEntity)
-    suspend fun checkFavorite(movieId:Int) : Int
-    fun countWishlist(userId:String) : Int
+    suspend fun checkFavorite(movieId:Int, userId: String) : Int
+    suspend fun countWishlist(userId:String) : Int
 }
 
 class RoomRepositoryImpl(
@@ -41,20 +43,28 @@ class RoomRepositoryImpl(
         local.deleteCart(cartEntity)
     }
 
-    override suspend fun checkAdd(movieId: Int): Int = safeDataCall{
-        local.checkAdd(movieId)
+    override suspend fun checkAdd(movieId: Int, userId: String): Int = safeDataCall{
+        local.checkAdd(movieId, userId)
     }
 
-    override suspend fun updateCheckCart(cartId: Int, value: Boolean) {
-        local.updateCheckCart(cartId, value)
+    override suspend fun updateCheckCart(cartId: Int, value: Boolean, userId: String) {
+        local.updateCheckCart(cartId, value, userId)
     }
 
-    override suspend fun updateTotalPriceChecked(): Int = safeDataCall {
-        local.updateTotalPriceChecked()
+    override suspend fun updateTotalPriceChecked(userId: String): Int = safeDataCall {
+        local.updateTotalPriceChecked(userId)
+    }
+
+    override suspend fun fetchMovieCart(movieId: Int, userId: String): CartEntity = safeDataCall {
+        local.fetchMovieCart(movieId, userId)
     }
 
     override suspend fun fetchWishlist(userId: String): Flow<List<WishlistEntity>> = safeDataCall{
         local.fetchWishlist(userId)
+    }
+
+    override suspend fun fetchMovieWishlist(movieId: Int, userId: String): WishlistEntity = safeDataCall{
+        local.fetchMovieWishlist(movieId, userId)
     }
 
     override suspend fun deleteAllWishlist() {
@@ -69,11 +79,11 @@ class RoomRepositoryImpl(
         local.deleteWishlist(wishlistEntity)
     }
 
-    override suspend fun checkFavorite(movieId: Int): Int = safeDataCall{
-        local.checkFavorite(movieId)
+    override suspend fun checkFavorite(movieId: Int, userId: String): Int = safeDataCall{
+        local.checkFavorite(movieId, userId)
     }
 
-    override fun countWishlist(userId: String): Int = local.countWishlist(userId)
+    override suspend fun countWishlist(userId: String): Int = local.countWishlist(userId)
 
 
 

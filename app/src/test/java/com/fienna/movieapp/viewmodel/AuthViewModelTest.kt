@@ -15,7 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.verify
 
 @RunWith(MockitoJUnitRunner::class)
-class AuthViewModelTest{
+class AuthViewModelTest {
     @get:Rule
     val mainDispatchersRule = MainCoroutineRule()
 
@@ -24,7 +24,7 @@ class AuthViewModelTest{
     private lateinit var viewModel: AuthViewModel
 
     @Before
-    fun setUp(){
+    fun setUp() {
         MockitoAnnotations.openMocks(this)
         viewModel = AuthViewModel(movieUsecase)
     }
@@ -62,8 +62,6 @@ class AuthViewModelTest{
         verify(movieUsecase).signUp(email, password)
         assert(!result.last())
     }
-
-
 
 
 }

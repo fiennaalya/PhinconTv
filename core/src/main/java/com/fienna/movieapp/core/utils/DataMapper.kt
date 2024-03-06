@@ -1,7 +1,6 @@
 package com.fienna.movieapp.core.utils
 
 import com.fienna.movieapp.core.data.local.entity.CartEntity
-import com.fienna.movieapp.core.data.local.entity.TransactionEntity
 import com.fienna.movieapp.core.data.local.entity.WishlistEntity
 import com.fienna.movieapp.core.data.remote.data.CreditResponse
 import com.fienna.movieapp.core.data.remote.data.DetailMovieResponse
@@ -18,7 +17,6 @@ import com.fienna.movieapp.core.domain.model.DataPayment
 import com.fienna.movieapp.core.domain.model.DataPopular
 import com.fienna.movieapp.core.domain.model.DataSearch
 import com.fienna.movieapp.core.domain.model.DataSession
-import com.fienna.movieapp.core.domain.model.DataTransaction
 import com.fienna.movieapp.core.domain.model.DataUpcoming
 import com.fienna.movieapp.core.domain.model.DataWishlist
 import com.fienna.movieapp.core.domain.state.SplashState

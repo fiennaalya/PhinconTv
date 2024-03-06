@@ -12,9 +12,9 @@ import com.fienna.movieapp.utils.formatRating
 
 class SearchAdapter(
     private val action: (DataSearch) -> Unit
-): BasePagingAdapter<DataSearch, ItemSearchMovieBinding>(ItemSearchMovieBinding::inflate) {
+) : BasePagingAdapter<DataSearch, ItemSearchMovieBinding>(ItemSearchMovieBinding::inflate) {
     override fun onItemBind(): (DataSearch, ItemSearchMovieBinding, View, Int) -> Unit =
-        {data, binding, itemView, _ ->
+        { data, binding, itemView, _ ->
             binding.run {
                 imgComingSoon.load(AppConstant.imageLink + data.posterPath)
                 titleNowPlaying.text = data.title

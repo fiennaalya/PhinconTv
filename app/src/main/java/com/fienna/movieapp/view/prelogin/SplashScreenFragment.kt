@@ -21,7 +21,8 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @SuppressLint("CustomSplashScreen")
-class SplashScreenFragment : BaseFragment<FragmentSplashScreenBinding, PreLoginViewModel>(FragmentSplashScreenBinding::inflate) {
+class SplashScreenFragment :
+    BaseFragment<FragmentSplashScreenBinding, PreLoginViewModel>(FragmentSplashScreenBinding::inflate) {
     override val viewModel: PreLoginViewModel by viewModel()
     override fun initView() {
         animateSplash()
@@ -32,8 +33,8 @@ class SplashScreenFragment : BaseFragment<FragmentSplashScreenBinding, PreLoginV
     }
 
     override fun observeData() {
-        with(viewModel){
-            onBoarding.launchAndCollectIn(viewLifecycleOwner){splashState ->
+        with(viewModel) {
+            onBoarding.launchAndCollectIn(viewLifecycleOwner) { splashState ->
                 lifecycleScope.launch {
                     delay(2000L)
                     splashState.runOnboarding {
@@ -60,17 +61,21 @@ class SplashScreenFragment : BaseFragment<FragmentSplashScreenBinding, PreLoginV
         }
         visibilityAnimator.duration = 1
 
-        val translateLeftAnimator = ObjectAnimator.ofFloat(binding.imgSplash, TRANSLATIONX_ANIMATION, 0f, -150f)
+        val translateLeftAnimator =
+            ObjectAnimator.ofFloat(binding.imgSplash, TRANSLATIONX_ANIMATION, 0f, -150f)
+        translateLeftAnimator.duration = 2000
+
+        val translateLeftAnimatorText =
+            ObjectAnimator.ofFloat(binding.layoutTextSplash, TRANSLATIONX_ANIMATION, 0f, -150f)
         translateLeftAnimator.duration = 1000
 
-        val translateLeftAnimatorText = ObjectAnimator.ofFloat(binding.layoutTextSplash, TRANSLATIONX_ANIMATION, 0f, -150f)
-        translateLeftAnimator.duration = 1000
-
-        val fadeInAnimator = ObjectAnimator.ofFloat(binding.layoutTextSplash, ALPHA_ANIMATION, 0f, 1f)
-        fadeInAnimator.duration = 2000
+        val fadeInAnimator =
+            ObjectAnimator.ofFloat(binding.layoutTextSplash, ALPHA_ANIMATION, 0f, 1f)
+        fadeInAnimator.duration = 3000
 
         val animatorSet = AnimatorSet()
-        animatorSet.play(translateLeftAnimator).before(visibilityAnimator).with(translateLeftAnimatorText).with(fadeInAnimator)
+        animatorSet.play(translateLeftAnimator).before(visibilityAnimator)
+            .with(translateLeftAnimatorText).with(fadeInAnimator)
 
         animatorSet.start()
     }

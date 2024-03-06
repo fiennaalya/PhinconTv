@@ -1,5 +1,6 @@
 package com.fienna.movieapp.view.dashboard.home
 
+import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -24,12 +25,17 @@ import com.fienna.movieapp.utils.extractYearFromDate
 import com.fienna.movieapp.utils.formatRating
 import com.fienna.movieapp.viewmodel.DashboardViewModel
 import com.fienna.movieapp.viewmodel.DetailViewModel
+import com.fienna.movieapp.viewmodel.FirebaseViewModel
+import com.fienna.movieapp.viewmodel.WishlistViewModel
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetailFragment :
     BaseFragment<FragmentDetailBinding, DetailViewModel>(FragmentDetailBinding::inflate) {
     override val viewModel: DetailViewModel by viewModel()
-    val dashboardViewModel : DashboardViewModel by viewModel()
+    private val firebaseViewModel: FirebaseViewModel by viewModel()
+    private val wishlistViewModel: WishlistViewModel by viewModel()
+    val dashboardViewModel: DashboardViewModel by viewModel()
     val safeArgs: DetailFragmentArgs by navArgs()
     private lateinit var rvCast: RecyclerView
     private val listCastAdapter = CastAdapter()
@@ -53,8 +59,8 @@ class DetailFragment :
         castView()
         updateFavorite()
         updateCart()
-        dashboardViewModel.getUserId()
         setButtonBuy()
+        dashboardViewModel.getUserId()
     }
 
     override fun initListener() {
@@ -75,6 +81,7 @@ class DetailFragment :
                         )
                     }
                     viewModel.insertWishlist()
+                    firebaseViewModel.logScreenView("addMovieToWishlist")
                 } else {
                     cbFavorite.setButtonDrawable(context?.getDrawable(R.drawable.ic_favorite))
                     context?.let { context ->
@@ -84,6 +91,7 @@ class DetailFragment :
                             resources.getString(R.string.tv_snackbar_wishlist_delete)
                         )
                     }
+
                     viewModel.deleteWishlistDetail()
                 }
             }
@@ -100,6 +108,7 @@ class DetailFragment :
                         )
                     }
                     viewModel.insertCart()
+                    firebaseViewModel.logScreenView("addMovieToCart")
                 } else {
                     cbCart.setButtonDrawable(context?.getDrawable(R.drawable.ic_add_deepblue))
                     context?.let { context ->
@@ -109,13 +118,14 @@ class DetailFragment :
                             resources.getString(R.string.tv_snackbar_cart_delete)
                         )
                     }
+                    viewModel.deleteCartDetail()
                 }
             }
 
             btnBuyDetail.setOnClickListener {
-                /*val bundle =  bundleOf("listdataTransaction" to dataTransaction.toTypedArray())*/
-                val bundle = bundleOf("dataTransaction" to dataTransaction )
+                val bundle = bundleOf("dataTransaction" to dataTransaction)
                 findNavController().navigate(R.id.action_detailFragment_to_checkoutFragment, bundle)
+                firebaseViewModel.logScreenView("buyDetail")
             }
         }
     }
@@ -137,8 +147,6 @@ class DetailFragment :
                                 .replace("%total_rating%", it.voteCount.toString())
                             tvDetailDesc.text = it.overview
                             tvToken.text = it.popularity.toInt().toString()
-                            updateFavorite()
-                            updateCart()
                             viewModel.setDataCart(
                                 DataCart(
                                     movieId = it.id,
@@ -160,12 +168,14 @@ class DetailFragment :
                                 )
                             )
 
-                            listDataTransaction.add(DataTransaction(
-                                movieId = it.id,
-                                posterPath = it.posterPath,
-                                title = it.title,
-                                popularity = it.popularity
-                            ))
+                            listDataTransaction.add(
+                                DataTransaction(
+                                    movieId = it.id,
+                                    posterPath = it.posterPath,
+                                    title = it.title,
+                                    popularity = it.popularity
+                                )
+                            )
 
                             dataTransaction = DataTransaction(
                                 movieId = it.id,
@@ -192,6 +202,15 @@ class DetailFragment :
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val screenName = "Detail"
+        firebaseViewModel.logEvent(
+            FirebaseAnalytics.Event.VIEW_ITEM,
+            Bundle().apply { putString("screenName", screenName) }
+        )
+    }
+
     private fun getGenresString(genres: List<DataDetailMovie.Genre>): String {
         val maxGenres = 3
         val limitedGenres = genres.take(maxGenres)
@@ -200,20 +219,25 @@ class DetailFragment :
 
 
     private fun updateFavorite() {
-        binding.cbFavorite.isChecked = viewModel.checkFavorite(safeArgs.movieId.toInt())
-        when (binding.cbFavorite.isChecked) {
-            true -> binding.cbFavorite.setButtonDrawable(context?.getDrawable(R.drawable.ic_check))
-            false -> {
-                binding.cbFavorite.setButtonDrawable(context?.getDrawable(R.drawable.ic_favorite))
-            }
+        val checkFav = viewModel.checkFavorite(safeArgs.movieId.toInt())
+        if (checkFav == 1){
+            binding.cbFavorite.isChecked = true
+            binding.cbFavorite.setButtonDrawable(context?.getDrawable(R.drawable.ic_check))
+        }else{
+            binding.cbFavorite.isChecked = false
+            binding.cbFavorite.setButtonDrawable(context?.getDrawable(R.drawable.ic_favorite))
         }
+        println("MASUK NILAI CHECK FAV $checkFav")
     }
 
     private fun updateCart() {
-        binding.cbCart.isChecked = viewModel.checkAdd(safeArgs.movieId.toInt())
-        when (binding.cbCart.isChecked) {
-            true -> binding.cbCart.setButtonDrawable(context?.getDrawable(R.drawable.ic_check))
-            false -> binding.cbCart.setButtonDrawable(context?.getDrawable(R.drawable.ic_add_deepblue))
+        val checkAdd = viewModel.checkAdd(safeArgs.movieId.toInt())
+        if (checkAdd ==1){
+            binding.cbCart.isChecked = true
+            binding.cbCart.setButtonDrawable(context?.getDrawable(R.drawable.ic_check))
+        }else{
+            binding.cbCart.isChecked = false
+            binding.cbCart.setButtonDrawable(context?.getDrawable(R.drawable.ic_add_deepblue))
         }
     }
 
@@ -224,22 +248,23 @@ class DetailFragment :
         }
     }
 
-    fun setButtonBuy(){
+    fun setButtonBuy() {
         dashboardViewModel.run {
             userId.launchAndCollectIn(viewLifecycleOwner) {
                 userIdValue = it
             }
 
-            getMovieFromDatabase(userIdValue, movieIdForFirebase).launchAndCollectIn(viewLifecycleOwner) { data ->
-                if (data?.movieId.toString() == movieIdForFirebase){
+            getMovieFromDatabase(userIdValue, movieIdForFirebase).launchAndCollectIn(
+                viewLifecycleOwner
+            ) { data ->
+                if (data?.movieId.toString() == movieIdForFirebase) {
                     binding.btnBuyDetail.isEnabled = false
                     binding.btnBuyDetail.setTextColor(resources.getColor(R.color.grey))
                     binding.btnBuyDetail.text = resources.getString(R.string.tv_purchased)
-                }else{
+                } else {
                     binding.btnBuyDetail.isEnabled = true
                 }
             }
         }
     }
-
 }

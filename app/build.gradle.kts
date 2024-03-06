@@ -1,4 +1,5 @@
 import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 
 plugins {
     id("com.android.application")
@@ -9,12 +10,60 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("io.gitlab.arturbosch.detekt")
+    id("jacoco")
 }
+
+private val coverageExclusions = listOf(
+    "**/R.class",
+    "**/R\$*.class",
+    "**/BuildConfig.*",
+    "**/Manifest*.*"
+)
+
 
 android {
     namespace = "com.fienna.movieapp"
     compileSdk = 34
     buildFeatures.buildConfig = true
+
+    configure<JacocoPluginExtension> {
+        toolVersion = "0.8.10"
+    }
+
+    val jacocoTestReport = tasks.create("jacocoTestReport")
+
+    androidComponents.onVariants { variant ->
+        val testTaskName = "test${variant.name.capitalize()}UnitTest"
+
+        val reportTask =
+            tasks.register("jacoco${testTaskName.capitalize()}Report", JacocoReport::class) {
+                dependsOn(testTaskName)
+
+                reports {
+                    html.required.set(true)
+                }
+
+                classDirectories.setFrom(
+                    fileTree("$buildDir/tmp/kotlin-classes/${variant.name}") {
+                        exclude(coverageExclusions)
+                    }
+                )
+
+                sourceDirectories.setFrom(
+                    files("$projectDir/src/main/java")
+                )
+                executionData.setFrom(file("$buildDir/jacoco/$testTaskName.exec"))
+            }
+
+        jacocoTestReport.dependsOn(reportTask)
+    }
+
+    tasks.withType<Test>().configureEach {
+        configure<JacocoTaskExtension> {
+            isIncludeNoLocationClasses = true
+            excludes = listOf("jdk.internal.*")
+        }
+    }
 
     defaultConfig {
         applicationId = "com.fienna.movieapp"
@@ -37,31 +86,56 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
     buildFeatures {
         viewBinding = true
     }
 
+//    detekt {
+//        toolVersion = "1.23.3"
+//        config.setFrom(file("config/detekt/detekt.yml"))
+//        buildUponDefaultConfig = true
+//
+//        tasks.withType<Detekt>().configureEach {
+//            reports {
+//                xml.required.set(true)
+//                html.required.set(true)
+//                txt.required.set(true)
+//                sarif.required.set(true)
+//                md.required.set(true)
+//            }
+//        }
+//    }
+
     detekt {
         toolVersion = "1.23.3"
-        config.setFrom(file("config/detekt/detekt.yml"))
         buildUponDefaultConfig = true
+        allRules = false
+        config.setFrom("$projectDir/config/detekt/detekt.yml")
+        baseline =
+            file("$projectDir/config/detekt/baseline.xml")
 
         tasks.withType<Detekt>().configureEach {
             reports {
-                xml.required.set(true)
                 html.required.set(true)
+                xml.required.set(true)
                 txt.required.set(true)
                 sarif.required.set(true)
                 md.required.set(true)
             }
+        }
+        tasks.withType<Detekt>().configureEach {
+            jvmTarget = "17"
+        }
+        tasks.withType<DetektCreateBaselineTask>().configureEach {
+            jvmTarget = "17"
         }
     }
 

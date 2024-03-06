@@ -55,13 +55,14 @@ class StatusFragment :
     }
 
     private fun readMovieFromDatabase() {
-        viewModel.getMovieFromDatabase(userIdValue, movieId).launchAndCollectIn(viewLifecycleOwner) { data ->
-            with(binding) {
-               tvTransactionDateValue.text = extractYearMonthDate(data?.transactionTime)
-                tvMovieTitleValue.text = data?.titleMovie
-                tvTotalPaymentValue.text = data?.priceMovie.toString()
+        viewModel.getMovieFromDatabase(userIdValue, movieId)
+            .launchAndCollectIn(viewLifecycleOwner) { data ->
+                with(binding) {
+                    tvTransactionDateValue.text = extractYearMonthDate(data?.transactionTime)
+                    tvMovieTitleValue.text = data?.titleMovie
+                    tvTotalPaymentValue.text = data?.priceMovie.toString()
+                }
             }
-        }
     }
 
 }

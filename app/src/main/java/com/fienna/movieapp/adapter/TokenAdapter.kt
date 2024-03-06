@@ -8,26 +8,26 @@ import com.fienna.movieapp.databinding.ItemTokenBinding
 import com.fienna.movieapp.utils.currency
 
 class TokenAdapter(
-    private val action:(DataToken) -> Unit,
-):BaseListAdapter<DataToken, ItemTokenBinding>(ItemTokenBinding::inflate){
+    private val action: (DataToken) -> Unit,
+) : BaseListAdapter<DataToken, ItemTokenBinding>(ItemTokenBinding::inflate) {
+    private var selectedItem : DataToken? = null
+
     override fun onItemBind(): (DataToken, ItemTokenBinding, View, Int) -> Unit =
-        {data, binding, itemView, position ->
+        { data, binding, itemView, position ->
             binding.run {
                 tvTokenInput.text = data.token
                 tvRupiahInput.text = currency(data.price)
+                if (data == selectedItem){
+                    layoutCardToken.setBackgroundColor(itemView.resources.getColor(R.color.sky_blue))
+                }else{
+                    layoutCardToken.setBackgroundColor(layoutCardToken.cardBackgroundColor.defaultColor)
+                }
 
-                var isItemViewClicked = false
                 itemView.setOnClickListener {
-                    isItemViewClicked = !isItemViewClicked
-                    if (isItemViewClicked){
-                        action.invoke(data)
-                        layoutCardToken.setBackgroundColor(itemView.resources.getColor(R.color.sky_blue))
-                    }else{
-                        layoutCardToken.setBackgroundColor(layoutCardToken.cardBackgroundColor.defaultColor)
-                    }
-
+                    action.invoke(data)
+                    selectedItem = data
+                    notifyDataSetChanged()
                 }
             }
         }
-
 }

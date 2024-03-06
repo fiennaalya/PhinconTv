@@ -1,6 +1,7 @@
 package com.fienna.movieapp.core.domain.repository
 
 import android.os.Bundle
+import com.fienna.movieapp.core.data.local.datasource.LocalDataSource
 import com.fienna.movieapp.core.domain.model.DataMovieTransaction
 import com.fienna.movieapp.core.domain.model.DataToken
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -46,6 +47,7 @@ interface FirebaseRepository {
 }
 
 class FirebaseRepositoryImpl(
+    private val local : LocalDataSource,
     private val firebaseAnalytics: FirebaseAnalytics,
     private val auth: FirebaseAuth,
     private val remoteConfig: FirebaseRemoteConfig,
@@ -173,14 +175,34 @@ class FirebaseRepositoryImpl(
             awaitClose()
         }
 
+    override suspend fun getTokenFromFirebase(userId: String): Flow<Int> = callbackFlow {
+        val id = local.getUserId()
+        firebaseDatabase.database.reference.child("user_token").child(id?:"")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    var totalToken = 0
+                    for (tokenSnapshot in snapshot.children) {
+                        val token = tokenSnapshot.child("token").getValue(String::class.java)
+                        val tokenValue = token?.toIntOrNull() ?: 0
+                        totalToken += tokenValue
+                    }
+                    trySend(totalToken)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    trySend(0)
+                }
+            })
+        awaitClose()
+    }
+
     override suspend fun sendMovieToDatabase(
         dataMovieTransaction: DataMovieTransaction,
         userId: String,
         movieId: String
     ): Flow<Boolean> = callbackFlow {
         trySend(false)
-        firebaseDatabase.database.reference.child("user_movie_transaction").child(movieId)
-            .child(userId).push()
+        firebaseDatabase.database.reference.child("user_movie_transaction").child(userId).push()
             .setValue(dataMovieTransaction)
             .addOnCompleteListener { task ->
                 trySend(task.isSuccessful)
@@ -191,40 +213,15 @@ class FirebaseRepositoryImpl(
         awaitClose()
     }
 
-    override suspend fun getTokenFromFirebase(userId: String): Flow<Int> = callbackFlow {
-        trySend(0)
-        firebaseDatabase.database.reference.child("user_token").child(userId)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    var totalToken = 0
-
-                    for (keySnapshot in snapshot.children) {
-                        for (dataToken in keySnapshot.children) {
-                            val token = dataToken.child("token").getValue(String::class.java)
-                            val tokenValue = token?.toIntOrNull() ?: 0
-                            totalToken += tokenValue
-                        }
-                        trySend(totalToken)
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    trySend(0)
-                }
-            })
-        awaitClose()
-    }
-
     override suspend fun getMovieTokenFromFirebase(userId: String): Flow<Int> = callbackFlow {
-        trySend(0)
-        firebaseDatabase.database.reference.child("user_movie_transaction").child(userId)
+        val id = local.getUserId()
+        firebaseDatabase.database.reference.child("user_movie_transaction").child(id?:"")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     var totalPrice = 0
 
-                    for (dataMovieTransaction in snapshot.children) {
-                        val price =
-                            dataMovieTransaction.child("priceMovie").getValue(Int::class.java)
+                    for (keySnapshot in snapshot.children) {
+                        val price = keySnapshot.child("priceMovie").getValue(Int::class.java)
                         if (price != null) {
                             totalPrice += price
                         }
@@ -243,19 +240,14 @@ class FirebaseRepositoryImpl(
         userId: String,
         movieId: String
     ): Flow<DataMovieTransaction?> = callbackFlow {
-        val query = firebaseDatabase.database.reference
-            .child("user_movie_transaction")
-            .child(movieId)
-            .child(userId)
+        val id = local.getUserId()
+        val query = firebaseDatabase.database.reference.child("user_movie_transaction").child(id?:"")
 
         val eventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                for (id in snapshot.children) {
-                    for (keySnapshot in id.children){
-                        val dataMovie = keySnapshot.getValue(DataMovieTransaction::class.java)
-                        trySend(dataMovie)
-                    }
-
+                for (keySnapshot in snapshot.children) {
+                    val dataMovie = keySnapshot.getValue(DataMovieTransaction::class.java)
+                    trySend(dataMovie)
                 }
 
             }
@@ -271,30 +263,23 @@ class FirebaseRepositoryImpl(
     }
 
     override suspend fun getAllMovieFromFirebase(userId: String): Flow<List<DataMovieTransaction>> = callbackFlow{
-        firebaseDatabase.database.reference.child("user_movie_transaction").child(userId).addValueEventListener(object :ValueEventListener{
+        val id = local.getUserId()
+        firebaseDatabase.database.reference.child("user_movie_transaction").child(id?:"").addValueEventListener(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 val movies = mutableListOf<DataMovieTransaction>()
-                for (movieSnapshot in snapshot.children){
-                    for (id in movieSnapshot.children){
-                        for(key in id.children){
-                            println("masuk movie key $key")
-                            val movie = key.getValue(DataMovieTransaction::class.java)
-                            movie?.let { movies.add(it) }
-                            println("masuk nilai movie $movie")
-                        }
-                    }
+                for (keySnapshot in snapshot.children){
+                    val movie = keySnapshot.getValue(DataMovieTransaction::class.java)
+                    movie?.let { movies.add(it) }
                 }
+                movies.sortBy { it.transactionTime }
                 trySend(movies)
             }
 
             override fun onCancelled(error: DatabaseError) {
                 close(error.toException())
-                println("error realtime  $error")
             }
 
         })
         awaitClose()
     }
-
-
 }

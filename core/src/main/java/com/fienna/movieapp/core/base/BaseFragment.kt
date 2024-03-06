@@ -32,4 +32,5 @@ abstract class BaseFragment<B : ViewBinding, VM: ViewModel>(
     abstract fun initView()
     abstract fun initListener()
     abstract fun observeData()
+
 }

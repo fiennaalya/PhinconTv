@@ -48,7 +48,7 @@ val databaseModules = module {
 }
 
 val repositoryModules = module {
-    single<FirebaseRepository> { FirebaseRepositoryImpl(get(),get(),get(), get()) }
+    single<FirebaseRepository> { FirebaseRepositoryImpl(get(),get(),get(), get(), get()) }
     single<PreLoginRepository> { PreLoginRepositoryImpl(get()) }
     single<RemoteRepository> { RemoteRepositoryImpl(get(),get()) }
     single<RoomRepository> { RoomRepositoryImpl(get()) }

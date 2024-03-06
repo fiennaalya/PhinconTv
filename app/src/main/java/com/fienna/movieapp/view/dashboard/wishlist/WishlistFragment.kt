@@ -21,18 +21,21 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class WishlistFragment : BaseFragment<FragmentWishlistBinding,WishlistViewModel >(FragmentWishlistBinding::inflate) {
+class WishlistFragment :
+    BaseFragment<FragmentWishlistBinding, WishlistViewModel>(FragmentWishlistBinding::inflate) {
     override val viewModel: WishlistViewModel by viewModel()
-    private var dataWishlist:List<DataWishlist>? = null
-    private lateinit var rvWishlist : RecyclerView
-    var count:Int = 0
+    private var dataWishlist: List<DataWishlist>? = null
+    private lateinit var rvWishlist: RecyclerView
+    var count: Int = 0
     private val listWishlistAdapter by lazy {
         WishlistAdapter(
             action = {
                 val bundle = bundleOf("movieId" to it.movieId.toString())
-                activity?.supportFragmentManager?.findFragmentById(R.id.main_fragment_container)?.findNavController()?.navigate(R.id.action_dashboardFragment_to_detailFragment, bundle)
+                activity?.supportFragmentManager?.findFragmentById(R.id.main_fragment_container)
+                    ?.findNavController()
+                    ?.navigate(R.id.action_dashboardFragment_to_detailFragment, bundle)
             },
-            remove = {entity-> removeItemFromWishlist(entity)}
+            remove = { entity -> removeItemFromWishlist(entity) }
         )
     }
 
@@ -40,18 +43,18 @@ class WishlistFragment : BaseFragment<FragmentWishlistBinding,WishlistViewModel 
         rvWishlist = binding.rvWishlist
         rvWishlist.setHasFixedSize(true)
         viewModel.fetchWishlist()
-        viewModel.setBadge()
+        viewModel.countWishlist()
         listWishlistView()
     }
 
     override fun initListener() {}
 
     override fun observeData() {
-        with(viewModel){
-            fetchWishlist().launchAndCollectIn(viewLifecycleOwner){state->
+        with(viewModel) {
+            fetchWishlist().launchAndCollectIn(viewLifecycleOwner) { state ->
                 this.launch {
-                    state.onLoading {  }
-                        .onSuccess {data ->
+                    state.onLoading { }
+                        .onSuccess { data ->
                             dataWishlist = data
                             listWishlistAdapter.submitList(data)
 
@@ -60,24 +63,19 @@ class WishlistFragment : BaseFragment<FragmentWishlistBinding,WishlistViewModel 
                                 CustomSnackbar.showSnackBar(
                                     it,
                                     binding.root,
-                                    "Error ${it}")
+                                    "Error ${it}"
+                                )
                             }
                         }
                 }
             }
 
 
-//            countWishlist.launchAndCollectIn(viewLifecycleOwner){
-//                println("masuk count wishlist $it")
-//                binding.tvWishlistCountItems.text = resources.getString(R.string.tv_count_wishlist)
-//                    .replace("%angka%", it.toString())
-//            }
-
-            badge.launchAndCollectIn(viewLifecycleOwner){
-                println("masuk count wishlist $it")
+            countWishlist.launchAndCollectIn(viewLifecycleOwner) {
                 binding.tvWishlistCountItems.text = resources.getString(R.string.tv_count_wishlist)
                     .replace("%angka%", it.toString())
             }
+
         }
     }
 

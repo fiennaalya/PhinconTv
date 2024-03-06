@@ -1,5 +1,6 @@
 package com.fienna.movieapp.view.auth
 
+import android.os.Bundle
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.navigation.fragment.findNavController
@@ -10,25 +11,27 @@ import com.fienna.movieapp.core.domain.state.onValue
 import com.fienna.movieapp.core.utils.launchAndCollectIn
 import com.fienna.movieapp.databinding.FragmentProfileBinding
 import com.fienna.movieapp.viewmodel.AuthViewModel
+import com.fienna.movieapp.viewmodel.FirebaseViewModel
 import com.google.firebase.auth.userProfileChangeRequest
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ProfileFragment : BaseFragment<FragmentProfileBinding, AuthViewModel>(FragmentProfileBinding::inflate) {
+class ProfileFragment :
+    BaseFragment<FragmentProfileBinding, AuthViewModel>(FragmentProfileBinding::inflate) {
     override val viewModel: AuthViewModel by viewModel()
-
+    private val firebaseViewModel: FirebaseViewModel by viewModel()
     override fun initView() {
         with(binding) {
             tvUsername.text = resources.getString(R.string.tv_username)
             tvUsernameDesc.text = resources.getString(R.string.tv_username_desc)
-            formUsername.hint= resources.getString(R.string.username)
-            btnUsername.text= resources.getString(R.string.btn_username)
+            formUsername.hint = resources.getString(R.string.username)
+            btnUsername.text = resources.getString(R.string.btn_username)
         }
     }
 
     override fun initListener() {
-        with(binding){
+        with(binding) {
 
-            tietUsername.doOnTextChanged{text, _, _, _ ->
+            tietUsername.doOnTextChanged { text, _, _, _ ->
                 viewModel.validateProfileField(text.toString())
             }
             btnUsername.setOnClickListener {
@@ -36,17 +39,18 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, AuthViewModel>(Frag
                     displayName = tietUsername.text.toString()
                 }
 
-                if (formUsername.isErrorEnabled.not()){
-                    viewModel.updateProfile(profileUpdates).launchAndCollectIn(viewLifecycleOwner){
-                        if (it){
-                            profileUpdates.displayName?.let { it1 -> viewModel.saveProfileName(it1) }
+                if (formUsername.isErrorEnabled.not()) {
+                    viewModel.updateProfile(profileUpdates).launchAndCollectIn(viewLifecycleOwner) {
+                        if (it) {
+                            profileUpdates.displayName?.let { it1 ->
+                                viewModel.saveProfileName(it1)
+                                firebaseViewModel.logScreenView(it1)
+                            }
                             viewModel.getCurrentUser()?.userId?.let { it1 ->
-                                viewModel.saveUserId(
-                                    it1
-                                )
+                                viewModel.saveUserId(it1)
                             }
                             findNavController().navigate(R.id.action_profileFragment_to_dashboardFragment)
-                        } else{
+                        } else {
                             Toast.makeText(
                                 context,
                                 "please input username",
@@ -54,7 +58,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, AuthViewModel>(Frag
                             ).show()
                         }
                     }
-                } else{
                 }
             }
         }
@@ -62,9 +65,9 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, AuthViewModel>(Frag
     }
 
     override fun observeData() {
-        with(viewModel){
-            profileNameValidation.launchAndCollectIn(viewLifecycleOwner){state ->
-                state.onCreated {  }
+        with(viewModel) {
+            profileNameValidation.launchAndCollectIn(viewLifecycleOwner) { state ->
+                state.onCreated { }
                     .onValue { isPass ->
                         binding.run {
                             formUsername.isErrorEnabled = isPass.not()
@@ -73,7 +76,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, AuthViewModel>(Frag
                                 formUsername.error = null
                             } else {
                                 btnUsername.isEnabled = false
-                                formUsername.error = resources.getString(R.string.helperText_name_error)
+                                formUsername.error =
+                                    resources.getString(R.string.helperText_name_error)
                             }
                             resetProfileValidationState()
                         }
@@ -82,4 +86,12 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, AuthViewModel>(Frag
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val screenName = "Profile"
+        firebaseViewModel.logEvent(
+            "Profile",
+            Bundle().apply { putString("screenName", screenName) }
+        )
+    }
 }

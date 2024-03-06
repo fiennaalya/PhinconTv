@@ -12,14 +12,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val movieUsecase: MovieUsecase): ViewModel() {
-    private val _nowPlayingMovie: MutableStateFlow<UiState<List<DataNowPlaying>>> = MutableStateFlow(UiState.Empty)
+class HomeViewModel(private val movieUsecase: MovieUsecase) : ViewModel() {
+    private val _nowPlayingMovie: MutableStateFlow<UiState<List<DataNowPlaying>>> =
+        MutableStateFlow(UiState.Empty)
     val nowPlayingMovie = _nowPlayingMovie.asStateFlow()
 
-    private val _popularMovie: MutableStateFlow<UiState<List<DataPopular>>> = MutableStateFlow(UiState.Empty)
+    private val _popularMovie: MutableStateFlow<UiState<List<DataPopular>>> =
+        MutableStateFlow(UiState.Empty)
     val popularMovie = _popularMovie.asStateFlow()
 
-    private val _upComingMovie: MutableStateFlow<UiState<List<DataUpcoming>>> = MutableStateFlow(UiState.Empty)
+    private val _upComingMovie: MutableStateFlow<UiState<List<DataUpcoming>>> =
+        MutableStateFlow(UiState.Empty)
     val upComingMovie = _upComingMovie.asStateFlow()
 
 
@@ -30,19 +33,21 @@ class HomeViewModel(private val movieUsecase: MovieUsecase): ViewModel() {
             }
         }
     }
-    fun fetchPopularMovie(){
+
+    fun fetchPopularMovie() {
         viewModelScope.launch {
             _popularMovie.asMutableStateFlow {
                 movieUsecase.fetchPopularMovie()
             }
         }
     }
-   fun fetchUpcomingMovie(){
+
+    fun fetchUpcomingMovie() {
         viewModelScope.launch {
             _upComingMovie.asMutableStateFlow {
                 movieUsecase.fetchUpcomingMovie()
             }
         }
-   }
+    }
 
 }

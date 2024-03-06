@@ -13,10 +13,12 @@ import com.fienna.movieapp.viewmodel.DashboardViewModel
 import com.google.firebase.auth.FirebaseAuth
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingFragment : BaseFragment<FragmentSettingBinding, DashboardViewModel> (FragmentSettingBinding::inflate) {
+class SettingFragment :
+    BaseFragment<FragmentSettingBinding, DashboardViewModel>(FragmentSettingBinding::inflate) {
     override val viewModel: DashboardViewModel by viewModel()
     private lateinit var auth: FirebaseAuth
-    var userIdValue :String =""
+    var userIdValue: String = ""
+    var tokenAfterPayment = 0
     override fun initView() {
         auth = FirebaseAuth.getInstance()
         with(binding) {
@@ -29,11 +31,11 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, DashboardViewModel>
 
         viewModel.getThemeValue()
         val isLanguageChecked = viewModel.getLanguageValue()
-        if (isLanguageChecked){
+        if (isLanguageChecked) {
             val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(languageIn)
             AppCompatDelegate.setApplicationLocales(appLocale)
             binding.switchLang.isChecked = true
-        }else{
+        } else {
             val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(languageEn)
             AppCompatDelegate.setApplicationLocales(appLocale)
             binding.switchLang.isChecked = false
@@ -50,21 +52,22 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, DashboardViewModel>
         }
 
         binding.switchTheme.setOnCheckedChangeListener { _, isChecked ->
-            when(isChecked){
+            when (isChecked) {
                 true -> {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
                 }
+
                 false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
             viewModel.saveThemeValue(isChecked)
         }
 
         binding.switchLang.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked){
+            if (isChecked) {
                 val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(languageIn)
                 AppCompatDelegate.setApplicationLocales(appLocale)
-            } else{
+            } else {
                 val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(languageEn)
                 AppCompatDelegate.setApplicationLocales(appLocale)
             }
@@ -81,25 +84,34 @@ class SettingFragment : BaseFragment<FragmentSettingBinding, DashboardViewModel>
             findNavController().navigate(R.id.action_settingFragment_to_tokenFragment, bundle)
         }
     }
+
     override fun observeData() {
         viewModel.run {
-            theme.launchAndCollectIn(viewLifecycleOwner){
+            theme.launchAndCollectIn(viewLifecycleOwner) {
                 binding.switchTheme.checkIf(it)
             }
-            userId.launchAndCollectIn(viewLifecycleOwner){
+            userId.launchAndCollectIn(viewLifecycleOwner) {
+                println("masuk userId $it")
                 userIdValue = it
             }
         }
 
     }
 
-    private fun readFromDatabase(){
-        viewModel.getTokenFromFirebase(userIdValue).launchAndCollectIn(viewLifecycleOwner){tokenValue ->
-            binding.tvTokenAmountUser.text = tokenValue.toString()
-        }
+    private fun readFromDatabase() {
+        viewModel.getMovieTokenFromFirebase(userIdValue)
+            .launchAndCollectIn(viewLifecycleOwner) { tokenafterpayment ->
+                println("masuk dr setting nilai $tokenafterpayment")
+                tokenAfterPayment = tokenafterpayment
+            }
+
+        viewModel.getTokenFromFirebase(userIdValue)
+            .launchAndCollectIn(viewLifecycleOwner) { tokenValue ->
+                binding.tvTokenAmountUser.text = tokenValue.toString()
+            }
     }
 
-    companion object{
+    companion object {
         const val languageIn = "in"
         const val languageEn = "en"
     }

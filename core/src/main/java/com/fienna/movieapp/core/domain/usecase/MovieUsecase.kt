@@ -71,15 +71,17 @@ interface MovieUsecase {
     suspend fun deleteAllCart()
     suspend fun insertCart(dataCart: DataCart?)
     suspend fun deleteCart(dataCart: DataCart)
-    suspend fun checkAdd(movieId:Int) : Int
-    suspend fun updateCheckCart(cartId: Int, value:Boolean)
-    suspend fun updateTotalPriceChecked(): Int
+    suspend fun checkAdd(movieId:Int, userId: String) : Int
+    suspend fun updateCheckCart(cartId: Int, value:Boolean, userId: String)
+    suspend fun updateTotalPriceChecked(userId: String): Int
+    suspend fun fetchMovieCart(movieId: Int, userId: String): DataCart
 
     suspend fun fetchWishlist(userId:String): Flow<UiState<List<DataWishlist>>>
+    suspend fun fetchMovieWishlist(movieId: Int, userId: String):DataWishlist
     suspend fun deleteAllWishlist()
     suspend fun insertWishlist(dataWishlist: DataWishlist?)
     suspend fun deleteWishlist(dataWishlist: DataWishlist?)
-    suspend fun checkFavorite(movieId:Int) : Int
-    fun countWishlist(userId:String) : Int
+    suspend fun checkFavorite(movieId:Int, userId: String) : Int
+    suspend fun countWishlist(userId:String) : Int
 
 }

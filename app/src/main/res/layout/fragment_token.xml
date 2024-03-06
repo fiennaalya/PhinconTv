@@ -177,6 +177,8 @@
                         android:src="@drawable/ic_arrow_card" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

@@ -64,34 +64,39 @@ class MovieInteractor(
         firebaseRepository.logEvent(eventName, bundle)
     }
 
-    override suspend fun sendDataToDatabase(dataToken: DataToken, userId: String): Flow<Boolean> = safeDataCall{
-        firebaseRepository.sendDataToDatabase(dataToken, userId)
-    }
+    override suspend fun sendDataToDatabase(dataToken: DataToken, userId: String): Flow<Boolean> =
+        safeDataCall {
+            firebaseRepository.sendDataToDatabase(dataToken, userId)
+        }
 
     override suspend fun sendMovieToDatabase(
         dataMovieTransaction: DataMovieTransaction,
         userId: String,
         movieId: String
-    ): Flow<Boolean> = safeDataCall{
-        firebaseRepository.sendMovieToDatabase(dataMovieTransaction, userId,movieId)
+    ): Flow<Boolean> = safeDataCall {
+        firebaseRepository.sendMovieToDatabase(dataMovieTransaction, userId, movieId)
     }
 
     override suspend fun getTokenFromFirebase(userId: String): Flow<Int> = safeDataCall {
         firebaseRepository.getTokenFromFirebase(userId)
     }
 
-    override suspend fun getMovieTokenFromFirebase(userId: String): Flow<Int> = safeDataCall{
+    override suspend fun getMovieTokenFromFirebase(userId: String): Flow<Int> = safeDataCall {
         firebaseRepository.getMovieTokenFromFirebase(userId)
     }
 
-    override suspend fun getMovieFromFirebase(userId: String, movieId: String): Flow<DataMovieTransaction?> =
+    override suspend fun getMovieFromFirebase(
+        userId: String,
+        movieId: String
+    ): Flow<DataMovieTransaction?> =
         safeDataCall {
             firebaseRepository.getMovieFromFirebase(userId, movieId)
-    }
+        }
 
-    override suspend fun getAllMovieFromFirebase(userId: String): Flow<List<DataMovieTransaction>> = safeDataCall{
-        firebaseRepository.getAllMovieFromFirebase(userId)
-    }
+    override suspend fun getAllMovieFromFirebase(userId: String): Flow<List<DataMovieTransaction>> =
+        safeDataCall {
+            firebaseRepository.getAllMovieFromFirebase(userId)
+        }
 
     override suspend fun getConfigStatusToken(): Flow<Boolean> {
         return firebaseRepository.getConfigStatusToken()
@@ -116,11 +121,14 @@ class MovieInteractor(
             uiDataList
         }
 
-    override fun getTokenValue(userId:String): Int  = preLoginRepository.getTokenValue(userId)
-    override fun putTokenValue(userId:String, value: Int) { preLoginRepository.putTokenValue(userId, value) }
+    override fun getTokenValue(userId: String): Int = preLoginRepository.getTokenValue(userId)
+    override fun putTokenValue(userId: String, value: Int) {
+        preLoginRepository.putTokenValue(userId, value)
+    }
+
     override fun getCurrentUser(): DataUser? {
         val firebaseUser = firebaseRepository.getCurrentUser()
-        return  firebaseUser?.let {
+        return firebaseUser?.let {
             DataUser(
                 displayName = it.displayName.orEmpty(),
                 userId = it.uid
@@ -165,10 +173,11 @@ class MovieInteractor(
         preLoginRepository.putProfileName(value)
     }
 
-    override fun getCountWishlistFromDashboard(): Int = preLoginRepository.getCountWishlistFromDashboard()
+    override fun getCountWishlistFromDashboard(): Int =
+        preLoginRepository.getCountWishlistFromDashboard()
 
     override fun putCountWishlistFromDashboard(value: Int) {
-       preLoginRepository.putCountWishlistFromDashboard(value)
+        preLoginRepository.putCountWishlistFromDashboard(value)
     }
 
     override suspend fun fetchNowPlayingMovie(): List<DataNowPlaying> = safeDataCall {
@@ -216,16 +225,18 @@ class MovieInteractor(
         roomRepository.deleteCart(dataCart.toEntity())
     }
 
-    override suspend fun checkAdd(movieId: Int): Int = safeDataCall {
-        roomRepository.checkAdd(movieId)
+    override suspend fun checkAdd(movieId: Int, userId: String): Int = safeDataCall {
+        roomRepository.checkAdd(movieId, userId)
     }
 
-    override suspend fun updateCheckCart(cartId: Int, value: Boolean) {
-        roomRepository.updateCheckCart(cartId, value)
+    override suspend fun updateCheckCart(cartId: Int, value: Boolean, userId: String) {
+        roomRepository.updateCheckCart(cartId, value, userId)
     }
 
-    override suspend fun updateTotalPriceChecked(): Int = roomRepository.updateTotalPriceChecked()
-
+    override suspend fun updateTotalPriceChecked(userId: String): Int = roomRepository.updateTotalPriceChecked(userId)
+    override suspend fun fetchMovieCart(movieId: Int, userId: String): DataCart = safeDataCall {
+        roomRepository.fetchMovieCart(movieId, userId).toUiData()
+    }
 
     override suspend fun fetchWishlist(userId: String): Flow<UiState<List<DataWishlist>>> =
         safeDataCall {
@@ -233,6 +244,11 @@ class MovieInteractor(
                 val mapped = data.map { entity: WishlistEntity -> entity.toUiData() }
                 UiState.Success(mapped)
             }.flowOn(Dispatchers.IO).catch { throwable -> UiState.Error(throwable) }
+        }
+
+    override suspend fun fetchMovieWishlist(movieId: Int, userId: String): DataWishlist =
+        safeDataCall {
+            roomRepository.fetchMovieWishlist(movieId, userId).toUiData()
         }
 
     override suspend fun deleteAllWishlist() {
@@ -248,10 +264,12 @@ class MovieInteractor(
         dataWishlist?.let { roomRepository.deleteWishlist(it.toEntity()) }
     }
 
-    override suspend fun checkFavorite(movieId: Int): Int = safeDataCall {
-        roomRepository.checkFavorite(movieId)
+    override suspend fun checkFavorite(movieId: Int, userId: String): Int = safeDataCall {
+        roomRepository.checkFavorite(movieId, userId)
     }
 
-    override fun countWishlist(userId: String): Int = roomRepository.countWishlist(userId)
+    override suspend fun countWishlist(userId: String): Int = safeDataCall {
+        roomRepository.countWishlist(userId)
+    }
 
 }

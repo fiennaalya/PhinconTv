@@ -17,13 +17,15 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.navigationrail.NavigationRailView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewModel>(FragmentDashboardBinding::inflate) {
+class DashboardFragment :
+    BaseFragment<FragmentDashboardBinding, DashboardViewModel>(FragmentDashboardBinding::inflate) {
     override val viewModel: DashboardViewModel by viewModel()
-    val authViewModel:AuthViewModel by viewModel()
-    val wishlistViewModel:WishlistViewModel by viewModel()
+    val authViewModel: AuthViewModel by viewModel()
+    val wishlistViewModel: WishlistViewModel by viewModel()
     private lateinit var navController: NavController
     override fun initView() {
-        val navHostFragment = childFragmentManager.findFragmentById(R.id.fragment_dashboard_container) as NavHostFragment
+        val navHostFragment =
+            childFragmentManager.findFragmentById(R.id.fragment_dashboard_container) as NavHostFragment
         navController = navHostFragment.navController
 
         viewModel.getCurrentUser()?.let { user ->
@@ -35,20 +37,21 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
                 .replace("%name%", username)
 
         }
-        wishlistViewModel.setBadge()
     }
 
     override fun initListener() {
-        binding.abtDashboard.setOnMenuItemClickListener {menuItem ->
-            when(menuItem.itemId){
+        binding.abtDashboard.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
                 R.id.navigation_user -> {
                     findNavController().navigate(R.id.action_dashboardFragment_to_settingFragment)
                     true
                 }
+
                 R.id.navigation_cart -> {
                     findNavController().navigate(R.id.action_dashboardFragment_to_cartFragment)
                     true
                 }
+
                 else -> false
             }
         }
@@ -61,19 +64,21 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
 
         val widthDp = metrics?.bounds?.width()?.div(resources.displayMetrics.density)
 
-        if (widthDp != null){
-            when{
+        if (widthDp != null) {
+            when {
                 widthDp < 600f -> {
                     val bottomNav = binding.bnDashboard as BottomNavigationView
                     bottomNav.setupWithNavController(navController)
-                    wishlistViewModel.badge.launchAndCollectIn(viewLifecycleOwner){count ->
+                    wishlistViewModel.badge.launchAndCollectIn(viewLifecycleOwner) { count ->
                         updateBadge(bottomNav, count)
-        }
+                    }
                 }
-                widthDp < 840f ->{
+
+                widthDp < 840f -> {
                     val navRail = binding.bnDashboard as NavigationRailView
                     navRail.setupWithNavController(navController)
                 }
+
                 else -> {
                     val navView = binding.bnDashboard as NavigationView
                     navView.setupWithNavController(navController)
@@ -82,15 +87,9 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding, DashboardViewMo
         }
     }
 
-    override fun observeData() {
-//        wishlistViewModel.countWishlist.launchAndCollectIn(viewLifecycleOwner){count ->
-//            println("masuk count dashboard $count")
-//            updateBadge(binding.bnDashboard, count)
-//        }
+    override fun observeData() {}
 
-    }
-
-    private fun updateBadge(bottomNav:BottomNavigationView ,  count: Int) {
+    private fun updateBadge(bottomNav: BottomNavigationView, count: Int) {
         val wishlistMenuItemId = R.id.wishlistFragment
         val badge = bottomNav.getOrCreateBadge(wishlistMenuItemId)
         badge.isVisible = count > 0

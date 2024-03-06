@@ -4,27 +4,22 @@ import androidx.lifecycle.ViewModel
 import com.fienna.movieapp.core.domain.model.DataToken
 import com.fienna.movieapp.core.domain.usecase.MovieUsecase
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.runBlocking
 
-class TokenViewModel(private val movieUsecase: MovieUsecase):ViewModel() {
-    private val _selectedToken = MutableStateFlow(0)
-    val selectedToken = _selectedToken.asStateFlow()
-
+class TokenViewModel(private val movieUsecase: MovieUsecase) : ViewModel() {
     fun getConfigToken() = runBlocking {
         movieUsecase.getConfigToken()
     }
 
-    fun getConfigStatusToken()= runBlocking {
+    fun getConfigStatusToken() = runBlocking {
         movieUsecase.getConfigStatusToken()
     }
 
-    fun getConfigPayment()= runBlocking {
+    fun getConfigPayment() = runBlocking {
         movieUsecase.getConfigPayment()
     }
 
-    fun getConfigStatusPayment()= runBlocking {
+    fun getConfigStatusPayment() = runBlocking {
         movieUsecase.getConfigStatusPayment()
     }
 

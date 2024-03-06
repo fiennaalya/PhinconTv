@@ -12,6 +12,7 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.TextView
+import com.fienna.movieapp.R
 import com.google.android.material.materialswitch.MaterialSwitch
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -26,11 +27,11 @@ import java.util.Locale
 fun setText(locale: String, context: Context, textInput: TextView, fullText: String) {
     val spannable = SpannableString(fullText)
 
-    val tncText = if (locale == "languageIn") "Ketentuan Layanan" else "Terms of Service"
+    val tncText = if (locale == "in") "Ketentuan Layanan" else "Terms of Service"
     val startTnc = fullText.indexOf(tncText)
     val endTnc = startTnc + tncText.length
 
-    val policyText = if (locale == "languageIn") "Kebijakan Privasi" else "Privacy Policy"
+    val policyText = if (locale == "in") "Kebijakan Privasi" else "Privacy Policy"
     val startPolicy = fullText.indexOf(policyText)
     val endPolicy = startPolicy + policyText.length
 
@@ -74,7 +75,6 @@ fun setText(locale: String, context: Context, textInput: TextView, fullText: Str
 
     textInput.text = spannable
     textInput.movementMethod = LinkMovementMethod.getInstance()
-
 }
 
 fun openUrl(context: Context, url: String) {
@@ -82,38 +82,37 @@ fun openUrl(context: Context, url: String) {
     context.startActivity(intent)
 }
 
-fun MaterialSwitch.checkIf(state: Boolean){
+fun MaterialSwitch.checkIf(state: Boolean) {
     this.isChecked = state
 }
 
-fun changeGenre(genreId: Int? = null): String {
+fun changeGenre(genreId: Int? = null, context: Context): String {
     val genres = mapOf(
-        28 to "Action",
-        12 to "Adventure",
-        16 to "Animation",
-        35 to "Comedy",
-        80 to "Crime",
-        99 to "Documentary",
-        18 to "Drama",
-        10751 to "Family",
-        14 to "Fantasy",
-        36 to "History",
-        27 to "Horror",
-        10402 to "Music",
-        9648 to "Mystery",
-        10749 to "Romance",
-        878 to "Science Fiction",
-        10770 to "TV Movie",
-        53 to "Thriller",
-        10752 to "War",
-        37 to "Western"
+        28 to context.getString(R.string.genre_action),
+        12 to context.getString(R.string.genre_adventure),
+        16 to context.getString(R.string.genre_animation),
+        35 to context.getString(R.string.genre_comedy),
+        80 to context.getString(R.string.genre_crime),
+        99 to context.getString(R.string.genre_documentary),
+        18 to context.getString(R.string.genre_drama),
+        10751 to context.getString(R.string.genre_family),
+        14 to context.getString(R.string.genre_fantasy),
+        36 to context.getString(R.string.genre_history),
+        27 to context.getString(R.string.genre_horror),
+        10402 to context.getString(R.string.genre_music),
+        9648 to context.getString(R.string.genre_mystery),
+        10749 to context.getString(R.string.genre_romance),
+        878 to context.getString(R.string.genre_science_fiction),
+        10770 to context.getString(R.string.genre_tv_movie),
+        53 to context.getString(R.string.genre_thriller),
+        10752 to context.getString(R.string.genre_war),
+        37 to context.getString(R.string.genre_western)
     )
-
-    return genres[genreId] ?: "Unknown Genre"
+    return genres[genreId] ?: context.getString(R.string.unknown_genre)
 }
 
 fun extractYearFromDate(dateString: String? = null): String {
-    val date = dateString ?: ""  // Using the elvis operator to handle null or empty cases
+    val date = dateString ?: ""
     val year = if (date.isNotEmpty()) {
         date.split("-")[0]
     } else {
@@ -121,7 +120,6 @@ fun extractYearFromDate(dateString: String? = null): String {
     }
     return year
 }
-
 
 fun formatRating(rating: Double? = null): String {
     return String.format("%.1f", rating)
@@ -135,7 +133,7 @@ fun String.toBase64(): String {
     }
 }
 
-fun currency(number : Int): String{
+fun currency(number: Int): String {
     val currencyIn = DecimalFormat.getCurrencyInstance() as DecimalFormat
     val formatRupiah = DecimalFormatSymbols()
 
@@ -171,7 +169,6 @@ fun extractYearMonthDate(dateTimeString: String?): String {
         val date = inputFormat.parse(dateTimeString)
         return outputFormat.format(date)
     } catch (e: ParseException) {
-        e.printStackTrace()
         return ""
     }
 }

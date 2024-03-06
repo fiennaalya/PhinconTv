@@ -14,18 +14,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class DetailViewModel(private val movieUsecase: MovieUsecase):ViewModel() {
-    private val _detailMovie: MutableStateFlow<UiState<DataDetailMovie>> = MutableStateFlow(UiState.Empty)
+class DetailViewModel(private val movieUsecase: MovieUsecase) : ViewModel() {
+    private val _detailMovie: MutableStateFlow<UiState<DataDetailMovie>> =
+        MutableStateFlow(UiState.Empty)
     val detailMovie = _detailMovie.asStateFlow()
 
-    private val _creditMovie: MutableStateFlow<UiState<List<DataCredit>>> = MutableStateFlow(UiState.Empty)
+    private val _creditMovie: MutableStateFlow<UiState<List<DataCredit>>> =
+        MutableStateFlow(UiState.Empty)
     val creditMovie = _creditMovie.asStateFlow()
 
     private var dataCart: DataCart? = null
     private var dataWishlist: DataWishlist? = null
 
 
-    fun fetchDetailMovie(movieId:Int){
+    fun fetchDetailMovie(movieId: Int) {
         viewModelScope.launch {
             _detailMovie.asMutableStateFlow {
                 movieUsecase.fetchDetailMovie(movieId)
@@ -33,7 +35,7 @@ class DetailViewModel(private val movieUsecase: MovieUsecase):ViewModel() {
         }
     }
 
-    fun fetchCreditMovie(movieId:Int){
+    fun fetchCreditMovie(movieId: Int) {
         viewModelScope.launch {
             _creditMovie.asMutableStateFlow {
                 movieUsecase.fetchCreditMovie(movieId)
@@ -41,41 +43,56 @@ class DetailViewModel(private val movieUsecase: MovieUsecase):ViewModel() {
         }
     }
 
-    fun setDataCart(data: DataCart){
+    fun setDataCart(data: DataCart) {
         dataCart = data
     }
-    fun setDataWishlist(data: DataWishlist){
+
+    fun setDataWishlist(data: DataWishlist) {
         dataWishlist = data
     }
 
-    fun insertWishlist() = runBlocking{
+    fun insertWishlist() = runBlocking {
         val userId = movieUsecase.getUserId()
         dataWishlist = dataWishlist?.copy(userId = userId)
         movieUsecase.insertWishlist(dataWishlist)
     }
 
 
-
-    fun insertCart() = runBlocking{
+    fun insertCart() = runBlocking {
         val userId = movieUsecase.getUserId()
         dataCart = dataCart?.copy(userId = userId)
         movieUsecase.insertCart(dataCart)
     }
 
-    fun checkFavorite(movieId: Int) = runBlocking {
-        movieUsecase.checkFavorite(movieId) > 0
-    }
-
-    fun deleteWishlistDetail(){
+    fun deleteCartDetail() {
         viewModelScope.launch {
-            dataWishlist?.let {
-                movieUsecase.deleteWishlist(it)
+            val userId = movieUsecase.getUserId()
+            dataCart?.let {
+                val movieData = movieUsecase.fetchMovieCart(it.movieId, userId)
+                movieUsecase.deleteCart(movieData)
             }
         }
     }
 
-    fun checkAdd(movieId: Int) = runBlocking {
-        movieUsecase.checkAdd(movieId) > 0
+    fun checkFavorite(movieId: Int): Int = runBlocking {
+        val userId = movieUsecase.getUserId()
+        movieUsecase.checkFavorite(movieId, userId)
     }
+
+    fun checkAdd(movieId: Int): Int = runBlocking {
+        val userId = movieUsecase.getUserId()
+        movieUsecase.checkAdd(movieId, userId)
+    }
+
+    fun deleteWishlistDetail() {
+        val userId = movieUsecase.getUserId()
+        viewModelScope.launch {
+            dataWishlist?.let {
+                val movieData = movieUsecase.fetchMovieWishlist(it.movieId, userId)
+                movieUsecase.deleteWishlist(movieData)
+            }
+        }
+    }
+
 
 }

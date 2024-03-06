@@ -10,12 +10,12 @@ import kotlinx.coroutines.flow.Flow
 class PagingDataSourceImpl(
     private val apiEndPoint: ApiEndPoint
 ) {
-    fun fetchSearchProduct(query : String): Flow<PagingData<DataSearch>>{
+    fun fetchSearchProduct(query: String): Flow<PagingData<DataSearch>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 10
             ),
-            pagingSourceFactory = { PagingDataSource(endpoint =apiEndPoint, query = query) }
+            pagingSourceFactory = { PagingDataSource(endpoint = apiEndPoint, query = query) }
         ).flow
     }
 }

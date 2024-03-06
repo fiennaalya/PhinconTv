@@ -1,5 +1,6 @@
 package com.fienna.movieapp.view.dashboard.checkout
 
+import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
@@ -14,6 +15,8 @@ import com.fienna.movieapp.core.utils.launchAndCollectIn
 import com.fienna.movieapp.databinding.FragmentCheckoutBinding
 import com.fienna.movieapp.utils.DateTimeNow
 import com.fienna.movieapp.viewmodel.DashboardViewModel
+import com.fienna.movieapp.viewmodel.FirebaseViewModel
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -23,12 +26,13 @@ class CheckoutFragment :
     val safeArgs: CheckoutFragmentArgs by navArgs()
     private val list = mutableListOf<DataTransaction>()
     var dataTransaction: DataTransaction? = null
+    private val firebaseViewModel: FirebaseViewModel by viewModel()
 
     var tokenMovie: Int = 0
     private var title: String = ""
     private var movieId: Int = 0
     var userName = ""
-    var tokenAfterCheckout = 0
+    var tokenAfterPayment = 0
     var userIdToken = ""
 
     private val checkoutAdapter by lazy {
@@ -66,10 +70,6 @@ class CheckoutFragment :
 
             viewModel.getProfileName()
             viewModel.getUserId()
-            viewModel.getTokenFromFirebase(userIdToken).launchAndCollectIn(viewLifecycleOwner) {
-                binding.tvTokenValueCheckout.text = it.toString()
-            }
-
         }
 
         safeArgs.dataTransaction.let {
@@ -90,15 +90,31 @@ class CheckoutFragment :
                 userIdToken = it
             }
 
+            getMovieTokenFromFirebase(userIdToken).launchAndCollectIn(viewLifecycleOwner) { tokenafterpayment ->
+                tokenAfterPayment = tokenafterpayment
+            }
+
             getTokenFromFirebase(userIdToken).launchAndCollectIn(viewLifecycleOwner) {
-                binding.tvTokenValueCheckout.text = it.toString()
-                setTopUpState(it)
+                val finalTokenValue = it - tokenAfterPayment
+                binding.tvTokenValueCheckout.text = finalTokenValue.toString()
+                setTopUpState(finalTokenValue)
             }
 
             profileUserName.launchAndCollectIn(viewLifecycleOwner) {
                 userName = it
             }
+
+
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val screenName = "Checkout"
+        firebaseViewModel.logEvent(
+            FirebaseAnalytics.Event.BEGIN_CHECKOUT,
+            Bundle().apply { putString("screenName", screenName) }
+        )
     }
 
     private fun setTopUpState(token: Int) {
@@ -111,15 +127,15 @@ class CheckoutFragment :
             binding.btnBuyCheckout.isEnabled = false
             binding.layoutEnoughBalance.visibility = View.VISIBLE
             binding.tvTopupToken.setOnClickListener {
+                firebaseViewModel.logScreenView("paymentCheckout")
                 val bundle =
                     bundleOf("paymentLabel" to resources.getString(R.string.tv_choose_payment))
                 findNavController().navigate(R.id.action_checkoutFragment_to_tokenFragment, bundle)
             }
         }
-        tokenAfterCheckout = token - tokenMovie
     }
 
-    private fun setMovieToDatabase(){
+    private fun setMovieToDatabase() {
         val dataMovieTransaction = DataMovieTransaction(
             movieId = movieId,
             userId = userIdToken,
@@ -129,13 +145,16 @@ class CheckoutFragment :
             transactionTime = DateTimeNow()
         )
 
-        viewModel.sendMovieToDatabase(dataMovieTransaction, userIdToken,movieId.toString())
+        viewModel.sendMovieToDatabase(dataMovieTransaction, userIdToken, movieId.toString())
             .launchAndCollectIn(viewLifecycleOwner) { success ->
                 if (success) {
                     val bundle = bundleOf(
                         "movieId" to movieId.toString()
                     )
-                    findNavController().navigate(R.id.action_checkoutFragment_to_statusFragment,bundle)
+                    findNavController().navigate(
+                        R.id.action_checkoutFragment_to_statusFragment,
+                        bundle
+                    )
                 }
             }
     }

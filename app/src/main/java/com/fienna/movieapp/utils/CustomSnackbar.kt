@@ -17,7 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 
 object CustomSnackbar {
     @SuppressLint("RestrictedApi")
-    fun showSnackBar(context: Context, root: View, text: String){
+    fun showSnackBar(context: Context, root: View, text: String) {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val binding = CustomToastBinding.inflate(inflater)
         val snackBar = Snackbar.make(root, "", Snackbar.LENGTH_INDEFINITE)
@@ -31,7 +31,7 @@ object CustomSnackbar {
             layoutParams = lp
         }
 
-        snackbarLayout.addView(binding.root,0)
+        snackbarLayout.addView(binding.root, 0)
 
         snackBar.apply {
             view.setBackgroundColor(Color.TRANSPARENT)
@@ -42,7 +42,7 @@ object CustomSnackbar {
 
             view.startAnimation(slideDownAnim)
 
-            slideDownAnim.setAnimationListener(object : Animation.AnimationListener{
+            slideDownAnim.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationStart(p0: Animation?) {}
 
                 override fun onAnimationEnd(p0: Animation?) {
@@ -52,7 +52,7 @@ object CustomSnackbar {
                 override fun onAnimationRepeat(p0: Animation?) {}
             })
 
-            slideUpAnim.setAnimationListener(object : Animation.AnimationListener{
+            slideUpAnim.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationStart(p0: Animation?) {}
 
                 override fun onAnimationEnd(p0: Animation?) {
@@ -68,7 +68,7 @@ object CustomSnackbar {
     }
 
     @SuppressLint("RestrictedApi")
-    fun showSnackBarWithAction(context: Context, root: View, text: String, action : () -> Unit){
+    fun showSnackBarWithAction(context: Context, root: View, text: String, action: () -> Unit) {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val binding = CustomToastBinding.inflate(inflater)
         val snackBar = Snackbar.make(root, "", Snackbar.LENGTH_INDEFINITE)
@@ -82,7 +82,7 @@ object CustomSnackbar {
             layoutParams = lp
         }
 
-        snackbarLayout.addView(binding.root,0)
+        snackbarLayout.addView(binding.root, 0)
 
         snackBar.apply {
             view.setBackgroundColor(Color.TRANSPARENT)
@@ -93,7 +93,7 @@ object CustomSnackbar {
 
             view.startAnimation(slideDownAnim)
 
-            slideDownAnim.setAnimationListener(object : Animation.AnimationListener{
+            slideDownAnim.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationStart(p0: Animation?) {}
 
                 override fun onAnimationEnd(p0: Animation?) {
@@ -103,7 +103,7 @@ object CustomSnackbar {
                 override fun onAnimationRepeat(p0: Animation?) {}
             })
 
-            slideUpAnim.setAnimationListener(object : Animation.AnimationListener{
+            slideUpAnim.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationStart(p0: Animation?) {}
 
                 override fun onAnimationEnd(p0: Animation?) {
@@ -111,11 +111,10 @@ object CustomSnackbar {
                     dismiss()
                     action.invoke()
                 }
-                override fun onAnimationRepeat(p0: Animation?) {}
 
+                override fun onAnimationRepeat(p0: Animation?) {}
             })
             show()
         }
     }
-
 }

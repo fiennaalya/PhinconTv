@@ -5,9 +5,7 @@ import com.fienna.movieapp.core.data.local.entity.CartEntity
 import com.fienna.movieapp.core.data.local.entity.WishlistEntity
 import com.fienna.movieapp.core.data.local.preferences.SharedPref
 import com.fienna.movieapp.core.utils.safeDataCall
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.runBlocking
 
 class LocalDataSource(
     private val sharedPref: SharedPref,
@@ -43,24 +41,21 @@ class LocalDataSource(
 
     /*room database code*/
     fun fetchCart(userId:String): Flow<List<CartEntity>> = dao.retrieveAllCart(userId)
+    fun fetchCheckedCart(userId: String) : Flow<List<CartEntity>> = dao.retrieveCheckedCart(userId)
     suspend fun deleteAllCart() = dao.deleteAllCart()
     suspend fun insertCart(cartEntity: CartEntity) { dao.insertCart(cartEntity) }
     suspend fun deleteCart(cartEntity: CartEntity){dao.deleteCart(cartEntity)}
-    suspend fun checkAdd(movieId: Int) : Int = safeDataCall { dao.checkAdd(movieId) }
-    suspend fun updateCheckCart(cartId:Int, value: Boolean){dao.updateCheckCart(cartId, value)}
-    suspend fun updateTotalPriceChecked():Int = safeDataCall { dao.updateTotalPriceChecked() }
+    suspend fun checkAdd(movieId: Int, userId: String) : Int = safeDataCall { dao.checkAdd(movieId, userId) }
+    suspend fun updateCheckCart(cartId:Int, value: Boolean, userId: String){dao.updateCheckCart(cartId, value, userId)}
+    suspend fun updateTotalPriceChecked(userId: String):Int = safeDataCall { dao.updateTotalPriceChecked(userId) }
+    fun fetchMovieCart(movieId: Int, userId: String): CartEntity = dao.retrieveMovieCart(movieId, userId)
 
 
     fun fetchWishlist(userId:String): Flow<List<WishlistEntity>> = dao.retrieveAllWishlist(userId)
+    fun fetchMovieWishlist(movieId: Int, userId: String):WishlistEntity = dao.retrieveMovieWishlist(movieId, userId)
     suspend fun deleteAllWishlist() = dao.deleteAllWishlist()
     suspend fun insertWishlist(wishlistEntity: WishlistEntity) { dao.insertWishlist(wishlistEntity) }
     suspend fun deleteWishlist(wishlistEntity: WishlistEntity){dao.deleteWishlist(wishlistEntity)}
-    suspend fun checkFavorite(movieId: Int) : Int = safeDataCall { dao.checkFavorite(movieId) }
-    fun countWishlist(userId:String) : Int = runBlocking {
-        val data = async {
-            dao.countWishlist(userId)
-        }
-        data.start()
-        data.await()
-    }
+    suspend fun checkFavorite(movieId: Int, userId: String) : Int = safeDataCall { dao.checkFavorite(movieId, userId) }
+    suspend fun countWishlist(userId:String) : Int = safeDataCall { dao.countWishlist(userId) }
 }

@@ -8,9 +8,9 @@ import com.fienna.movieapp.databinding.ItemPaymentParentBinding
 
 class PaymentParentAdapter(
     private val action: (DataPayment.Item) -> Unit
-):BaseListAdapter<DataPayment, ItemPaymentParentBinding>(ItemPaymentParentBinding::inflate){
+) : BaseListAdapter<DataPayment, ItemPaymentParentBinding>(ItemPaymentParentBinding::inflate) {
     override fun onItemBind(): (DataPayment, ItemPaymentParentBinding, View, Int) -> Unit =
-        {data, binding, itemView, position ->
+        { data, binding, itemView, position ->
             binding.run {
                 tvTitlePaymentParent.text = data.title
 

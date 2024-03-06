@@ -39,6 +39,11 @@
         <item name="cornerRadius">100dp</item>
     </style>
 
+    <style name="CustomCardImgRounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
     <style name="BoldSwitchTextAppearance" parent="TextAppearance.MaterialComponents.Caption">
         <item name="fontFamily">@font/poppins_bold</item> <!-- Assuming "poppins_bold" is your bold font -->
         <item name="android:textStyle">bold</item>

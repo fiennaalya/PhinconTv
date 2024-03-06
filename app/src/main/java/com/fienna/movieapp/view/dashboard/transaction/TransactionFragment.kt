@@ -9,7 +9,8 @@ import com.fienna.movieapp.databinding.FragmentTransactionBinding
 import com.fienna.movieapp.viewmodel.DashboardViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TransactionFragment : BaseFragment<FragmentTransactionBinding, DashboardViewModel>(FragmentTransactionBinding::inflate) {
+class TransactionFragment :
+    BaseFragment<FragmentTransactionBinding, DashboardViewModel>(FragmentTransactionBinding::inflate) {
     override val viewModel: DashboardViewModel by viewModel()
     private val list = mutableListOf<DataMovieTransaction>()
     private val transactionAdapter = TransactionAdapter()
@@ -30,7 +31,7 @@ class TransactionFragment : BaseFragment<FragmentTransactionBinding, DashboardVi
         viewModel.userId.launchAndCollectIn(viewLifecycleOwner) {
             userIdToken = it
         }
-        viewModel.getAllMovieFromDatabase(userIdToken).launchAndCollectIn(viewLifecycleOwner){
+        viewModel.getAllMovieFromDatabase(userIdToken).launchAndCollectIn(viewLifecycleOwner) {
             list.addAll(it)
             transactionAdapter.submitList(list)
         }

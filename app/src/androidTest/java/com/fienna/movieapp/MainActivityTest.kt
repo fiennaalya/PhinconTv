@@ -16,7 +16,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4ClassRunner::class)
-class MainActivityTest{
+class MainActivityTest {
     private val dummyEmail = "lala@gmail.com"
     private val dummyPassword = "12345678"
     private val delayTimeMs = 1000L
@@ -75,7 +75,7 @@ class DelayIdlingResources(private val delayTimeMs: Long) : IdlingResource {
     }
 
     override fun isIdleNow(): Boolean {
-        val elapseTime = System .currentTimeMillis() - startTime
+        val elapseTime = System.currentTimeMillis() - startTime
         val isIdle = elapseTime >= delayTimeMs
         if (isIdle && resourcesCallback != null) {
             resourcesCallback?.onTransitionToIdle()

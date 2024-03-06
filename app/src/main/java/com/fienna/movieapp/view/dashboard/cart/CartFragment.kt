@@ -22,21 +22,22 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CartFragment : BaseFragment<FragmentCartBinding, CartViewModel>(FragmentCartBinding::inflate) {
+class CartFragment :
+    BaseFragment<FragmentCartBinding, CartViewModel>(FragmentCartBinding::inflate) {
     override val viewModel: CartViewModel by viewModel()
-    private var dataCart:List<DataCart>? = null
-    private lateinit var rvCart : RecyclerView
+    private var dataCart: List<DataCart>? = null
+    private lateinit var rvCart: RecyclerView
     private val listCartAdapter by lazy {
         CartAdapter(
             action = {
                 val bundle = bundleOf("movieId" to it.movieId.toString())
                 findNavController().navigate(R.id.action_cartFragment_to_detailFragment, bundle)
             },
-            remove = {entity -> removeItemFromCart(entity)},
-            checkbox = {id, isChecked ->
+            remove = { entity -> removeItemFromCart(entity) },
+            checkbox = { id, isChecked ->
                 viewModel.updateCheckCart(id, isChecked)
                 android.os.Handler(Looper.getMainLooper())
-                    .postDelayed({viewModel.totalPrice()}, 500)
+                    .postDelayed({ viewModel.totalPrice() }, 500)
 
             }
         )
@@ -48,7 +49,7 @@ class CartFragment : BaseFragment<FragmentCartBinding, CartViewModel>(FragmentCa
         viewModel.fetchCart()
         listCartView()
 
-        with(binding){
+        with(binding) {
             tvTitleCart.text = resources.getString(R.string.menu_cart)
             tvCartSelect.text = resources.getString(R.string.tv_select_all)
             tvCartTotalprice.text = resources.getString(R.string.total_bayar)
@@ -69,11 +70,11 @@ class CartFragment : BaseFragment<FragmentCartBinding, CartViewModel>(FragmentCa
     }
 
     override fun observeData() {
-        with(viewModel){
-            fetchCart().launchAndCollectIn(viewLifecycleOwner){state->
+        with(viewModel) {
+            fetchCart().launchAndCollectIn(viewLifecycleOwner) { state ->
                 this.launch {
-                    state.onLoading {  }
-                        .onSuccess {data ->
+                    state.onLoading { }
+                        .onSuccess { data ->
                             dataCart = data
                             listCartAdapter.submitList(data)
 
@@ -82,13 +83,14 @@ class CartFragment : BaseFragment<FragmentCartBinding, CartViewModel>(FragmentCa
                                 CustomSnackbar.showSnackBar(
                                     it,
                                     binding.root,
-                                    "Error ${it}")
+                                    "Error ${it}"
+                                )
                             }
                         }
                 }
             }
 
-            totalPrice.launchAndCollectIn(viewLifecycleOwner){
+            totalPrice.launchAndCollectIn(viewLifecycleOwner) {
                 binding.tvCartPrice.text = it.toString()
             }
         }

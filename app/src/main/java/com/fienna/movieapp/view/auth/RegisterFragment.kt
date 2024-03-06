@@ -19,7 +19,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class RegisterFragment : BaseFragment<FragmentRegsiterBinding,AuthViewModel>(FragmentRegsiterBinding::inflate) {
     override val viewModel: AuthViewModel by viewModel()
     private val firebaseViewModel : FirebaseViewModel by viewModel()
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
     override fun initView() {
         with(binding){
             btnSignup.text = resources.getString(R.string.btn_signup)
@@ -30,7 +29,8 @@ class RegisterFragment : BaseFragment<FragmentRegsiterBinding,AuthViewModel>(Fra
             tvTnc.text = resources.getString(R.string.tv_tnc)
         }
 
-        textHyperlink()
+        val lang = resources.configuration.locales[0].language
+        context?.let { setText(lang, it, binding.tvTnc, getString(R.string.tv_tnc)) }
     }
 
     override fun initListener() {
@@ -143,10 +143,8 @@ class RegisterFragment : BaseFragment<FragmentRegsiterBinding,AuthViewModel>(Fra
     override fun onResume() {
         super.onResume()
         val screenName = resources.getString(R.string.btn_signup)
-        firebaseViewModel.logEvent(FirebaseAnalytics.Event.SIGN_UP, Bundle().apply { putString("screenName", screenName)})
-    }
-
-    private fun textHyperlink() {
-        context?.let { setText("languageEn", it, binding.tvTnc, getString(R.string.tv_tnc)) }
+        firebaseViewModel.logEvent(
+            FirebaseAnalytics.Event.SIGN_UP, Bundle().apply { putString("screenName", screenName)}
+        )
     }
 }

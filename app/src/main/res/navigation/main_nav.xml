@@ -108,10 +108,10 @@
         tools:layout="@layout/fragment_setting">
         <argument
             android:name="tokenTopUp"
-            app:argType="string"/>
+            app:argType="string" />
         <argument
             android:name="paymentLabel"
-            app:argType="string"/>
+            app:argType="string" />
         <action
             android:id="@+id/action_settingFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
@@ -156,7 +156,7 @@
         tools:layout="@layout/fragment_token">
         <argument
             android:name="paymentLabel"
-            app:argType="string"/>
+            app:argType="string" />
         <action
             android:id="@+id/action_tokenFragment_to_paymentFragment"
             app:destination="@id/paymentFragment"
@@ -175,7 +175,7 @@
         tools:layout="@layout/fragment_payment">
         <argument
             android:name="paymentLabel"
-            app:argType="string"/>
+            app:argType="string" />
         <action
             android:id="@+id/action_paymentFragment_to_tokenFragment"
             app:destination="@id/tokenFragment"
@@ -186,7 +186,7 @@
         android:id="@+id/checkoutFragment"
         android:name="com.fienna.movieapp.view.dashboard.checkout.CheckoutFragment"
         android:label="fragment_checkout"
-        tools:layout="@layout/fragment_checkout" >
+        tools:layout="@layout/fragment_checkout">
         <action
             android:id="@+id/action_checkoutFragment_to_tokenFragment"
             app:destination="@id/tokenFragment" />
@@ -198,12 +198,15 @@
             app:destination="@id/statusFragment"
             app:popUpTo="@id/checkoutFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="dataListTransaction"
+            app:argType="com.fienna.movieapp.core.domain.model.DataListTransaction" />
     </fragment>
     <fragment
         android:id="@+id/statusFragment"
         android:name="com.fienna.movieapp.view.dashboard.checkout.StatusFragment"
         android:label="fragment_status"
-        tools:layout="@layout/fragment_status" >
+        tools:layout="@layout/fragment_status">
         <argument
             android:name="movieId"
             app:argType="string" />
