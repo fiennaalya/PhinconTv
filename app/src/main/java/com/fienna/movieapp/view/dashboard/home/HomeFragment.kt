@@ -1,5 +1,6 @@
 package com.fienna.movieapp.view.dashboard.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -75,6 +76,7 @@ class HomeFragment :
 
     override fun initListener() {}
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun observeData() {
         with(viewModel) {
             upComingMovie.launchAndCollectIn(viewLifecycleOwner) { state ->
@@ -95,15 +97,14 @@ class HomeFragment :
                     }
             }
 
-            nowPlayingMovie.launchAndCollectIn(viewLifecycleOwner) { state ->
+            nowPlayingMovie.launchAndCollectIn(viewLifecycleOwner){state ->
                 state.onLoading {
                 }.onSuccess {
                     list.addAll(it)
-                    nowPlayingAdapter.notifyDataSetChanged()
                     setupViewPager()
-
                 }
             }
+
         }
     }
 

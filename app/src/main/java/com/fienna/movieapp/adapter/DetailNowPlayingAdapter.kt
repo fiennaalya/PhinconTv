@@ -18,6 +18,7 @@ class DetailNowPlayingAdapter(private val list: List<DataNowPlaying>) :
     inner class DetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemNowPlayingBinding.bind(itemView)
         fun bind(data: DataNowPlaying) {
+            println("MASUK ADAPTER $data")
             binding.apply {
                 imgNowplaying.load(AppConstant.backdropLink + data.backdropPath)
                 yearAndGenreComingSoon.text =

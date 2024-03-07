@@ -11,6 +11,8 @@ import com.fienna.movieapp.R
 import com.fienna.movieapp.adapter.CartAdapter
 import com.fienna.movieapp.core.base.BaseFragment
 import com.fienna.movieapp.core.domain.model.DataCart
+import com.fienna.movieapp.core.domain.model.DataListTransaction
+import com.fienna.movieapp.core.domain.model.DataTransaction
 import com.fienna.movieapp.core.domain.state.onError
 import com.fienna.movieapp.core.domain.state.onLoading
 import com.fienna.movieapp.core.domain.state.onSuccess
@@ -26,6 +28,7 @@ class CartFragment :
     BaseFragment<FragmentCartBinding, CartViewModel>(FragmentCartBinding::inflate) {
     override val viewModel: CartViewModel by viewModel()
     private var dataCart: List<DataCart>? = null
+    private var listDataTransactionFromCart =  DataListTransaction()
     private lateinit var rvCart: RecyclerView
     private val listCartAdapter by lazy {
         CartAdapter(
@@ -38,7 +41,6 @@ class CartFragment :
                 viewModel.updateCheckCart(id, isChecked)
                 android.os.Handler(Looper.getMainLooper())
                     .postDelayed({ viewModel.totalPrice() }, 500)
-
             }
         )
     }
@@ -67,6 +69,12 @@ class CartFragment :
             val isChecked = binding.checkboxCartAll.isChecked
             listCartAdapter.setAllChecked(isChecked)
         }
+
+        binding.btnBuy.setOnClickListener {
+            viewModel.fetchCheckedCart()
+            val bundle = bundleOf("dataListTransaction" to listDataTransactionFromCart)
+            findNavController().navigate(R.id.action_cartFragment_to_checkoutFragment, bundle)
+        }
     }
 
     override fun observeData() {
@@ -77,7 +85,34 @@ class CartFragment :
                         .onSuccess { data ->
                             dataCart = data
                             listCartAdapter.submitList(data)
+                        }.onError {
+                            context?.let {
+                                CustomSnackbar.showSnackBar(
+                                    it,
+                                    binding.root,
+                                    "Error ${it}"
+                                )
+                            }
+                        }
+                }
+            }
 
+            fetchCheckedCart().launchAndCollectIn(viewLifecycleOwner) { state ->
+                this.launch {
+                    state.onLoading { }
+                        .onSuccess { data ->
+                            listDataTransactionFromCart = DataListTransaction(
+                                data.map {
+                                    DataTransaction(
+                                        movieId = it.movieId,
+                                        userId = it.userId,
+                                        popularity = it.popularity,
+                                        title = it.title,
+                                        posterPath = it.posterPath,
+                                        transactionId = it.cartId
+                                    )
+                                }
+                            )
                         }.onError {
                             context?.let {
                                 CustomSnackbar.showSnackBar(

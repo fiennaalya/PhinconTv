@@ -24,7 +24,6 @@ class CheckoutFragment :
     BaseFragment<FragmentCheckoutBinding, DashboardViewModel>(FragmentCheckoutBinding::inflate) {
     override val viewModel: DashboardViewModel by viewModel()
     val safeArgs: CheckoutFragmentArgs by navArgs()
-    private val list = mutableListOf<DataTransaction>()
     var dataTransaction: DataTransaction? = null
     private val firebaseViewModel: FirebaseViewModel by viewModel()
 
@@ -36,14 +35,19 @@ class CheckoutFragment :
     var userIdToken = ""
 
     private val checkoutAdapter by lazy {
-        CheckoutAdapter {
-            binding.tvTokenPrice.text = it.popularity.toInt().toString()
-            tokenMovie = it.popularity.toInt()
-            title = it.title
-            movieId = it.movieId
-            dataTransaction = it
-            dataTransaction?.userId = userIdToken
-        }
+        CheckoutAdapter (
+            action = {
+                title = it.title
+                movieId = it.movieId
+                dataTransaction = it
+                dataTransaction?.userId = userIdToken
+            },
+            dataPrice = {
+                println("masuk data price fragment $it")
+                tokenMovie = it
+                binding.tvTokenPrice.text = it.toString()
+            }
+        )
     }
 
     override fun initView() {
@@ -72,9 +76,9 @@ class CheckoutFragment :
             viewModel.getUserId()
         }
 
-        safeArgs.dataTransaction.let {
-            list.addAll(listOf(it))
-            checkoutAdapter.submitList(list)
+
+        safeArgs.dataListTransaction.let {
+            checkoutAdapter.submitList(it.listTransaction)
         }
     }
 
@@ -119,7 +123,7 @@ class CheckoutFragment :
 
     private fun setTopUpState(token: Int) {
         binding.btnBuyCheckout.isEnabled = false
-
+        println("masuk set token movie $tokenMovie")
         if (token > tokenMovie) {
             binding.btnBuyCheckout.isEnabled = true
             binding.layoutEnoughBalance.visibility = View.GONE

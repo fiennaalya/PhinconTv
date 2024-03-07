@@ -68,6 +68,7 @@ interface MovieUsecase {
 
     /*room database*/
     suspend fun fetchCart(userId:String): Flow<UiState<List<DataCart>>>
+    suspend fun fetchCheckedCart(userId: String) : Flow<UiState<List<DataCart>>>
     suspend fun deleteAllCart()
     suspend fun insertCart(dataCart: DataCart?)
     suspend fun deleteCart(dataCart: DataCart)

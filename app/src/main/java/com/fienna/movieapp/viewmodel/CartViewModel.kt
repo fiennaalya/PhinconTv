@@ -18,6 +18,11 @@ class CartViewModel(private val movieUsecase: MovieUsecase) : ViewModel() {
         movieUsecase.fetchCart(userId)
     }
 
+    fun fetchCheckedCart() = runBlocking {
+        val userId = movieUsecase.getUserId()
+        movieUsecase.fetchCheckedCart(userId)
+    }
+
     fun deleteCart(data: DataCart) {
         viewModelScope.launch {
             movieUsecase.deleteCart(data)

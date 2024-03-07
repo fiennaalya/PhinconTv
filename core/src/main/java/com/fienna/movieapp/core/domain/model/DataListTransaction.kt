@@ -7,5 +7,5 @@ import kotlinx.parcelize.Parcelize
 @Keep
 @Parcelize
 data class DataListTransaction (
-    val listTransaction : List<DataTransaction> = listOf()
+    val listTransaction : List<DataTransaction?> = listOf()
 ):Parcelable

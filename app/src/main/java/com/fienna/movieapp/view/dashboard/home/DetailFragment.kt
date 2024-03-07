@@ -12,6 +12,7 @@ import com.fienna.movieapp.adapter.CastAdapter
 import com.fienna.movieapp.core.base.BaseFragment
 import com.fienna.movieapp.core.domain.model.DataCart
 import com.fienna.movieapp.core.domain.model.DataDetailMovie
+import com.fienna.movieapp.core.domain.model.DataListTransaction
 import com.fienna.movieapp.core.domain.model.DataTransaction
 import com.fienna.movieapp.core.domain.model.DataWishlist
 import com.fienna.movieapp.core.domain.state.onError
@@ -26,7 +27,6 @@ import com.fienna.movieapp.utils.formatRating
 import com.fienna.movieapp.viewmodel.DashboardViewModel
 import com.fienna.movieapp.viewmodel.DetailViewModel
 import com.fienna.movieapp.viewmodel.FirebaseViewModel
-import com.fienna.movieapp.viewmodel.WishlistViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -34,7 +34,6 @@ class DetailFragment :
     BaseFragment<FragmentDetailBinding, DetailViewModel>(FragmentDetailBinding::inflate) {
     override val viewModel: DetailViewModel by viewModel()
     private val firebaseViewModel: FirebaseViewModel by viewModel()
-    private val wishlistViewModel: WishlistViewModel by viewModel()
     val dashboardViewModel: DashboardViewModel by viewModel()
     val safeArgs: DetailFragmentArgs by navArgs()
     private lateinit var rvCast: RecyclerView
@@ -42,7 +41,7 @@ class DetailFragment :
     private var dataTransaction: DataTransaction? = null
     var movieIdForFirebase = ""
     var userIdValue = ""
-    private var listDataTransaction: MutableList<DataTransaction> = mutableListOf()
+    private var listDataTransaction: DataListTransaction? = null
     override fun initView() {
         with(binding) {
             tvFavorite.text = resources.getString(R.string.tv_favorite)
@@ -123,7 +122,7 @@ class DetailFragment :
             }
 
             btnBuyDetail.setOnClickListener {
-                val bundle = bundleOf("dataTransaction" to dataTransaction)
+                val bundle = bundleOf("dataListTransaction" to listDataTransaction)
                 findNavController().navigate(R.id.action_detailFragment_to_checkoutFragment, bundle)
                 firebaseViewModel.logScreenView("buyDetail")
             }
@@ -168,20 +167,15 @@ class DetailFragment :
                                 )
                             )
 
-                            listDataTransaction.add(
-                                DataTransaction(
-                                    movieId = it.id,
-                                    posterPath = it.posterPath,
-                                    title = it.title,
-                                    popularity = it.popularity
-                                )
-                            )
-
                             dataTransaction = DataTransaction(
                                 movieId = it.id,
                                 posterPath = it.posterPath,
                                 title = it.title,
                                 popularity = it.popularity
+                            )
+
+                            listDataTransaction = DataListTransaction(
+                                listTransaction = listOf(dataTransaction)
                             )
 
 

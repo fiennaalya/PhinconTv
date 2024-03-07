@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface RoomRepository {
     suspend fun fetchCart(userId:String): Flow<List<CartEntity>>
+    suspend fun fetchCheckedCart(userId: String) : Flow<List<CartEntity>>
     suspend fun deleteAllCart()
     suspend fun insertCart(cartEntity: CartEntity)
     suspend fun deleteCart(cartEntity: CartEntity)
@@ -29,6 +30,10 @@ class RoomRepositoryImpl(
 ):RoomRepository{
     override suspend fun fetchCart(userId: String): Flow<List<CartEntity>> = safeDataCall {
         local.fetchCart(userId)
+    }
+
+    override suspend fun fetchCheckedCart(userId: String): Flow<List<CartEntity>> = safeDataCall{
+        local.fetchCheckedCart(userId)
     }
 
     override suspend fun deleteAllCart(){

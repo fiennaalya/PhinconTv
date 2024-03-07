@@ -213,6 +213,14 @@ class MovieInteractor(
         }.flowOn(Dispatchers.IO).catch { throwable -> UiState.Error(throwable) }
     }
 
+    override suspend fun fetchCheckedCart(userId: String): Flow<UiState<List<DataCart>>> = safeDataCall{
+        roomRepository.fetchCheckedCart(userId).map {data ->
+            val mapped = data.map { entity: CartEntity -> entity.toUiData() }
+            UiState.Success(mapped)
+        }.flowOn(Dispatchers.IO).catch { throwable -> UiState.Error(throwable) }
+    }
+
+
     override suspend fun deleteAllCart() {
         roomRepository.deleteAllCart()
     }

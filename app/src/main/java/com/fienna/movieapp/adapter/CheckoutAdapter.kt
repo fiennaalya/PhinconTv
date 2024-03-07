@@ -8,8 +8,10 @@ import com.fienna.movieapp.databinding.ItemListCheckoutBinding
 import com.fienna.movieapp.utils.AppConstant
 
 class CheckoutAdapter(
-    private val action: (DataTransaction) -> Unit
+    private val action: (DataTransaction) -> Unit,
+    private val dataPrice : (Int) -> Unit
 ) : BaseListAdapter<DataTransaction, ItemListCheckoutBinding>(ItemListCheckoutBinding::inflate) {
+    var totalPrice : Int = 0
     override fun onItemBind(): (DataTransaction, ItemListCheckoutBinding, View, Int) -> Unit =
         { data, binding, view, _ ->
             binding.run {
@@ -18,5 +20,7 @@ class CheckoutAdapter(
                 imgCartItems.load(AppConstant.imageLink + data.posterPath)
                 action.invoke(data)
             }
+            totalPrice += data.popularity.toInt()
+            dataPrice(totalPrice)
         }
 }
